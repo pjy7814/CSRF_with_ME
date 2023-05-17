@@ -13,7 +13,7 @@
 |![login](/uploads/6f2d7faac7a97d3a17f56d68b099d7ba/image.png)|![signup](/uploads/db351572f4cbd8d0ec9bcdd22014058b/image.png)|![board](/uploads/36fe2d5273fbca02acbafc46527b5355/image.png)|
 
 # 고민한 사항
-JWT Token의 도입 이유 및 어떤 식으로 도입을 해야할지를 고민했습니다.
+JWT Token의 도입 이유 및 어떤 식으로 도입을 해야할지를 고민했습니다. <br>
 https://developing-chalk-6cb.notion.site/JWT-29e41decd35c47c9b039c4d802d316d6
 
 # 구현 이야기
