@@ -42,7 +42,7 @@ export default {
     ...mapActions(itemStore, ["getSido"]),
     ...mapMutations(itemStore, ["CLEAR_SIDO_LIST"]),
     changeSido() {
-      // console.log("시도 선택 ::: " + this.sidoCode);
+      console.log("시도 선택 ::: " + this.sidoCode);
       this.$emit("select-sido", this.sidoCode);
     },
   },
