@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.vue.model.HouseInfoDto;
+import com.ssafy.vue.model.SearchOptionDto;
 import com.ssafy.vue.model.SidoGugunCodeDto;
+import com.ssafy.vue.model.TouristSpotInfoDto;
 import com.ssafy.vue.model.service.AttractionService;
 import com.ssafy.vue.model.service.HouseMapService;
 
@@ -52,8 +54,15 @@ public class AttractionController {
 	public ResponseEntity<List<SidoGugunCodeDto>> gugun(
 			@RequestParam("sido") @ApiParam(value = "시도코드.", required = true) String sido) throws Exception {
 		logger.info("gugun - 호출");
-		System.out.println(attractionService.getGugunInSido(sido));
 		return new ResponseEntity<List<SidoGugunCodeDto>>(attractionService.getGugunInSido(sido), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "여행지 정보", notes = "여행지 정보를 반환한다.", response = List.class)
+	@GetMapping("/destination")
+	public ResponseEntity<List<TouristSpotInfoDto>> destination(
+			@ApiParam(value = "시도코드.", required = true) SearchOptionDto searchOptionDto) throws Exception {
+		logger.info("gugun - 호출");
+		return new ResponseEntity<List<TouristSpotInfoDto>>(attractionService.getDestination(searchOptionDto), HttpStatus.OK);
 	}
 
 }

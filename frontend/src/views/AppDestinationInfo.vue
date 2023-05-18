@@ -60,6 +60,7 @@ export default {
       destinationList(
         params,
         ({ data }) => {
+          console.log(data);
           this.destinationList = data.items[0].item;
         },
         (error) => {
