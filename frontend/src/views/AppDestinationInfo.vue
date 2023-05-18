@@ -4,6 +4,9 @@
     <b-row class="mt-3">
       <select-sido @select-sido="selectSido"></select-sido>
       <select-gugun :sidoCode="sidoCode" @select-gugun="selectGugun"></select-gugun>
+      <select-content-type @select-contenttype="selectContentType"></select-content-type>
+      <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요" />
+      <button class="btn btn-primary" @click="search">조회</button>
     </b-row>
     <b-row class="mt-3">
       <b-col cols="12">
@@ -14,22 +17,27 @@
 </template>
 <script>
 // import { mapActions, mapMutations } from "vuex";
-import { electricChargerStationList } from "@/api/electric.js";
 import SelectSido from "@/components/item/SelectSido.vue";
 import SelectGugun from "@/components/item/SelectGugun.vue";
+import SelectContentType from "@/components/item/SelectContentType.vue";
 import TheKakaoMap from "@/components/TheKakaoMap.vue";
+import { destinationList } from "@/api/item/item.js";
 
 export default {
-  name: "AppElectricCharger",
+  name: "AppDestinationInfo",
   components: {
     SelectSido,
     SelectGugun,
+    SelectContentType,
     TheKakaoMap,
   },
   data() {
     return {
       sidoCode: null,
-      chargerList: [],
+      gugunCode: null,
+      contentTypeId: null,
+      searchQuery: null,
+      destinationList: [],
     };
   },
   methods: {
@@ -37,22 +45,22 @@ export default {
       this.sidoCode = sidoCode;
     },
     selectGugun(gugunCode) {
-      console.log("구군바꼈으니 충전소 찾으러 가자!!!", gugunCode);
-      const SERVICE_KEY = process.env.VUE_APP_APT_DEAL_API_KEY;
-
+      this.gugunCode = gugunCode;
+    },
+    selectContentType(contentTypeId) {
+      this.contentTypeId = contentTypeId;
+    },
+    search() {
       const params = {
-        pageNo: 1,
-        numOfRows: 30,
-        zscode: gugunCode,
-        serviceKey: decodeURIComponent(SERVICE_KEY),
+        sidoCode: this.sidoCode,
+        gugunCode: this.gugunCode,
+        contentTypeId: this.contentTypeId,
+        searchQuery: this.searchQuery,
       };
-      // if (gugunCode) params.zscode = gugunCode;
-      // else params.zcode = this.sidoCode;
-
-      electricChargerStationList(
+      destinationList(
         params,
         ({ data }) => {
-          this.chargerList = data.items[0].item;
+          this.destinationList = data.items[0].item;
         },
         (error) => {
           console.log(error);

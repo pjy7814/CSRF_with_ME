@@ -10,4 +10,7 @@ function gugunList(params, success, fail) {
   api.get(`/map/gugun`, { params: params }).then(success).catch(fail);
 }
 
-export { sidoList, gugunList };
+function destinationList(params, success, fail) {
+  api.get(`/map/destination`, { params: params }).then(success).catch(fail);
+}
+export { sidoList, gugunList, destinationList };

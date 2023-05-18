@@ -5,6 +5,17 @@ const itemStore = {
   state: {
     sidos: [{ value: null, text: "선택하세요" }],
     guguns: [{ value: null, text: "선택하세요" }],
+    contentTypes: [
+      { value: null, text: "선택하세요" },
+      { value: "12", text: "관광지" },
+      { value: "28", text: "레포츠" },
+      { value: "14", text: "문화시설" },
+      { value: "38", text: "쇼핑" },
+      { value: "32", text: "숙박" },
+      { value: "25", text: "여행코스" },
+      { value: "39", text: "음식점" },
+      { value: "15", text: "축제공연행사" },
+    ],
   },
   getters: {},
   mutations: {
@@ -29,7 +40,6 @@ const itemStore = {
     getSido: ({ commit }) => {
       sidoList(
         ({ data }) => {
-          console.log(data);
           commit("SET_SIDO_LIST", data);
         },
         (error) => {
@@ -42,7 +52,6 @@ const itemStore = {
       gugunList(
         params,
         ({ data }) => {
-          console.log(data);
           commit("SET_GUGUN_LIST", data);
         },
         (error) => {
