@@ -47,92 +47,129 @@ const routes = [
       {
         path: "join",
         name: "join",
-        component: () => import(/* webpackChunkName: "user" */ "@/components/user/UserRegister"),
+        component: () =>
+          import(
+            /* webpackChunkName: "user" */ "@/components/user/UserRegister"
+          ),
       },
       {
         path: "login",
         name: "login",
-        component: () => import(/* webpackChunkName: "user" */ "@/components/user/UserLogin"),
+        component: () =>
+          import(/* webpackChunkName: "user" */ "@/components/user/UserLogin"),
       },
       {
         path: "mypage",
         name: "mypage",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "user" */ "@/components/user/UserMyPage"),
+        component: () =>
+          import(/* webpackChunkName: "user" */ "@/components/user/UserMyPage"),
       },
     ],
   },
   {
     path: "/noticeboard",
     name: "noticeboard",
-    component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard"),
+    component: () =>
+      import(/* webpackChunkName: "board" */ "@/views/AppNoticeBoard"),
     redirect: "/noticeboard/list",
     children: [
       {
         path: "list",
         name: "noticeboardlist",
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardList"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardList"
+          ),
       },
       {
         path: "write",
         name: "noticeboardwrite",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardWrite"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardWrite"
+          ),
       },
       {
         path: "view/:articleno",
         name: "noticeboardview",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardView"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardView"
+          ),
       },
       {
         path: "modify",
         name: "noticeboardmodify",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardModify"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardModify"
+          ),
       },
       {
         path: "delete/:articleno",
         name: "noticeboarddelete",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardDelete"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardDelete"
+          ),
       },
     ],
   },
   {
     path: "/shareboard",
     name: "shareboard",
-    component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard"),
+    component: () =>
+      import(/* webpackChunkName: "board" */ "@/views/AppShareBoard"),
     redirect: "/shareboard/list",
     children: [
       {
         path: "list",
         name: "shareboardlist",
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardList"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardList"
+          ),
       },
       {
         path: "write",
         name: "shareboardwrite",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardWrite"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardWrite"
+          ),
       },
       {
         path: "view/:articleno",
         name: "shareboardview",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardView"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardView"
+          ),
       },
       {
         path: "modify",
         name: "shareboardmodify",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardModify"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardModify"
+          ),
       },
       {
         path: "delete/:articleno",
         name: "shareboarddelete",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardDelete"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardDelete"
+          ),
       },
     ],
   },
