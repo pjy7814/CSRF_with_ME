@@ -2,19 +2,34 @@
   <b-container class="bv-example-row mt-3">
     <b-row>
       <b-col>
-        <b-alert show><h3>글목록</h3></b-alert>
+        <b-alert show
+          ><h3>{{ currentBoardTitle }}</h3></b-alert
+        >
       </b-col>
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-right">
-        <b-button variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
+        <b-button variant="outline-primary" @click="moveWrite()"
+          >글쓰기</b-button
+        >
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <b-table striped hover :items="articles" :fields="fields" @row-clicked="viewArticle">
+        <b-table
+          striped
+          hover
+          :items="articles"
+          :fields="fields"
+          @row-clicked="viewArticle"
+        >
           <template #cell(subject)="data">
-            <router-link :to="{ name: 'boardview', params: { articleno: data.item.articleno } }">
+            <router-link
+              :to="{
+                name: 'boardview',
+                params: { articleno: data.item.articleno },
+              }"
+            >
               {{ data.item.subject }}
             </router-link>
           </template>
@@ -31,6 +46,7 @@ export default {
   name: "BoardList",
   data() {
     return {
+      currentBoardTitle: "",
       articles: [],
       fields: [
         { key: "articleno", label: "글번호", tdClass: "tdClass" },
@@ -57,6 +73,15 @@ export default {
         console.log(error);
       }
     );
+    const currentBoardPath = this.$route.path.split("/")[1];
+
+    if (currentBoardPath === "noticeboard") {
+      this.currentBoardTitle = "공지사항 게시판";
+    } else if (currentBoardPath === "shareboard") {
+      this.currentBoardTitle = "공유 게시판";
+    } else {
+      //의도치 않은 접근! 에러 페이지 또는 메인 페이지로 강제 이동 중 택 1 선택 필요
+    }
   },
   methods: {
     moveWrite() {
