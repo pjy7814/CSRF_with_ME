@@ -1,9 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import AppMain from "@/views/AppMain";
-import AppInstagram from "@/views/AppInstagram";
-import AppHouse from "@/views/AppHouse";
-import AppTodo from "@/views/AppTodo";
 import AppDestinationInfo from "@/views/AppDestinationInfo";
 
 import store from "@/store";
