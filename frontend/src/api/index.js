@@ -22,4 +22,15 @@ function houseInstance() {
   return instance;
 }
 
-export { apiInstance, houseInstance };
+// electric charger station API axios instance
+function electricInstance() {
+  const instance = axios.create({
+    baseURL: process.env.VUE_APP_ELECTRIC_CHARGER_STATION_URL,
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+  return instance;
+}
+
+export { apiInstance, houseInstance, electricInstance };

@@ -10,65 +10,50 @@
     <b-col class="sm-3" align="left">
       <b-button variant="outline-primary" @click="sendKeyword">검색</b-button>
     </b-col> -->
-    <b-col class="sm-3">
+    <!-- <b-col class="sm-3">
       <b-form-select v-model="sidoCode" :options="sidos" @change="gugunList"></b-form-select>
     </b-col>
     <b-col class="sm-3">
       <b-form-select v-model="gugunCode" :options="guguns" @change="searchApt"></b-form-select>
-    </b-col>
+    </b-col> -->
+    <select-sido @select-sido="selectSido"></select-sido>
+    <select-gugun :sidoCode="sidoCode" @select-gugun="selectGugun"></select-gugun>
   </b-row>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
+import SelectSido from "@/components/item/SelectSido.vue";
+import SelectGugun from "@/components/item/SelectGugun.vue";
 
-/*
-  namespaced: true를 사용했기 때문에 선언해줍니다.
-  index.js 에서 modules 객체의 '키' 이름입니다.
-
-  modules: {
-    키: 값
-    memberStore: memberStore,
-    houseStore: houseStore
-  }  
-*/
+const itemStore = "itemStore";
 const houseStore = "houseStore";
 
 export default {
   name: "HouseSearchBar",
+  components: {
+    SelectSido,
+    SelectGugun,
+  },
   data() {
     return {
       sidoCode: null,
-      gugunCode: null,
     };
   },
-  computed: {
-    ...mapState(houseStore, ["sidos", "guguns", "houses"]),
-    // sidos() {
-    //   return this.$store.state.sidos;
-    // },
-  },
-  created() {
-    // this.$store.dispatch("getSido");
-    // this.sidoList();
-    this.CLEAR_SIDO_LIST();
-    this.CLEAR_APT_LIST();
-    this.getSido();
-  },
+  computed: {},
+  created() {},
   methods: {
-    ...mapActions(houseStore, ["getSido", "getGugun", "getHouseList"]),
-    ...mapMutations(houseStore, ["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_APT_LIST"]),
-    // sidoList() {
-    //   this.getSido();
-    // },
-    gugunList() {
-      // console.log(this.sidoCode);
-      this.CLEAR_GUGUN_LIST();
-      this.gugunCode = null;
-      if (this.sidoCode) this.getGugun(this.sidoCode);
+    ...mapActions(houseStore, ["getHouseList"]),
+    ...mapActions(itemStore, ["getGugun"]),
+    ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
+    selectSido(sidoCode) {
+      // this.CLEAR_GUGUN_LIST();
+      // this.getGugun(sidoCode);
+      this.sidoCode = sidoCode;
     },
-    searchApt() {
-      if (this.gugunCode) this.getHouseList(this.gugunCode);
+    selectGugun(gugunCode) {
+      console.log("구군바꼈으니 아파트 찾으러 가자!!!");
+      if (gugunCode) this.getHouseList(gugunCode);
     },
   },
 };
