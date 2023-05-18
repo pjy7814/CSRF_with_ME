@@ -4,6 +4,7 @@ import AppMain from "@/views/AppMain";
 import AppInstagram from "@/views/AppInstagram";
 import AppHouse from "@/views/AppHouse";
 import AppTodo from "@/views/AppTodo";
+import AppDestinationInfo from "@/views/AppDestinationInfo";
 
 import store from "@/store";
 
@@ -37,19 +38,9 @@ const routes = [
     component: AppMain,
   },
   {
-    path: "/instagram",
-    name: "insta",
-    component: AppInstagram,
-  },
-  {
-    path: "/house",
-    name: "house",
-    component: AppHouse,
-  },
-  {
-    path: "/todo",
-    name: "todo",
-    component: AppTodo,
+    path: "/destination",
+    name: "destination",
+    component: AppDestinationInfo,
   },
   {
     path: "/user",
@@ -75,37 +66,74 @@ const routes = [
     ],
   },
   {
-    path: "/board",
-    name: "board",
+    path: "/noticeboard",
+    name: "noticeboard",
     component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard"),
-    redirect: "/board/list",
+    redirect: "/noticeboard/list",
     children: [
       {
         path: "list",
-        name: "boardlist",
+        name: "noticeboardlist",
         component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardList"),
       },
       {
         path: "write",
-        name: "boardwrite",
+        name: "noticeboardwrite",
         beforeEnter: onlyAuthUser,
         component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardWrite"),
       },
       {
         path: "view/:articleno",
-        name: "boardview",
+        name: "noticeboardview",
         beforeEnter: onlyAuthUser,
         component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardView"),
       },
       {
         path: "modify",
-        name: "boardmodify",
+        name: "noticeboardmodify",
         beforeEnter: onlyAuthUser,
         component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardModify"),
       },
       {
         path: "delete/:articleno",
-        name: "boarddelete",
+        name: "noticeboarddelete",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardDelete"),
+      },
+    ],
+  },
+  {
+    path: "/shareboard",
+    name: "shareboard",
+    component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard"),
+    redirect: "/shareboard/list",
+    children: [
+      {
+        path: "list",
+        name: "shareboardlist",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardList"),
+      },
+      {
+        path: "write",
+        name: "shareboardwrite",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardWrite"),
+      },
+      {
+        path: "view/:articleno",
+        name: "shareboardview",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardView"),
+      },
+      {
+        path: "modify",
+        name: "shareboardmodify",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardModify"),
+      },
+      {
+        path: "delete/:articleno",
+        name: "shareboarddelete",
         beforeEnter: onlyAuthUser,
         component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardDelete"),
       },
