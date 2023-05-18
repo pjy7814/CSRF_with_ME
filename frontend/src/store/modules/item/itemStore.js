@@ -29,6 +29,7 @@ const itemStore = {
     getSido: ({ commit }) => {
       sidoList(
         ({ data }) => {
+          console.log(data);
           commit("SET_SIDO_LIST", data);
         },
         (error) => {
@@ -41,6 +42,7 @@ const itemStore = {
       gugunList(
         params,
         ({ data }) => {
+          console.log(data);
           commit("SET_GUGUN_LIST", data);
         },
         (error) => {
