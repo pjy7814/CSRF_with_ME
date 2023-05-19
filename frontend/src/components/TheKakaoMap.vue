@@ -16,16 +16,18 @@ export default {
     };
   },
   props: {
-    chargers: [],
+    destinations: [],
   },
   watch: {
-    chargers() {
-      console.log("충전소", this.chargers);
+    destinations() {
+      console.log("충전소", this.destinations);
       this.positions = [];
-      this.chargers.forEach((charger) => {
+      this.destinations.forEach((destination) => {
+        //fix me! : 여행지 API 보고 프로젝트에 맞게 수정 필요!
+        console.log(destination);
         let obj = {};
-        obj.title = charger.statNm;
-        obj.latlng = new kakao.maps.LatLng(charger.lat, charger.lng);
+        //obj.title = charger.statNm;
+        //obj.latlng = new kakao.maps.LatLng(charger.lat, charger.lng);
 
         this.positions.push(obj);
       });

@@ -10,7 +10,7 @@
     </b-row>
     <b-row class="mt-3">
       <b-col cols="12">
-        <the-kakao-map :chargers="chargerList"></the-kakao-map>
+        <the-kakao-map :chargers="searchingdestination"></the-kakao-map>
       </b-col>
     </b-row>
   </b-container>
@@ -37,7 +37,7 @@ export default {
       gugunCode: null,
       contentTypeId: null,
       searchQuery: null,
-      destinationList: [],
+      searchingdestination: [],
     };
   },
   methods: {
@@ -60,8 +60,7 @@ export default {
       destinationList(
         params,
         ({ data }) => {
-          console.log(data);
-          this.destinationList = data.items[0].item;
+          this.searchingdestination = data;
         },
         (error) => {
           console.log(error);
