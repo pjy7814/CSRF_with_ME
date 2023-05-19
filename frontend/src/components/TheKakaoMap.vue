@@ -1,21 +1,17 @@
 <template>
   <div>
     <div id="map"></div>
-    <destination-info-item :position="position"></destination-info-item>
   </div>
 </template>
 
 <script>
-import DestinationInfoItem from "@/components/item/DestinationInfoItem.vue";
 export default {
   name: "KakaoMap",
-  components: {
-    DestinationInfoItem,
-  },
   data() {
     return {
       map: null,
       positions: [],
+      curPositionIdx: 0,
       markers: [],
       overlay: null,
     };
@@ -74,9 +70,7 @@ export default {
     // 지정한 위치에 마커 불러오기
     loadMaker() {
       // 현재 표시되어있는 marker들이 있다면 marker에 등록된 map을 없애준다.
-      console.log("1111");
       this.deleteMarker();
-      console.log("2222");
 
       // 마커를 생성합니다
       this.markers = [];
@@ -96,7 +90,6 @@ export default {
         // 마커 지도에 추가
         marker.setMap(this.map);
       });
-      console.log("마커수 ::: " + this.markers.length);
 
       // 4. 지도를 이동시켜주기
       // 배열.reduce( (누적값, 현재값, 인덱스, 요소)=>{ return 결과값}, 초기값);
@@ -108,35 +101,50 @@ export default {
       this.map.setBounds(bounds);
     },
     deleteMarker() {
-      console.log("마커 싹 지우자!!!", this.markers.length);
       if (this.markers.length > 0) {
         this.markers.forEach((item) => {
-          // console.log(item);
           item.setMap(null);
         });
       }
     },
     openOverlay(position) {
-      console.log(position);
+      if (this.overlay) this.closeOverlay();
       // 오버레이 생성
+
+      //fix me! : 없는 이미지일 시, 대체로 넣을 수 있는 이미지 넣어주기
+      const customOverlay = document.createElement("div");
+      customOverlay.innerHTML = `
+        <div class="wrap">
+      <div class="info">
+        <div class="title">
+          ${position.title}
+          <div class="close" title="닫기"></div>
+        </div>
+        <div class="body">
+          <div class="img"><img src=${position.img} width="73" height="70" /></div>
+          <div class="desc">
+            <div class="ellipsis">${position.address}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+      `;
+
+      customOverlay.querySelector(".close").addEventListener("click", () => {
+        this.closeOverlay();
+      });
+
       const overlay = new kakao.maps.CustomOverlay({
-        content: `
-            <destination-info-item position=${position}></destination-info-item>
-      `,
+        content: customOverlay,
         map: this.map,
         position: position.latlng,
       });
-
-      console.log(overlay);
-
       // 오버레이 열기
       overlay.setMap(this.map);
-
       // 오버레이 객체 저장
       this.overlay = overlay;
     },
     closeOverlay() {
-      console.log("닫아!!!");
       if (this.overlay) {
         // 오버레이 닫기
         this.overlay.setMap(null);
