@@ -56,9 +56,9 @@ public class TouristSpotInfoDto {
 	}
 
 	public void setAddress1(String address1) throws MyException {
-		if(address1==null || address1.length()==0) {
-			throw new MyException("잘못된 주소값1을 입력하였습니다.");
-		}
+//		if(address1==null || address1.length()==0) {
+//			throw new MyException("잘못된 주소값1을 입력하였습니다.");
+//		}
 		this.address1 = address1;
 	}
 
