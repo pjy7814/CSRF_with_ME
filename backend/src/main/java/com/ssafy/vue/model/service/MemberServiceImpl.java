@@ -18,35 +18,13 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberDto login(MemberDto memberDto) throws Exception {
-		if (memberDto.getUserid() == null || memberDto.getUserpwd() == null)
+		if (memberDto.getMemberId() == null || memberDto.getMemberPassword() == null)
 			return null;
 		return sqlSession.getMapper(MemberMapper.class).login(memberDto);
 	}
 
 	@Override
-	public MemberDto userInfo(String userid) throws Exception {
-		return sqlSession.getMapper(MemberMapper.class).userInfo(userid);
+	public MemberDto memberInfo(String memberId) throws Exception {
+		return sqlSession.getMapper(MemberMapper.class).memberInfo(memberId);
 	}
-
-	@Override
-	public void saveRefreshToken(String userid, String refreshToken) throws Exception {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("userid", userid);
-		map.put("token", refreshToken);
-		sqlSession.getMapper(MemberMapper.class).saveRefreshToken(map);
-	}
-
-	@Override
-	public Object getRefreshToken(String userid) throws Exception {
-		return sqlSession.getMapper(MemberMapper.class).getRefreshToken(userid);
-	}
-
-	@Override
-	public void deleRefreshToken(String userid) throws Exception {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("userid", userid);
-		map.put("token", null);
-		sqlSession.getMapper(MemberMapper.class).deleteRefreshToken(map);
-	}
-
 }
