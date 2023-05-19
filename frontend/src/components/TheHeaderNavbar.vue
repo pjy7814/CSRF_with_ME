@@ -47,15 +47,11 @@
             <template #button-content>
               <b-icon icon="people" font-scale="2"></b-icon>
             </template>
-            <b-dropdown-item href="#">
-              <router-link :to="{ name: 'join' }" class="link">
-                <b-icon icon="person-circle"></b-icon> 회원가입
-              </router-link>
+            <b-dropdown-item href="#" @click="onClickDropDown('join')" class="link">
+              <b-icon icon="person-circle"></b-icon> 회원가입
             </b-dropdown-item>
-            <b-dropdown-item href="#">
-              <router-link :to="{ name: 'login' }" class="link">
-                <b-icon icon="key"></b-icon> 로그인
-              </router-link>
+            <b-dropdown-item href="#" @click="onClickDropDown('login')" class="link">
+              <b-icon icon="key"></b-icon> 로그인
             </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
@@ -93,6 +89,10 @@ export default {
       console.log(this.checkMemberInfo);
       sessionStorage.removeItem("access-token"); //저장된 토큰 없애기
       if (this.$route.path != "/") this.$router.push({ name: "main" });
+    },
+    onClickDropDown(name) {
+      if (name === this.$route.name) return;
+      this.$router.push({ name });
     },
   },
 };
