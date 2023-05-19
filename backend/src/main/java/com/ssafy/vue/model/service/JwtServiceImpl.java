@@ -32,16 +32,10 @@ public class JwtServiceImpl implements JwtService {
 
 	@Override
 	public <T> String createAccessToken(String key, T data) {
-		return create(key, data, "access-token", 1000 * 60 * ACCESS_TOKEN_EXPIRE_MINUTES);
+		return create(key, data, "access-token", 1000 * 600 * ACCESS_TOKEN_EXPIRE_MINUTES);
 //		return create(key, data, "access-token", 1000 * 10 * ACCESS_TOKEN_EXPIRE_MINUTES);
 	}
 
-//	AccessToken에 비해 유효기간을 길게...
-	@Override
-	public <T> String createRefreshToken(String key, T data) {
-		return create(key, data, "refresh-token", 1000 * 60 * 60 * 24 * 7 * REFRESH_TOKEN_EXPIRE_MINUTES);
-//		return create(key, data, "refresh-token", 1000 * 30 * ACCESS_TOKEN_EXPIRE_MINUTES);
-	}
 
 	//Token 발급
 	/**
@@ -64,6 +58,7 @@ public class JwtServiceImpl implements JwtService {
 				.setExpiration(new Date(System.currentTimeMillis() + expire)); 
 		
 		// 저장할 data의 key, value
+		System.out.println(key + " " + data);
 		claims.put(key, data); 
 		
 		String jwt = Jwts.builder()
@@ -143,8 +138,8 @@ public class JwtServiceImpl implements JwtService {
 	}
 
 	@Override
-	public String getUserId() {
-		return (String) this.get("user").get("userid");
+	public String getMemberId() {
+		return (String) this.get("member").get("memberId");
 	}
 
 }
