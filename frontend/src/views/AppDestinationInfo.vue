@@ -10,7 +10,7 @@
     </b-row>
     <b-row class="mt-3">
       <b-col cols="12">
-        <the-kakao-map :chargers="searchingdestination"></the-kakao-map>
+        <the-kakao-map :destinations="searchingdestination"></the-kakao-map>
       </b-col>
     </b-row>
   </b-container>
@@ -60,6 +60,7 @@ export default {
       destinationList(
         params,
         ({ data }) => {
+          console.log(data);
           this.searchingdestination = data;
         },
         (error) => {
