@@ -111,5 +111,28 @@ public class MemberController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 
 	}
-
+	
+	@ApiOperation(value = "회원가입", notes = "회원 정보를 가져와 회원가입을 수행한다.", response = Map.class)
+	@PostMapping("/regist")
+	public ResponseEntity<Map<String, Object>> regist(
+			@RequestBody @ApiParam(value = "회원가입 시 필요한 회원정보(아이디, 이름, 이메일, 비밀번호, 시도코드, 군구코드).", required = true) MemberDto memberDto) {
+		System.out.println(memberDto);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		try {
+			boolean registMember = memberService.regist(memberDto);
+			if (registMember) {
+				resultMap.put("message", SUCCESS);
+				
+			} else {
+				resultMap.put("message", FAIL);
+			}
+			status = HttpStatus.ACCEPTED;
+		} catch (Exception e) {
+			logger.error("회원가입 실패 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
 }

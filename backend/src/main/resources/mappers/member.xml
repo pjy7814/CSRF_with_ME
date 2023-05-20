@@ -15,4 +15,15 @@
 		from member
 		where member_id = #{memberId}
 	</select>
+	
+	<insert id="regist" parameterType="memberDto">
+	  INSERT INTO member (member_id, member_name, member_password, member_email, sido_code, gungu_code)
+	  VALUES (#{memberId}, #{memberName}, #{memberPassword}, #{memberEmail}, #{sidoCode}, #{gunguCode})
+	</insert>
+	
+	<insert id="registSalt" parameterType="java.util.Map">
+        INSERT INTO memberSec (member_id, salt)
+        VALUES (#{memberId}, #{salt})
+    </insert>
+	
 </mapper>
