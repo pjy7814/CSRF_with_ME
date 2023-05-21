@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import AppMain from "@/views/AppMain";
 import AppDestinationInfo from "@/views/AppDestinationInfo";
-
+import AppError from "@/views/AppError";
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -42,101 +42,146 @@ const routes = [
   {
     path: "/member",
     name: "member",
-    component: () => import(/* webpackChunkName: "member" */ "@/views/AppMember"),
+    component: () =>
+      import(/* webpackChunkName: "member" */ "@/views/AppMember"),
     children: [
       {
         path: "join",
         name: "join",
         component: () =>
-          import(/* webpackChunkName: "member" */ "@/components/member/memberRegister"),
+          import(
+            /* webpackChunkName: "member" */ "@/components/member/memberRegister"
+          ),
       },
       {
         path: "login",
         name: "login",
-        component: () => import(/* webpackChunkName: "member" */ "@/components/member/memberLogin"),
+        component: () =>
+          import(
+            /* webpackChunkName: "member" */ "@/components/member/memberLogin"
+          ),
       },
       {
         path: "mypage",
         name: "mypage",
         beforeEnter: onlyAuthMember,
         component: () =>
-          import(/* webpackChunkName: "member" */ "@/components/member/memberMyPage"),
+          import(
+            /* webpackChunkName: "member" */ "@/components/member/memberMyPage"
+          ),
       },
     ],
   },
   {
     path: "/noticeboard",
     name: "noticeboard",
-    component: () => import(/* webpackChunkName: "board" */ "@/views/AppNoticeBoard"),
+    component: () =>
+      import(/* webpackChunkName: "board" */ "@/views/AppNoticeBoard"),
     redirect: "/noticeboard/list",
     children: [
       {
         path: "list",
         name: "noticeboardlist",
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardList"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardList"
+          ),
       },
       {
         path: "write",
         name: "noticeboardwrite",
         beforeEnter: onlyAuthMember,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardWrite"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardWrite"
+          ),
       },
       {
         path: "view/:articleno",
         name: "noticeboardview",
         beforeEnter: onlyAuthMember,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardView"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardView"
+          ),
       },
       {
         path: "modify",
         name: "noticeboardmodify",
         beforeEnter: onlyAuthMember,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardModify"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardModify"
+          ),
       },
       {
         path: "delete/:articleno",
         name: "noticeboarddelete",
         beforeEnter: onlyAuthMember,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardDelete"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardDelete"
+          ),
       },
     ],
   },
   {
     path: "/shareboard",
     name: "shareboard",
-    component: () => import(/* webpackChunkName: "board" */ "@/views/AppShareBoard"),
+    component: () =>
+      import(/* webpackChunkName: "board" */ "@/views/AppShareBoard"),
     redirect: "/shareboard/list",
     children: [
       {
         path: "list",
         name: "shareboardlist",
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardList"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardList"
+          ),
       },
       {
         path: "write",
         name: "shareboardwrite",
         beforeEnter: onlyAuthMember,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardWrite"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardWrite"
+          ),
       },
       {
         path: "view/:articleno",
         name: "shareboardview",
         beforeEnter: onlyAuthMember,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardView"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardView"
+          ),
       },
       {
         path: "modify",
         name: "shareboardmodify",
         beforeEnter: onlyAuthMember,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardModify"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardModify"
+          ),
       },
       {
         path: "delete/:articleno",
         name: "shareboarddelete",
         beforeEnter: onlyAuthMember,
-        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardDelete"),
+        component: () =>
+          import(
+            /* webpackChunkName: "board" */ "@/components/board/BoardDelete"
+          ),
       },
     ],
+  },
+  {
+    path: "/error",
+    name: "error",
+    component: AppError,
   },
 ];
 
