@@ -181,6 +181,7 @@ const routes = [
   {
     path: "/error",
     name: "error",
+    props: true,
     component: AppError,
   },
 ];
