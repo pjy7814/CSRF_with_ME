@@ -25,5 +25,8 @@
         INSERT INTO memberSec (member_id, salt)
         VALUES (#{memberId}, #{salt})
     </insert>
+    <select id="getSalt" parameterType="string" resultType="string">
+    	select salt from membersec where member_id = #{memberId}
+    </select>
 	
 </mapper>
