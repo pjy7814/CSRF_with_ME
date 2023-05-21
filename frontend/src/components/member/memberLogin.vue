@@ -124,7 +124,10 @@ export default {
         return;
       } else this.memberPassword.valid = true;
 
-      await this.memberConfirm("1234");
+      await this.memberConfirm({
+        memberId: this.memberId.value,
+        memberPassword: this.memberPassword.value,
+      });
       let token = sessionStorage.getItem("access-token");
       if (this.isLogin) {
         await this.getMemberInfo(token);
