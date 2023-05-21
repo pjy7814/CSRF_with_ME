@@ -68,7 +68,7 @@ const memberStore = {
               commit("SET_IS_LOGIN", false);
               commit("SET_IS_LOGIN_ERROR", false);
               commit("SET_IS_VALID_TOKEN", false);
-              this.$router.push({
+              router.push({
                 name: "error",
                 params: {
                   msg: "서버 에러입니다! 관리자에게 문의해주세요.",
@@ -80,7 +80,7 @@ const memberStore = {
               commit("SET_IS_LOGIN", false);
               commit("SET_IS_LOGIN_ERROR", false);
               commit("SET_IS_VALID_TOKEN", false);
-              this.$router.push({
+              router.push({
                 name: "error",
                 params: {
                   msg: "비 정상적인 접근입니다! 사이트를 정상적으로 이용해주세요!",
@@ -88,7 +88,6 @@ const memberStore = {
               });
               break;
           }
-          console.log(error);
         }
       );
     },
