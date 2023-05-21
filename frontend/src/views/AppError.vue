@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <b-container class="bv-example-row mt-3 text-center">
     <h1>Error!</h1>
     <p>{{ msg }}</p>
-  </div>
+  </b-container>
 </template>
 
 <script>
