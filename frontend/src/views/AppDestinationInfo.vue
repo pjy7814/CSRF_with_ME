@@ -1,16 +1,31 @@
 <template>
   <b-container class="bv-example-row mt-3 text-center">
-    <h3 class="underline-blue"><b-icon icon="map"></b-icon> 여행지 정보 찾기</h3>
+    <h3 class="underline-blue">
+      <b-icon icon="map"></b-icon> 여행지 정보 찾기
+    </h3>
     <b-row class="mt-3">
       <select-sido @select-sido="selectSido"></select-sido>
-      <select-gugun :sidoCode="sidoCode" @select-gugun="selectGugun"></select-gugun>
-      <select-content-type @select-contenttype="selectContentType"></select-content-type>
-      <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요" />
+      <select-gugun
+        :sidoCode="sidoCode"
+        @select-gugun="selectGugun"
+      ></select-gugun>
+      <select-content-type
+        @select-contenttype="selectContentType"
+      ></select-content-type>
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색어를 입력하세요"
+      />
       <button class="btn btn-primary" @click="search">조회</button>
     </b-row>
     <b-row class="mt-3">
       <b-col cols="12">
-        <the-kakao-map :destinations="searchingdestination"></the-kakao-map>
+        <the-kakao-map
+          :destinations="searchingdestination"
+          :startPoint="startPoint"
+          @registModalAttraction="registModalAttraction"
+        ></the-kakao-map>
       </b-col>
     </b-row>
   </b-container>
@@ -25,6 +40,7 @@ import { destinationList } from "@/api/item/item.js";
 
 export default {
   name: "AppDestinationInfo",
+  props: ["startPoint"],
   components: {
     SelectSido,
     SelectGugun,
@@ -40,6 +56,7 @@ export default {
       searchingdestination: [],
     };
   },
+  created() {},
   methods: {
     selectSido(sidoCode) {
       this.sidoCode = sidoCode;
@@ -68,12 +85,19 @@ export default {
         }
       );
     },
+    registModalAttraction(position) {
+      this.$emit("registModalAttraction", position);
+    },
   },
 };
 </script>
 <style scoped>
 .underline-blue {
   display: inline-block;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 70%, rgba(27, 136, 231, 0.3) 30%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 70%,
+    rgba(27, 136, 231, 0.3) 30%
+  );
 }
 </style>

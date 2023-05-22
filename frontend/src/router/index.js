@@ -29,6 +29,7 @@ const routes = [
     path: "/destination",
     name: "destination",
     component: AppDestinationInfo,
+    props: true,
   },
   {
     path: "/member",
