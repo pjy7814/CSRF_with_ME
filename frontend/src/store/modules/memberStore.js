@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout } from "@/api/member";
+import { login, findById } from "@/api/member";
 
 const memberStore = {
   namespaced: true,
@@ -91,7 +91,7 @@ const memberStore = {
         }
       );
     },
-    async getMemberInfo({ commit, dispatch }, token) {
+    async getMemberInfo({ commit }, token) {
       let decodeToken = jwtDecode(token);
       // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
       await findById(
@@ -109,70 +109,20 @@ const memberStore = {
             "getMemberInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
             error.response.status
           );
-          commit("SET_IS_VALID_TOKEN", false);
-          await dispatch("tokenRegeneration");
+          /*
+          logout 처리하기
+          */
+          await this.memberLogout(decodeToken.memberId);
         }
       );
     },
-    async tokenRegeneration({ commit, state }) {
-      console.log(
-        "토큰 재발급 >> 기존 토큰 정보 : {}",
-        sessionStorage.getItem("access-token")
-      );
-      await tokenRegeneration(
-        JSON.stringify(state.memberInfo),
-        ({ data }) => {
-          if (data.message === "success") {
-            let accessToken = data["access-token"];
-            console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
-            sessionStorage.setItem("access-token", accessToken);
-            commit("SET_IS_VALID_TOKEN", true);
-          }
-        },
-        async (error) => {
-          // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-          if (error.response.status === 401) {
-            console.log("갱신 실패");
-            // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
-            await logout(
-              state.memberInfo.memberId,
-              ({ data }) => {
-                if (data.message === "success") {
-                  console.log("로그아웃 성공");
-                } else {
-                  console.log("로그아웃 실패");
-                }
-                commit("SET_IS_LOGIN", false);
-                commit("SET_MEMBER_INFO", null);
-                commit("SET_IS_VALID_TOKEN", false);
-                router.push({ name: "login" });
-              },
-              (error) => {
-                console.log(error);
-                commit("SET_IS_LOGIN", false);
-                commit("SET_MEMBER_INFO", null);
-              }
-            );
-          }
-        }
-      );
-    },
-    async memberLogout({ commit }, memberId) {
-      await logout(
-        memberId,
-        ({ data }) => {
-          if (data.message === "success") {
-            commit("SET_MEMBER_INFO", null);
-            commit("SET_IS_VALID_TOKEN", false);
-            commit("SET_IS_LOGIN", false);
-          } else {
-            console.log("유저 정보 없음!!!!");
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    async memberLogout({ commit }) {
+      sessionStorage.removeItem("access-token");
+      commit("SET_MEMBER_INFO", null);
+      commit("SET_IS_VALID_TOKEN", false);
+      commit("SET_IS_LOGIN", false);
+      alert("로그인 유효기간이 만료되었습니다. 다시 로그인 해주세요!");
+      router.replace({ name: "login" });
     },
   },
 };

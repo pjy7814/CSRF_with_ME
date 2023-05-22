@@ -17,9 +17,15 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item href="#">
-            <router-link :to="{ name: 'destination' }" class="link"> 여행지 정보 </router-link>
-            <router-link :to="{ name: 'noticeboard' }" class="m-2 link"> 공지사항 </router-link>
-            <router-link :to="{ name: 'shareboard' }" class="m-2 link"> 공유 게시판 </router-link>
+            <router-link :to="{ name: 'destination' }" class="link">
+              여행지 정보
+            </router-link>
+            <router-link :to="{ name: 'noticeboard' }" class="m-2 link">
+              공지사항
+            </router-link>
+            <router-link :to="{ name: 'shareboard' }" class="m-2 link">
+              공유 게시판
+            </router-link>
           </b-nav-item>
         </b-navbar-nav>
 
@@ -37,7 +43,9 @@
               >내정보보기</router-link
             >
           </b-nav-item>
-          <b-nav-item class="align-self-center link" @click.prevent="onClickLogout"
+          <b-nav-item
+            class="align-self-center link"
+            @click.prevent="onClickLogout"
             >로그아웃</b-nav-item
           >
         </b-navbar-nav>
@@ -47,10 +55,18 @@
             <template #button-content>
               <b-icon icon="people" font-scale="2"></b-icon>
             </template>
-            <b-dropdown-item href="#" @click="onClickDropDown('join')" class="link">
+            <b-dropdown-item
+              href="#"
+              @click="onClickDropDown('join')"
+              class="link"
+            >
               <b-icon icon="person-circle"></b-icon> 회원가입
             </b-dropdown-item>
-            <b-dropdown-item href="#" @click="onClickDropDown('login')" class="link">
+            <b-dropdown-item
+              href="#"
+              @click="onClickDropDown('login')"
+              class="link"
+            >
               <b-icon icon="key"></b-icon> 로그인
             </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -85,7 +101,7 @@ export default {
       //vuex actions에서 userLogout 실행(Backend에 저장 된 리프레시 토큰 없애기
       //+ satate에 isLogin, memberInfo 정보 변경)
       // this.$store.dispatch("userLogout", this.memberInfo.memberId);
-      this.memberLogout(this.memberInfo.memberId);
+      this.memberLogout();
       console.log(this.checkMemberInfo);
       sessionStorage.removeItem("access-token"); //저장된 토큰 없애기
       if (this.$route.path != "/") this.$router.push({ name: "main" });
