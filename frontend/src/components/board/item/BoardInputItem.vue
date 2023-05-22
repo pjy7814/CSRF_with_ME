@@ -83,19 +83,17 @@ import { writeArticle, modifyArticle, getArticle } from "@/api/board";
 
   - 글 등록 시에는, 제목, 본문에 xss 공격 방지를 위한 .replace 함수를 적용시켜준다. 만약, 해당 시도가 존재할 시에 xss공격 방지를 위해 특수 문자로 변경된다.
 */
-const accessToken = sessionStorage.getItem("access-token");
+
 export default {
   name: "BoardInputItem",
   data() {
     return {
       article: {
         articleno: 0,
-        userid: "",
+        memberId: "",
         subject: "",
         content: "",
-        accessToken,
       },
-      isUserid: false,
     };
   },
   props: {

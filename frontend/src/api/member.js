@@ -15,8 +15,7 @@ async function findById(memberId, success, fail) {
 }
 
 async function tokenRegeneration(member, success, fail) {
-  api.defaults.headers["refresh-token"] =
-    sessionStorage.getItem("refresh-token"); //axios header에 refresh-token 셋팅
+  api.defaults.headers["access-token"] = sessionStorage.getItem("access-token");
   await api.post(`/member/refresh`, member).then(success).catch(fail);
 }
 

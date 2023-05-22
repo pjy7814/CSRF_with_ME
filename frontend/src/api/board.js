@@ -7,6 +7,7 @@ function listArticle(param, success, fail) {
 }
 
 function writeArticle(article, success, fail) {
+  api.defaults.headers["access-token"] = sessionStorage.getItem("access-token");
   api.post(`/board`, JSON.stringify(article)).then(success).catch(fail);
 }
 
@@ -15,10 +16,12 @@ function getArticle(articleno, success, fail) {
 }
 
 function modifyArticle(article, success, fail) {
+  api.defaults.headers["access-token"] = sessionStorage.getItem("access-token");
   api.put(`/board`, JSON.stringify(article)).then(success).catch(fail);
 }
 
 function deleteArticle(articleno, success, fail) {
+  api.defaults.headers["access-token"] = sessionStorage.getItem("access-token");
   api.delete(`/board/${articleno}`).then(success).catch(fail);
 }
 
