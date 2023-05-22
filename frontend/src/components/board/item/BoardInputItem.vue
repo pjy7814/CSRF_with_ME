@@ -2,18 +2,12 @@
   <b-row class="mb-1">
     <b-col style="text-align: left">
       <b-form @submit="onSubmit" @reset="onReset">
-        <b-form-group id="userid-group" label="작성자:" label-for="userid" description="작성자를 입력하세요.">
-          <b-form-input
-            id="userid"
-            :disabled="isUserid"
-            v-model="article.userid"
-            type="text"
-            required
-            placeholder="작성자 입력..."
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group id="subject-group" label="제목:" label-for="subject" description="제목을 입력하세요.">
+        <b-form-group
+          label-cols="2"
+          content-cols="10"
+          label="제목:"
+          label-for="subject"
+        >
           <b-form-input
             id="subject"
             v-model="article.subject"
@@ -21,6 +15,21 @@
             required
             placeholder="제목 입력..."
           ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          label-cols="2"
+          content-cols="10"
+          label="이미지 등록"
+          label-for="input-horizontal"
+        >
+          <b-form-file
+            v-model="selectedImg"
+            variant="success"
+            multiple
+            accept=".jpg, .jpeg, .png, .gif"
+            browse-text="업로드"
+            @input="changeImgFile()"
+          ></b-form-file>
         </b-form-group>
 
         <b-form-group id="content-group" label="내용:" label-for="content">
@@ -33,8 +42,16 @@
           ></b-form-textarea>
         </b-form-group>
 
-        <b-button type="submit" variant="primary" class="m-1" v-if="this.type === 'register'">글작성</b-button>
-        <b-button type="submit" variant="primary" class="m-1" v-else>글수정</b-button>
+        <b-button
+          type="submit"
+          variant="primary"
+          class="m-1"
+          v-if="this.type === 'register'"
+          >글작성</b-button
+        >
+        <b-button type="submit" variant="primary" class="m-1" v-else
+          >글수정</b-button
+        >
         <b-button type="reset" variant="danger" class="m-1">초기화</b-button>
       </b-form>
     </b-col>
@@ -44,6 +61,29 @@
 <script>
 import { writeArticle, modifyArticle, getArticle } from "@/api/board";
 
+/*
+ fix me!
+  - 토큰 만료 시, interceptor에서 토큰 초기화 및 로그아웃 response를 반환해줘야 한다.
+  - 글 작성 시, request할 시에 서버에서 memberId와 accessToken.memberId를 동일한지 체킹하는 로직 꼭 필요하다. 
+
+  글 작성 페이지
+  - 글 작성 입력 사항은 다음과 같다.
+    - 제목
+    - 공유할 관광지 : 이름, 주소가 저장됨.
+      - '등록' 버튼 클릭시, 서브 페이지로 이동한다.
+      - 서브 페이지 내부에는 시/도, 구/군, 카테고리, 키워드 검색이 존재한다.
+      - 사용자의 경우 마커 클릭 시, 마커위에 창이 뜨며 해당 창 내에서 '등록'을 누를 시에 하단 입력창에 해당 여행지의 이름과 주소가 표시된다.
+    - 이미지
+      - 최대 5개 등록 가능하다.
+      - 이미지 등록 시에, .jpg, .jpeg, .png임을 체크하는 validation이 존재한다.
+        - 만약, validation에 불통할 시, 등록 자체를 해주지 않으며 하단에 경고 문구를 띄운다.
+    - 본문
+      - 최대 1000자로 제한해준다.
+      - 띄어쓰기 및 줄 바꿈을 textarea로 구성하기 위해 wrap="hard"를 넣어주며, .replace를 통해 <br>태그를 삽입해준다.
+
+  - 글 등록 시에는, 제목, 본문에 xss 공격 방지를 위한 .replace 함수를 적용시켜준다. 만약, 해당 시도가 존재할 시에 xss공격 방지를 위해 특수 문자로 변경된다.
+*/
+const accessToken = sessionStorage.getItem("access-token");
 export default {
   name: "BoardInputItem",
   data() {
@@ -53,6 +93,7 @@ export default {
         userid: "",
         subject: "",
         content: "",
+        accessToken,
       },
       isUserid: false,
     };
@@ -85,12 +126,24 @@ export default {
 
       let err = true;
       let msg = "";
-      !this.article.userid && ((msg = "작성자 입력해주세요"), (err = false), this.$refs.userid.focus());
-      err && !this.article.subject && ((msg = "제목 입력해주세요"), (err = false), this.$refs.subject.focus());
-      err && !this.article.content && ((msg = "내용 입력해주세요"), (err = false), this.$refs.content.focus());
+      !this.article.userid &&
+        ((msg = "작성자 입력해주세요"),
+        (err = false),
+        this.$refs.userid.focus());
+      err &&
+        !this.article.subject &&
+        ((msg = "제목 입력해주세요"),
+        (err = false),
+        this.$refs.subject.focus());
+      err &&
+        !this.article.content &&
+        ((msg = "내용 입력해주세요"),
+        (err = false),
+        this.$refs.content.focus());
 
       if (!err) alert(msg);
-      else this.type === "register" ? this.registArticle() : this.modifyArticle();
+      else
+        this.type === "register" ? this.registArticle() : this.modifyArticle();
     },
     onReset(event) {
       event.preventDefault();
@@ -142,6 +195,9 @@ export default {
           console.log(error);
         }
       );
+    },
+    changeImgFile() {
+      return;
     },
     moveList() {
       this.$router.push({ name: "boardlist" });
