@@ -1,75 +1,78 @@
 package com.ssafy.vue.model;
 
+import java.sql.Timestamp;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "BoardDto : 게시글정보", description = "게시글의 상세 정보를 나타낸다.")
 public class BoardDto {
 	@ApiModelProperty(value = "글번호")
-	private int articleno;
+	private int boardId;
 	@ApiModelProperty(value = "작성자 아이디")
-	private String userid;
+	private String boardWriterId;
 	@ApiModelProperty(value = "글제목")
-	private String subject;
+	private String boardTitle;
 	@ApiModelProperty(value = "글내용")
-	private String content;
-	@ApiModelProperty(value = "조회수")
-	private int hit;
+	private String boardContent;
+	@ApiModelProperty(value = "관광지 주소")
+	private String boardAttractinoInfo;
 	@ApiModelProperty(value = "작성일")
-	private String regtime;
-
-	public int getArticleno() {
-		return articleno;
+	private Timestamp createdTime;
+	@ApiModelProperty(value = "수정일")
+	private Timestamp modifiedTime;
+	@ApiModelProperty(value = "보드 타입")
+	private String boardType;
+	
+	public int getBoardId() {
+		return boardId;
 	}
-
-	public void setArticleno(int articleno) {
-		this.articleno = articleno;
+	public void setBoardId(int boardId) {
+		this.boardId = boardId;
 	}
-
-	public String getUserid() {
-		return userid;
+	public String getBoardWriterId() {
+		return boardWriterId;
 	}
-
-	public void setUserid(String userid) {
-		this.userid = userid;
+	public void setBoardWriterId(String boardWriterId) {
+		this.boardWriterId = boardWriterId;
 	}
-
-	public String getSubject() {
-		return subject;
+	public String getBoardTitle() {
+		return boardTitle;
 	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setBoardTitle(String boardTitle) {
+		this.boardTitle = boardTitle;
 	}
-
-	public String getContent() {
-		return content;
+	public String getBoardContent() {
+		return boardContent;
 	}
-
-	public void setContent(String content) {
-		this.content = content;
+	public void setBoardContent(String boardContent) {
+		this.boardContent = boardContent;
 	}
-
-	public int getHit() {
-		return hit;
+	public String getBoardAttractinoInfo() {
+		return boardAttractinoInfo;
 	}
-
-	public void setHit(int hit) {
-		this.hit = hit;
+	public void setBoardAttractinoInfo(String boardAttractinoInfo) {
+		this.boardAttractinoInfo = boardAttractinoInfo;
 	}
-
-	public String getRegtime() {
-		return regtime;
+	public Timestamp getCreatedTime() {
+		return createdTime;
 	}
-
-	public void setRegtime(String regtime) {
-		this.regtime = regtime;
+	public void setCreatedTime(Timestamp createdTime) {
+		this.createdTime = createdTime;
 	}
-
+	public Timestamp getModifiedTime() {
+		return modifiedTime;
+	}
+	public void setModifiedTime(Timestamp modifiedTime) {
+		this.modifiedTime = modifiedTime;
+	}
 	@Override
 	public String toString() {
-		return "BoardDto [articleno=" + articleno + ", userid=" + userid + ", subject=" + subject + ", content="
-				+ content + ", hit=" + hit + ", regtime=" + regtime + "]";
+		return "BoardDto [boardId=" + boardId + ", boardWriterId=" + boardWriterId + ", boardTitle=" + boardTitle
+				+ ", boardContent=" + boardContent + ", boardAttractinoInfo=" + boardAttractinoInfo + ", createdTime="
+				+ createdTime + ", modifiedTime=" + modifiedTime + "]";
 	}
+	
+	
 
 }

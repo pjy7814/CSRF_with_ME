@@ -18,7 +18,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	private SqlSession sqlSession;
-
+	//회원가입에서 role code 넣기
 	@Override
 	public MemberDto login(MemberDto memberDto) throws Exception {
 		if (memberDto.getMemberId() == null || memberDto.getMemberPassword() == null)

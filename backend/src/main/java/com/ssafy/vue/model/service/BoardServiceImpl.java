@@ -20,7 +20,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean writeArticle(BoardDto boardDto) throws Exception {
-		if(boardDto.getSubject() == null || boardDto.getContent() == null) {
+		if(boardDto.getBoardTitle() == null || boardDto.getBoardContent() == null) {
 			throw new Exception();
 		}
 		return sqlSession.getMapper(BoardMapper.class).writeArticle(boardDto) == 1;

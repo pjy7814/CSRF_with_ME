@@ -22,6 +22,8 @@ public class MemberDto {
 	private String gunguCode; 
 	@ApiModelProperty(value = "회원 가입일")
 	private Timestamp createdAt;
+	@ApiModelProperty(value = "회원 권한 코드")
+	private String memberRoleCd;
 		
 	public String getMemberId() {
 		return memberId;
@@ -65,12 +67,20 @@ public class MemberDto {
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
+	
+	public String getMemberRoleCd() {
+		return memberRoleCd;
+	}
+	public void setMemberRoleCd(String memberRoleCd) {
+		this.memberRoleCd = memberRoleCd;
+	}
 	@Override
 	public String toString() {
 		return "MemberDto [memberId=" + memberId + ", memberName=" + memberName + ", memberPassword=" + memberPassword
 				+ ", memberEmail=" + memberEmail + ", sidoCode=" + sidoCode + ", gunguCode=" + gunguCode
-				+ ", createdAt=" + createdAt + "]";
+				+ ", createdAt=" + createdAt + ", memberRoleCd=" + memberRoleCd + "]";
 	}
-
+	
+	
 
 }
