@@ -3,12 +3,13 @@ package com.ssafy.vue.model;
 import com.ssafy.util.MyException;
 
 public class TouristSpotInfoDto {
-
+	private int contentId;
 	private double latitude, longitude;
 	private String title, address1, address2, firstImage1, firstImage2;
 
-	public TouristSpotInfoDto(double latitude, double longitude, String title, String address1, String address2,
+	public TouristSpotInfoDto(int contentId, double latitude, double longitude, String title, String address1, String address2,
 							 String firstImage1, String firstImage2) throws MyException {
+		setContentId(contentId);
 		setLatitude(latitude);
 		setLongitude(longitude);
 		setTitle(title);
@@ -16,6 +17,14 @@ public class TouristSpotInfoDto {
 		setAddress2(address2);
 		setFirstImage1(firstImage1);
 		setFirstImage2(firstImage2);
+	}
+	
+	public int getContentId() {
+		return contentId;
+	}
+	
+	public void setContentId(int contentId) {
+		this.contentId = contentId;
 	}
 
 	public double getLatitude() {
