@@ -16,6 +16,7 @@ import com.ssafy.vue.exception.UnAuthorizedException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -136,7 +137,7 @@ public class JwtServiceImpl implements JwtService {
 		logger.info("value : {}", value);
 		return value;
 	}
-
+	
 	@Override
 	public String getMemberId() {
 		return (String) this.get("member").get("memberId");

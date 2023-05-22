@@ -15,9 +15,11 @@ public interface MemberMapper {
 	public void saveRefreshToken(Map<String, String> map) throws SQLException;
 	public Object getRefreshToken(String userid) throws SQLException;
 	public void deleteRefreshToken(Map<String, String> map) throws SQLException;
-	public MemberDto memberInfo(String memberId);
+	public MemberDto memberInfo(String memberId) throws SQLException;
 	public void regist(MemberDto memberDto) throws SQLException;
-	public void registSalt(String memberId, String salt);
-	public String getSalt(String memberId);
-	
+	public void registSalt(String memberId, String salt) throws SQLException;
+	public String getSalt(String memberId) throws SQLException;
+	public void updateMember(MemberDto memberDto) throws SQLException;
+	public void updateMemberPw(MemberDto memberDto) throws SQLException;
+	public void updateSalt(String memberId, String salt) throws SQLException;
 }

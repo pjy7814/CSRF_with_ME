@@ -23,11 +23,26 @@ export default {
   name: "SelectGugun",
   data() {
     return {
-      gugunCode: null,
+      // gugunCode: null,
     };
   },
   props: {
     sidoCode: String,
+    selectedGugun: {
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
+    ...mapState(itemStore, ["guguns"]),
+    gugunCode: {
+      get() {
+        return this.selectedGugun;
+      },
+      set(value) {
+        this.$emit("update:selectedGugun", value);
+      },
+    },
   },
   watch: {
     sidoCode() {
@@ -36,10 +51,6 @@ export default {
       if (this.sidoCode) this.getGugun(this.sidoCode);
     },
   },
-  computed: {
-    ...mapState(itemStore, ["guguns"]),
-  },
-  created() {},
   methods: {
     ...mapActions(itemStore, ["getGugun"]),
     ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
