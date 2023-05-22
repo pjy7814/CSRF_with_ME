@@ -5,35 +5,35 @@
 <mapper namespace="com.ssafy.vue.model.mapper.BoardMapper">
 
 	<insert id="writeArticle" parameterType="boardDto">
-		insert into board (userid, subject, content, hit, regtime)
-		values (#{userid}, #{subject}, #{content}, 0, now())
+		insert into board (board_writer_Id, board_title, board_content, created_time)
+		values (#{boardWriterId}, #{boardTitle}, #{boardContent}, now())
 	</insert>
 	
 	<select id="listArticle" parameterType="map" resultType="boardDto">
-		select articleno, userid, subject, content, hit,
-				case when date_format(regtime, '%Y%m%d') = date_format(now(), '%Y%m%d')
-				then date_format(regtime, '%H:%i:%s')
-				else date_format(regtime, '%y.%m.%d')
-				end regtime
+		select board_id as boardId, board_writer_Id as boardWriterId, board_title as boardTitle, board_content as boardContent,
+				case when date_format(created_time, '%Y%m%d') = date_format(now(), '%Y%m%d')
+				then date_format(created_time, '%H:%i:%s')
+				else date_format(created_time, '%y.%m.%d')
+				end created_time
 		from board
 		<if test="word != null and word != ''">
 			<if test="key == 'subject'">
-				where subject like concat('%', #{word}, '%')
+				where board_title like concat('%', #{word}, '%')
 			</if>
 			<if test="key != 'subject'">
 				where ${key} = #{word}
 			</if>
 		</if>
-		order by articleno desc
+		order by board_id desc
 		limit #{start}, #{spp}
 	</select>
 	
 	<select id="getTotalCount" parameterType="map" resultType="int">
-		select count(articleno)
+		select count(board_id)
 		from board
 		<if test="word != null and word != ''">
 			<if test="key == 'subject'">
-				where subject like concat('%', #{word}, '%')
+				where board_title like concat('%', #{word}, '%')
 			</if>
 			<if test="key != 'subject'">
 				where ${key} = #{word}
@@ -42,9 +42,9 @@
 	</select>
 	
 	<select id="getArticle" parameterType="int" resultType="boardDto">
-		select articleno, userid, subject, content, hit, regtime
+		select board_id as boardId, board_writer_id as boardWriterId, board_title as boardTitle, board_content as boardContent, created_time as createdTime
 		from board
-		where articleno = #{articleno}
+		where board_id = #{boardId}
 	</select>
 	
 	<update id="updateHit" parameterType="int">
@@ -55,18 +55,18 @@
 	
 	<update id="modifyArticle" parameterType="boardDto">
 		update board
-		set subject = #{subject}, content = #{content}
-		where articleno = #{articleno}
+		set board_title = #{boardTitle}, board_content = #{boardContent}
+		where board_id = #{boardId}
 	</update>
 	
 	<delete id="deleteMemo" parameterType="int">
 		delete from memo
-		where articleno = #{articleno}
+		where board_id = #{boardId}
 	</delete>
 	
 	<delete id="deleteArticle" parameterType="int">
 		delete from board
-		where articleno = #{articleno}
+		where board_id = #{boardId}
 	</delete>
 
 </mapper>
