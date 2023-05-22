@@ -84,15 +84,34 @@ import { writeArticle, modifyArticle, getArticle } from "@/api/board";
   - 글 등록 시에는, 제목, 본문에 xss 공격 방지를 위한 .replace 함수를 적용시켜준다. 만약, 해당 시도가 존재할 시에 xss공격 방지를 위해 특수 문자로 변경된다.
 */
 
+/*
+
+공유(또는 공지사항) 에서 글을 작성하고 등록을 보낼 때, 공지사항(또는 공유)로 request하도록 f12키를 통한 수정을 한다면?
+- 
+*/
 export default {
   name: "BoardInputItem",
   data() {
     return {
-      article: {
-        articleno: 0,
-        memberId: "",
-        subject: "",
-        content: "",
+      boardId: {
+        value: 0,
+        valid: true,
+      },
+      boardWriterId: {
+        value: "",
+        valid: null,
+      },
+      boardTitle: {
+        value: "",
+        valid: null,
+      },
+      boardContent: {
+        value: "",
+        valid: null,
+      },
+      boardAttractionInfoId: {
+        value: "",
+        valid: null,
       },
     };
   },
