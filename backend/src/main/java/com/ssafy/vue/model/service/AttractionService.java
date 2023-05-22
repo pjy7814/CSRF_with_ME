@@ -2,6 +2,7 @@ package com.ssafy.vue.model.service;
 
 import java.util.List;
 
+import com.ssafy.util.MyException;
 import com.ssafy.vue.model.HouseInfoDto;
 import com.ssafy.vue.model.SearchOptionDto;
 import com.ssafy.vue.model.SidoGugunCodeDto;

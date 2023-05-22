@@ -11,7 +11,7 @@
 	</select>
 	
 	<select id="memberInfo" parameterType="string" resultType="memberDto">
-		select member_name as memberName, member_id as memberId, member_email as memberEmail, created_at as createdAt
+		select member_name as memberName, member_id as memberId, member_email as memberEmail, sido_code as sidoCode, gungu_code as gunguCode
 		from member
 		where member_id = #{memberId}
 	</select>
@@ -28,5 +28,29 @@
     <select id="getSalt" parameterType="string" resultType="string">
     	select salt from membersec where member_id = #{memberId}
     </select>
+    
+    <update id="updateMember" parameterType="memberDto">
+    UPDATE member SET
+    member_name = #{memberName},
+    member_email = #{memberEmail},
+    sido_code = #{sidoCode},
+    gungu_code = #{gunguCode}
+    WHERE member_id = #{memberId}
+  </update>
+  
+  <update id="updateMemberPw" parameterType="memberDto">
+    UPDATE member SET
+    member_name = #{memberName},
+    member_password = #{memberPassword},
+    member_email = #{memberEmail},
+    sido_code = #{sidoCode},
+    gungu_code = #{gunguCode}
+    WHERE member_id = #{memberId}
+  </update>
 	
+	<update id="updateSalt" parameterType="String">
+    UPDATE memberSec SET
+    salt = #{salt}
+    WHERE member_id = #{memberId}
+  </update>
 </mapper>

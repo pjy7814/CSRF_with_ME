@@ -1,10 +1,12 @@
 package com.ssafy.vue.model.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.vue.model.SearchOptionDto;
 import com.ssafy.vue.model.SidoGugunCodeDto;

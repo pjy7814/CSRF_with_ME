@@ -23,18 +23,28 @@ export default {
   name: "SelectSido",
   data() {
     return {
-      sidoCode: null,
+      // sidoCode: null,
     };
   },
+  props: {
+    selectedSido: {
+      type: String,
+      required: true,
+    },
+  },
+
   computed: {
     ...mapState(itemStore, ["sidos"]),
-    // sidos() {
-    //   return this.$store.state.sidos;
-    // },
+    sidoCode: {
+      get() {
+        return this.selectedSido;
+      },
+      set(value) {
+        this.$emit("update:selectedSido", value);
+      },
+    },
   },
   created() {
-    // this.$store.dispatch("getSido");
-    // this.sidoList();
     this.CLEAR_SIDO_LIST();
     this.getSido();
   },

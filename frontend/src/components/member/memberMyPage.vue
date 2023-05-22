@@ -1,69 +1,310 @@
 <template>
-  <b-container class="mt-4" v-if="userInfo">
-    <b-row>
-      <b-col>
-        <b-alert variant="secondary" show><h3>내정보</h3></b-alert>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col></b-col>
-      <b-col cols="8">
-        <b-jumbotron>
-          <template #header>My Page</template>
+  <div class="container">
+    <form @submit.prevent="update" novalidate>
+      <div class="form-row">
+        <div class="col-md-4 mb-3">
+          <label for="member_id" class="text-left">아이디</label>
+        </div>
+        <div class="col-md-8 mb-3">
+          <input
+            type="text"
+            id="member_id"
+            v-model="memberId.value"
+            class="form-control"
+            required
+            @keydown.prevent.space
+            @keyup="handleInputChange('member_id')"
+            readonly
+          />
+          <div class="confirmMessage" id="validConfirmId">
+            아이디는 4자 이상, 영문과 숫자만 허용합니다
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-4 mb-3">
+          <label for="member_name" class="text-left">이름</label>
+        </div>
+        <div class="col-md-8 mb-3">
+          <input
+            type="text"
+            id="member_name"
+            v-model="memberName.value"
+            class="form-control"
+            required
+            @keydown.prevent.space
+            @keyup="handleInputChange('member_name')"
+          />
+          <div class="confirmMessage" id="validConfirmName">두글자 이상 입력해주세요</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-4 mb-3">
+          <label for="member_email" class="text-left">이메일</label>
+        </div>
+        <div class="col-md-8 mb-3">
+          <input
+            type="email"
+            id="member_email"
+            v-model="memberEmail.value"
+            class="form-control"
+            required
+            @keydown.prevent.space
+            @keyup="handleInputChange('member_email')"
+          />
+          <div class="confirmMessage" id="validConfirmEmail">
+            유효한 이메일 주소를 입력해주세요.
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-4 mb-3">
+          <label for="member_password" class="text-left">비밀번호</label>
+        </div>
+        <div class="col-md-8 mb-3">
+          <input
+            type="password"
+            id="member_password"
+            v-model="memberPassword.value"
+            class="form-control"
+            required
+            @keydown.prevent.space
+            @keyup="handleInputChange('member_password')"
+          />
+          <div class="confirmMessage" id="validConfirmPw">
+            비밀번호는 8자 이상, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-4 mb-3">
+          <label for="member_password" class="text-left">비밀번호 확인</label>
+        </div>
+        <div class="col-md-8 mb-3">
+          <input
+            type="password"
+            id="member_password_check"
+            v-model="memberPasswordCheck.value"
+            class="form-control"
+            required
+            @keydown.prevent.space
+            @keyup="handleInputChange('member_password_check')"
+          />
+          <div class="confirmMessage" id="validConfirmPwCheck">동일한 비밀번호가 아닙니다</div>
+        </div>
+      </div>
 
-          <template #lead> 내 정보 확인페이지입니다. </template>
-
-          <hr class="my-4" />
-
-          <b-container class="mt-4">
-            <b-row>
-              <b-col cols="2"></b-col>
-              <b-col cols="2" align-self="end">아이디</b-col
-              ><b-col cols="4" align-self="start">{{ userInfo.userid }}</b-col>
-              <b-col cols="2"></b-col>
-            </b-row>
-            <b-row>
-              <b-col cols="2"></b-col>
-              <b-col cols="2" align-self="end">이름</b-col
-              ><b-col cols="4" align-self="start">{{ userInfo.username }}</b-col>
-              <b-col cols="2"></b-col>
-            </b-row>
-            <b-row>
-              <b-col cols="2"></b-col>
-              <b-col cols="2" align-self="end">이메일</b-col
-              ><b-col cols="4" align-self="start">{{ userInfo.email }}</b-col>
-              <b-col cols="2"></b-col>
-            </b-row>
-            <b-row>
-              <b-col cols="2"></b-col>
-              <b-col cols="2" align-self="end">가입일</b-col
-              ><b-col cols="4" align-self="start">{{ userInfo.joindate }}</b-col>
-              <b-col cols="2"></b-col>
-            </b-row>
-          </b-container>
-          <hr class="my-4" />
-
-          <b-button variant="primary" href="#" class="mr-1">정보수정</b-button>
-          <b-button variant="danger" href="#">회원탈퇴</b-button>
-        </b-jumbotron>
-      </b-col>
-      <b-col></b-col>
-    </b-row>
-  </b-container>
+      <div class="form-row">
+        <div class="col-md-4">사는 곳</div>
+        <b-row class="col-md-8 mt-3">
+          <select-sido :selected-sido="sidoCode.value" @select-sido="selectSido"></select-sido>
+          <select-gugun
+            :sidoCode="sidoCode.value"
+            :selected-gugun="gunguCode.value"
+            @select-gugun="selectGugun"
+          ></select-gugun>
+        </b-row>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">저장하기</button>
+    </form>
+  </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-
-const memberStore = "memberStore";
-
+import SelectSido from "@/components/item/SelectSido.vue";
+import SelectGugun from "@/components/item/SelectGugun.vue";
+import {
+  validateMemberEmail,
+  validateMemberId,
+  validateMemberName,
+  validateMemberPassword,
+  validateMemberPasswordCheck,
+} from "@/util/index";
+import { updateMember } from "@/api/member";
 export default {
-  name: "UserMyPage",
-  components: {},
-  computed: {
-    ...mapState(memberStore, ["userInfo"]),
+  components: {
+    SelectSido,
+    SelectGugun,
+  },
+
+  data() {
+    return {
+      memberId: {
+        value: "",
+        valid: true,
+      },
+      memberName: {
+        value: "",
+        valid: true,
+      },
+      memberEmail: {
+        value: "",
+        valid: true,
+      },
+      memberPassword: {
+        value: "",
+        valid: true,
+      },
+      memberPasswordCheck: {
+        value: "",
+        valid: true,
+      },
+      sidoCode: {
+        value: "",
+        valid: true,
+      },
+      gunguCode: {
+        value: "",
+        valid: true,
+      },
+    };
+  },
+  // store에 저장되어있던 user의 정보를 받아옵니다
+  created() {
+    this.memberId.value = this.$store.state.memberStore.memberInfo.memberId;
+    this.memberName.value = this.$store.state.memberStore.memberInfo.memberName;
+    this.memberEmail.value = this.$store.state.memberStore.memberInfo.memberEmail;
+    this.sidoCode.value = this.$store.state.memberStore.memberInfo.sidoCode;
+    this.gunguCode.value = this.$store.state.memberStore.memberInfo.gunguCode;
+  },
+
+  methods: {
+    update() {
+      // 여기에서 API 호출이나 데이터베이스 연동 로직을 구현합니다.
+      // 입력된 데이터를 서버로 전송하고 회원가입을 처리하는 로직을 작성해야 합니다.
+      let member = {
+        memberId: this.memberId.value,
+        memberName: this.memberName.value,
+        memberEmail: this.memberEmail.value,
+        memberPassword: this.memberPassword.value,
+        sidoCode: this.sidoCode.value,
+        gunguCode: this.gunguCode.value,
+      };
+      console.log(member);
+      if (!this.checkAllInput()) {
+        window.alert("회원가입을 위한 정보를 다시 확인해주세요!");
+        return;
+      }
+      updateMember(
+        member,
+        ({ data }) => {
+          console.log(data);
+          if (data.message == "success") {
+            window.alert("수정이 완료되었습니다.");
+            this.$router.push("/");
+          } else {
+            window.alert("수정에 실패했습니다.");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    checkAllInput() {
+      console.log(this.sidoCode.valid, this.gunguCode.valid);
+      if (
+        this.memberId.valid &&
+        this.memberEmail.valid &&
+        this.memberName.valid &&
+        this.memberPassword.valid &&
+        this.memberPasswordCheck.valid &&
+        this.sidoCode.valid &&
+        this.gunguCode.valid
+      ) {
+        return true;
+      }
+      return false;
+    },
+
+    // 유효성 검사
+    handleInputChange(fieldName) {
+      let isValid = false;
+      switch (fieldName) {
+        case "member_id":
+          isValid = validateMemberId(this.memberId.value);
+          this.changeConfirmMsg(isValid, "validConfirmId", this.memberId);
+          break;
+        case "member_password":
+          isValid = validateMemberPassword(this.memberPassword.value);
+          this.changeConfirmMsg(isValid, "validConfirmPw", this.memberPassword);
+
+          isValid = validateMemberPasswordCheck(
+            this.memberPassword.value,
+            this.memberPasswordCheck.value
+          );
+          this.changeConfirmMsg(isValid, "validConfirmPwCheck", this.memberPasswordCheck);
+          break;
+        case "member_password_check":
+          isValid = validateMemberPasswordCheck(
+            this.memberPassword.value,
+            this.memberPasswordCheck.value
+          );
+          this.changeConfirmMsg(isValid, "validConfirmPwCheck", this.memberPasswordCheck);
+          break;
+        case "member_email":
+          isValid = validateMemberEmail(this.memberEmail.value);
+          this.changeConfirmMsg(isValid, "validConfirmEmail", this.memberEmail);
+          break;
+        case "member_name":
+          isValid = validateMemberName(this.memberName.value);
+          this.changeConfirmMsg(isValid, "validConfirmName", this.memberName);
+          break;
+      }
+    },
+
+    changeConfirmMsg(isValid, elementId, data) {
+      if (!isValid) {
+        // false
+        document.getElementById(elementId).style.display = "block";
+        data.valid = false;
+      } else {
+        document.getElementById(elementId).style.display = "none";
+        data.valid = true;
+      }
+    },
+
+    selectSido(sidoCode) {
+      this.sidoCode.value = sidoCode;
+      if (this.sidoCode.value > 0) {
+        this.sidoCode.valid = true;
+      } else {
+        this.sidoCode.valid = false;
+      }
+    },
+    selectGugun(gugunCode) {
+      this.gunguCode.value = gugunCode;
+      if (this.gunguCode.value > 0) {
+        this.gunguCode.valid = true;
+      } else {
+        this.gunguCode.valid = false;
+      }
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.container {
+  max-width: 500px;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.confirmMessage {
+  color: red;
+  margin-top: 0.25rem;
+  display: none;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.btn-block {
+  margin-top: 1rem;
+}
+</style>

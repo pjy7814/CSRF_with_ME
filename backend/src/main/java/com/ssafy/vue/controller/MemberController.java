@@ -66,18 +66,16 @@ public class MemberController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
-	@ApiOperation(value = "회원인증", notes = "회원 정보를 담은 Token을 반환한다.", response = Map.class)
-	@GetMapping("/info/{memberId}")
-	public ResponseEntity<Map<String, Object>> getInfo(
-			@PathVariable("memberId") @ApiParam(value = "인증할 회원의 아이디.", required = true) String memberId,
-			HttpServletRequest request) {
+	@ApiOperation(value = "회원정보 받아오기", notes = "회원 정보를 담은 Token을 반환한다.", response = Map.class)
+	@PostMapping("/info")
+	public ResponseEntity<Map<String, Object>> getInfo(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
-		System.out.println("토큰!");
 		if (jwtService.checkToken(request.getHeader("access-token"))) {
-			logger.info("사용 가능한 토큰!!!");
+			logger.info("사용 가능한 토큰!!!", request.getHeader("access-token"));
 			try {
 //				로그인 사용자 정보.
+				String memberId = jwtService.getMemberId();
 				MemberDto memberDto = memberService.memberInfo(memberId);
 				resultMap.put("memberInfo", memberDto);
 				resultMap.put("message", SUCCESS);
@@ -111,7 +109,7 @@ public class MemberController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 
 	}
-	
+
 	@ApiOperation(value = "회원가입", notes = "회원 정보를 가져와 회원가입을 수행한다.", response = Map.class)
 	@PostMapping("/regist")
 	public ResponseEntity<Map<String, Object>> regist(
@@ -123,7 +121,7 @@ public class MemberController {
 			boolean registMember = memberService.regist(memberDto);
 			if (registMember) {
 				resultMap.put("message", SUCCESS);
-				
+
 			} else {
 				resultMap.put("message", FAIL);
 			}
@@ -132,6 +130,38 @@ public class MemberController {
 			logger.error("회원가입 실패 : {}", e);
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
+
+	@ApiOperation(value = "수정하기", notes = "회원 정보를 가져와 회원가입을 수정한다.", response = Map.class)
+	@PostMapping("/update")
+	public ResponseEntity<Map<String, Object>> update(
+			@RequestBody @ApiParam(value = "수정하기 시 필요한 회원정보(아이디, 이름, 이메일, 비밀번호, 시도코드, 군구코드).", required = true) MemberDto memberDto,
+			HttpServletRequest request) {
+		System.out.println(memberDto);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		if (jwtService.checkToken(request.getHeader("access-token"))) {
+			logger.info("사용 가능한 토큰!!!", request.getHeader("access-token"));
+			try {
+				boolean updateMember = memberService.update(memberDto);
+				if (updateMember) {
+					resultMap.put("message", SUCCESS);
+
+				} else {
+					resultMap.put("message", FAIL);
+				}
+				status = HttpStatus.ACCEPTED;
+			} catch (Exception e) {
+				logger.error("수정 실패 : {}", e);
+				resultMap.put("message", e.getMessage());
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		} else {
+			logger.error("사용 불가능 토큰!!!");
+			resultMap.put("message", FAIL);
+			status = HttpStatus.UNAUTHORIZED;
 		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}

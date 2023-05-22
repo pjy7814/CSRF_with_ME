@@ -52,4 +52,26 @@ public class MemberServiceImpl implements MemberService {
 	        return false;
 	    }
 	}
+
+	@Override
+	@Transactional
+	public boolean update(MemberDto memberDto) throws Exception {
+		try {
+			if (memberDto.getMemberPassword() == null) {		// 비밀번호 변경 안함
+				sqlSession.getMapper(MemberMapper.class).updateMember(memberDto);
+			} else {	// 비밀번호 변경
+				String salt = UUID.randomUUID().toString();
+		        String hashPw = OpenCrypt.getSHA256(memberDto.getMemberPassword(), salt);
+		        
+		        memberDto.setMemberPassword(hashPw);
+		        sqlSession.getMapper(MemberMapper.class).updateMemberPw(memberDto);
+		        String memberId = memberDto.getMemberId();
+		        sqlSession.getMapper(MemberMapper.class).updateSalt(memberId, salt);
+			}
+			return true;
+		} catch (Exception e) {
+	        sqlSession.rollback();
+	        return false;
+	    }
+	}
 }
