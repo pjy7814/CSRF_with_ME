@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
@@ -40,8 +42,10 @@ public class BoardController {
 
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping
-	public ResponseEntity<String> writeArticle(@RequestBody @ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto) throws Exception {
+	public ResponseEntity<String> writeArticle(@ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto, @RequestParam("file") MultipartFile[] files) throws Exception {
 		logger.info("writeArticle - 호출");
+		System.out.println(boardDto.toString());
+		System.out.println(files.toString());
 		if (boardService.writeArticle(boardDto)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}

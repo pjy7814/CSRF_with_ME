@@ -5,8 +5,8 @@
 <mapper namespace="com.ssafy.vue.model.mapper.BoardMapper">
 
 	<insert id="writeArticle" parameterType="boardDto">
-		insert into board (board_writer_Id, board_title, board_content, created_time)
-		values (#{boardWriterId}, #{boardTitle}, #{boardContent}, now())
+		insert into board (board_writer_Id, board_title, board_attraction_info_id, board_content, created_time, board_type)
+		values (#{boardWriterId}, #{boardTitle}, #{boardAttractionInfoId}, #{boardContent}, now(), #{boardType})
 	</insert>
 	
 	<select id="listArticle" parameterType="map" resultType="boardDto">

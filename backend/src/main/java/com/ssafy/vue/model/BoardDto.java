@@ -16,7 +16,7 @@ public class BoardDto {
 	@ApiModelProperty(value = "글내용")
 	private String boardContent;
 	@ApiModelProperty(value = "관광지 주소")
-	private String boardAttractinoInfo;
+	private int boardAttractionInfoId;
 	@ApiModelProperty(value = "작성일")
 	private Timestamp createdTime;
 	@ApiModelProperty(value = "수정일")
@@ -48,11 +48,11 @@ public class BoardDto {
 	public void setBoardContent(String boardContent) {
 		this.boardContent = boardContent;
 	}
-	public String getBoardAttractinoInfo() {
-		return boardAttractinoInfo;
+	public int getBoardAttractionInfoId() {
+		return boardAttractionInfoId;
 	}
-	public void setBoardAttractinoInfo(String boardAttractinoInfo) {
-		this.boardAttractinoInfo = boardAttractinoInfo;
+	public void setBoardAttractionInfoId(int boardAttractionInfoId) {
+		this.boardAttractionInfoId = boardAttractionInfoId;
 	}
 	public Timestamp getCreatedTime() {
 		return createdTime;
@@ -66,13 +66,21 @@ public class BoardDto {
 	public void setModifiedTime(Timestamp modifiedTime) {
 		this.modifiedTime = modifiedTime;
 	}
+	
+	public String getBoardType() {
+		return boardType;
+	}
+	public void setBoardType(String boardType) {
+		this.boardType = boardType;
+	}
+	
 	@Override
 	public String toString() {
 		return "BoardDto [boardId=" + boardId + ", boardWriterId=" + boardWriterId + ", boardTitle=" + boardTitle
-				+ ", boardContent=" + boardContent + ", boardAttractinoInfo=" + boardAttractinoInfo + ", createdTime="
-				+ createdTime + ", modifiedTime=" + modifiedTime + "]";
+				+ ", boardContent=" + boardContent + ", boardAttractionInfoId=" + boardAttractionInfoId
+				+ ", createdTime=" + createdTime + ", modifiedTime=" + modifiedTime + ", boardType=" + boardType + "]";
 	}
-	
+
 	
 
 }
