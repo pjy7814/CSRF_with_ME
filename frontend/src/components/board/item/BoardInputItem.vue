@@ -70,7 +70,7 @@
             variant="success"
             multiple
             accept="image/jpg, image/jpeg, image/png"
-            v-model="boardImgFile.value"
+            :files="boardImgFile.value"
             browse-text="업로드"
             placeholder="이미지를 업로드해주세요"
             @input="registImgFile"
@@ -281,6 +281,7 @@ export default {
       );
     },
     registImgFile(files) {
+      if (files.length === 0) return;
       const curImgFiles = [];
       files.forEach((curFile) => {
         if (validateImgFile(curFile.type)) {
@@ -288,8 +289,8 @@ export default {
         }
       });
 
-      this.boardImgFile = curImgFiles.length != 0 ? curImgFiles : null;
-      console.log(this.boardImgFile);
+      this.boardImgFile.value = curImgFiles.length != 0 ? curImgFiles : null;
+      console.log(this.boardImgFile.value);
     },
 
     registModalAttraction(position) {
