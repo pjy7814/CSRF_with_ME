@@ -121,7 +121,6 @@ const memberStore = {
       commit("SET_MEMBER_INFO", null);
       commit("SET_IS_VALID_TOKEN", false);
       commit("SET_IS_LOGIN", false);
-      alert("로그인 유효기간이 만료되었습니다. 다시 로그인 해주세요!");
       router.replace({ name: "login" });
     },
   },
