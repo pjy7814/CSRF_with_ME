@@ -73,4 +73,12 @@ public class BoardServiceImpl implements BoardService {
 		sqlSession.getMapper(BoardMapper.class).deleteMemo(articleno);
 		return sqlSession.getMapper(BoardMapper.class).deleteArticle(articleno) == 1;
 	}
+
+	@Override
+	@Transactional
+	public boolean uploadImages(BoardDto boardDto, List<String> filePathList) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 }

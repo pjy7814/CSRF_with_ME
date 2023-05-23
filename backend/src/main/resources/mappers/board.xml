@@ -68,6 +68,9 @@
 		delete from board
 		where board_id = #{boardId}
 	</delete>
+	<insert id="uploadImages" paramterType="">
+	
+	</insert>
 
 </mapper>
 

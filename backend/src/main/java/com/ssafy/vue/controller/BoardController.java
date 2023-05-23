@@ -20,7 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
+import com.ssafy.vue.model.MemberDto;
 import com.ssafy.vue.model.service.BoardService;
+import com.ssafy.vue.model.service.FileHandlerService;
+import com.ssafy.vue.model.service.FileHandlerServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,15 +42,20 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
-
+	@Autowired
+	private FileHandlerService fileHandlerService;
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping
-	public ResponseEntity<String> writeArticle(@ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto, @RequestParam("file") MultipartFile[] files) throws Exception {
+	public ResponseEntity<String> writeArticle(@ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto, @RequestParam("file") List<MultipartFile> files) throws Exception {
 		logger.info("writeArticle - 호출");
-		System.out.println(boardDto.toString());
-		System.out.println(files.toString());
+		MemberDto memberDto = new MemberDto(boardDto.getBoardType());
+		List<String> filePathList = fileHandlerService.parseFileInfo(memberDto, files);
 		if (boardService.writeArticle(boardDto)) {
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+			if(boardService.uploadImages(boardDto, filePathList)) {
+				
+				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+			}
+			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
