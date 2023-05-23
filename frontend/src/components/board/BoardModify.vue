@@ -5,17 +5,36 @@
         <b-alert show><h3>글수정</h3></b-alert>
       </b-col>
     </b-row>
-    <board-input-item type="modify" />
+    <ShareBoardInputItem
+      v-if="isShareBoard"
+      type="modify"
+    ></ShareBoardInputItem>
+    <NoticeBoardInputItem
+      v-else-if="isNoticeBoard"
+      type="modify"
+    ></NoticeBoardInputItem>
   </b-container>
 </template>
 
 <script>
-import BoardInputItem from "@/components/board/item/BoardInputItem";
-
+import ShareBoardInputItem from "./item/ShareBoardInputItem";
+import NoticeBoardInputItem from "./item/NoticeBoardInputItem.vue";
 export default {
   name: "BoardModify",
+  props: {
+    currentBoard: String,
+  },
+  computed: {
+    isNoticeBoard() {
+      return this.currentBoard === "noticeboard";
+    },
+    isShareBoard() {
+      return this.currentBoard === "shareboard";
+    },
+  },
   components: {
-    BoardInputItem,
+    ShareBoardInputItem,
+    NoticeBoardInputItem,
   },
 };
 </script>

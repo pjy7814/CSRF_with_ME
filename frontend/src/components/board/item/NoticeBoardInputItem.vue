@@ -1,10 +1,10 @@
 <template>
-  <div></div>
+  <div>이게 공지사항...</div>
 </template>
 
 <script>
 export default {
-  name: "",
+  name: "NoticeBoardInputItem",
   components: {},
   data() {
     return {

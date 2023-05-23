@@ -65,7 +65,11 @@
                 placeholder="공유할 여행지 한 곳을 등록해주세요!"
               ></b-form-input>
             </b-form-group>
-            <b-button @click="registAttraction()" :disabled="isValidModalAttraction">등록</b-button>
+            <b-button
+              @click="registAttraction()"
+              :disabled="isValidModalAttraction"
+              >등록</b-button
+            >
             <b-button @click="closeModal()">닫기</b-button>
           </template>
         </b-modal>
@@ -105,10 +109,16 @@
           ></b-form-textarea>
         </b-form-group>
 
-        <b-button type="submit" variant="primary" class="m-1" v-if="this.type === 'register'"
+        <b-button
+          type="submit"
+          variant="primary"
+          class="m-1"
+          v-if="this.type === 'register'"
           >글작성</b-button
         >
-        <b-button type="submit" variant="primary" class="m-1" v-else>글수정</b-button>
+        <b-button type="submit" variant="primary" class="m-1" v-else
+          >글수정</b-button
+        >
         <b-button type="reset" variant="danger" class="m-1">초기화</b-button>
       </b-form>
     </b-col>
@@ -151,7 +161,7 @@ import { validateImgFile } from "@/util";
 import { mapGetters } from "vuex";
 const memberStore = "memberStore";
 export default {
-  name: "BoardInputItem",
+  name: "ShareBoardInputItem",
   data() {
     return {
       isModalOpen: false,
@@ -254,7 +264,8 @@ export default {
 
       if (
         err &&
-        (!this.boardAttractionInfo.value.contentId || !this.boardAttractionInfo.value.title)
+        (!this.boardAttractionInfo.value.contentId ||
+          !this.boardAttractionInfo.value.title)
       ) {
         this.boardAttractionInfo.valid = false;
         err = false;
@@ -273,7 +284,8 @@ export default {
 
       if (!err) {
         return;
-      } else this.type === "register" ? this.registArticle() : this.modifyArticle();
+      } else
+        this.type === "register" ? this.registArticle() : this.modifyArticle();
     },
     onReset(event) {
       event.preventDefault();
@@ -296,7 +308,10 @@ export default {
       formData.append("boardWriterId", this.boardWriterId.value);
       formData.append("boardTitle", this.boardTitle.value);
       formData.append("boardContent", this.boardContent.value);
-      formData.append("boardAttractionInfoId", this.boardAttractionInfo.value.contentId);
+      formData.append(
+        "boardAttractionInfoId",
+        this.boardAttractionInfo.value.contentId
+      );
       formData.append("boardType", "share");
       //formData.append("postBoard", data);
 

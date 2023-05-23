@@ -83,6 +83,7 @@ const routes = [
         path: "write",
         name: "noticeboardwrite",
         beforeEnter: onlyAuthMember,
+        props: true,
         component: () =>
           import(
             /* webpackChunkName: "board" */ "@/components/board/BoardWrite"
@@ -101,6 +102,7 @@ const routes = [
         path: "modify",
         name: "noticeboardmodify",
         beforeEnter: onlyAuthMember,
+        props: true,
         component: () =>
           import(
             /* webpackChunkName: "board" */ "@/components/board/BoardModify"
@@ -136,6 +138,7 @@ const routes = [
         path: "write",
         name: "shareboardwrite",
         beforeEnter: onlyAuthMember,
+        props: true,
         component: () =>
           import(
             /* webpackChunkName: "board" */ "@/components/board/BoardWrite"
@@ -145,6 +148,7 @@ const routes = [
         path: "view/:articleno",
         name: "shareboardview",
         beforeEnter: onlyAuthMember,
+        props: true,
         component: () =>
           import(
             /* webpackChunkName: "board" */ "@/components/board/BoardView"
