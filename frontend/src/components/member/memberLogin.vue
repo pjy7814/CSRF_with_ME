@@ -48,14 +48,8 @@
                 @keyup.enter="login"
               ></b-form-input>
             </b-form-group>
-            <b-button type="button" variant="primary" class="m-1" @click="login"
-              >로그인</b-button
-            >
-            <b-button
-              type="button"
-              variant="success"
-              class="m-1"
-              @click="movePage"
+            <b-button type="button" variant="primary" class="m-1" @click="login">로그인</b-button>
+            <b-button type="button" variant="success" class="m-1" @click="movePage"
               >회원가입</b-button
             >
           </b-form>
@@ -112,8 +106,7 @@ export default {
     async login() {
       if (!validateMemberId(this.memberId.value)) {
         this.memberId.valid = false;
-        this.memberId.invalidText =
-          "아이디는 4자 이상, 영문과 숫자만 허용합니다.";
+        this.memberId.invalidText = "아이디는 4자 이상, 영문과 숫자만 허용합니다.";
         return;
       } else this.memberId.valid = true;
 

@@ -1,13 +1,21 @@
 <template>
   <b-row class="mb-1">
     <b-col style="text-align: left">
-      <b-form @submit="onSubmit" @reset="onReset">
-        <b-form-group label-cols="2" content-cols="10" label="제목 :" label-for="title">
+      <b-form @submit="onSubmit" @reset="onReset" novalidate>
+        <b-form-group
+          label-cols="2"
+          content-cols="10"
+          label="제목 :"
+          label-for="title"
+          :invalid-feedback="boardTitle.invalidText"
+          :state="boardTitle.valid"
+        >
           <b-form-input
             id="title"
             v-model="boardTitle.value"
             type="text"
             required
+            :state="boardTitle.valid"
             placeholder="제목 입력..."
           ></b-form-input>
         </b-form-group>
@@ -17,6 +25,8 @@
           content-cols="10"
           label="여행지 입력 :"
           label-for="uploadAttraction"
+          :state="boardAttractionInfo.valid"
+          :invalid-feedback="boardAttractionInfo.invalidText"
         >
           <b-input-group>
             <b-form-input
@@ -24,6 +34,7 @@
               type="text"
               required
               readonly
+              :state="boardAttractionInfo.valid"
               v-model="boardAttractionInfo.value.title"
               placeholder="공유할 여행지를 등록해주세요!"
             ></b-form-input>
@@ -70,20 +81,27 @@
             variant="success"
             multiple
             accept="image/jpg, image/jpeg, image/png"
-            :files="boardImgFile.value"
             browse-text="업로드"
             placeholder="이미지를 업로드해주세요"
+            :file-name-formatter="printFileName"
             @input="registImgFile"
           ></b-form-file>
         </b-form-group>
 
-        <b-form-group id="content-group" label="내용:" label-for="content">
+        <b-form-group
+          id="content-group"
+          label="내용:"
+          label-for="content"
+          :state="boardContent.valid"
+          :invalid-feedback="boardContent.invalidText"
+        >
           <b-form-textarea
             id="content"
             v-model="boardContent.value"
             placeholder="내용 입력..."
             rows="10"
             max-rows="15"
+            :state="boardContent.valid"
           ></b-form-textarea>
         </b-form-group>
 
@@ -130,6 +148,8 @@ import AppDestinationInfo from "@/views/AppDestinationInfo.vue";
 -
 */
 import { validateImgFile } from "@/util";
+import { mapGetters } from "vuex";
+const memberStore = "memberStore";
 export default {
   name: "BoardInputItem",
   data() {
@@ -141,7 +161,7 @@ export default {
       },
       boardId: {
         value: 0,
-        valid: true,
+        valid: null,
       },
       boardWriterId: {
         value: "",
@@ -150,16 +170,19 @@ export default {
       boardTitle: {
         value: "",
         valid: null,
+        invalidText: "제목은 1자 이상, 50자 이하입니다.",
       },
       boardContent: {
         value: "",
         valid: null,
+        invalidText: "본문은 1자 이상, 1000자 이하입니다.",
       },
       boardAttractionInfo: {
         value: {
           contentId: "",
           title: "",
         },
+        invalidText: "공유 여행지는 꼭 등록되어야 합니다.",
         valid: null,
       },
       boardImgFile: {
@@ -180,6 +203,7 @@ export default {
       const { contentId = 0, title = "" } = this.selectedModalAttraction;
       return contentId === 0 || title.length === 0;
     },
+    ...mapGetters(memberStore, ["checkMemberInfo"]),
   },
   created() {
     if (this.type === "modify") {
@@ -206,6 +230,8 @@ export default {
           }
         }
       );
+    } else if (this.type === "register") {
+      this.boardWriterId.value = this.checkMemberInfo.memberId;
     }
   },
   methods: {
@@ -218,32 +244,64 @@ export default {
     onSubmit(event) {
       event.preventDefault();
       let err = true;
-      let msg = "";
       if (err && !this.boardTitle.value) {
-        msg = "제목을 입력해주세요";
+        this.boardTitle.valid = false;
         err = false;
         this.$refs.boardTitle.focus();
+      } else {
+        this.boardTitle.valid = true;
       }
+
+      if (
+        err &&
+        (!this.boardAttractionInfo.value.contentId || !this.boardAttractionInfo.value.title)
+      ) {
+        this.boardAttractionInfo.valid = false;
+        err = false;
+        this.$refs.boardAttractionInfo.focus();
+      } else {
+        this.boardAttractionInfo.valid = true;
+      }
+
       if (err && !this.boardContent.value) {
-        msg = "내용을 입력해주세요";
+        this.boardContent.valid = false;
         err = false;
-        this.$refs.boardTitle.focus();
+        this.$refs.boardContent.focus();
+      } else {
+        this.boardContent.valid = true;
       }
-      if (!err) alert(msg);
-      else this.type === "register" ? this.registArticle() : this.modifyArticle();
+
+      if (!err) {
+        return;
+      } else this.type === "register" ? this.registArticle() : this.modifyArticle();
     },
     onReset(event) {
       event.preventDefault();
       this.moveList();
     },
     registArticle() {
-      let param = {
-        boardWriterId: this.boardWriterId.value,
-        boardTitle: this.boardTitle.value,
-        boardContent: this.boardContent.value,
-      };
+      const formData = new FormData();
+
+      this.boardImgFile.value.forEach((curFile) => {
+        formData.append("file", curFile);
+      });
+
+      // let data = {
+      //   boardWriterId: this.boardWriterId.value,
+      //   boardTitle: this.boardTitle.value,
+      //   boardContent: this.boardContent.value,
+      //   boardAttractionInfoId: this.boardAttractionInfo.value.contentId,
+      // };
+      console.log(this.boardAttractionInfo.value.contentId);
+      formData.append("boardWriterId", this.boardWriterId.value);
+      formData.append("boardTitle", this.boardTitle.value);
+      formData.append("boardContent", this.boardContent.value);
+      formData.append("boardAttractionInfoId", this.boardAttractionInfo.value.contentId);
+      formData.append("boardType", "share");
+      //formData.append("postBoard", data);
+
       writeArticle(
-        param,
+        formData,
         ({ data }) => {
           let msg = "등록 처리시 문제가 발생했습니다.";
           if (data === "success") {
@@ -283,16 +341,25 @@ export default {
     registImgFile(files) {
       if (files.length === 0) return;
       const curImgFiles = [];
+      const maxSizeInBytes = 10 * 1024 * 1024;
       files.forEach((curFile) => {
-        if (validateImgFile(curFile.type)) {
+        if (validateImgFile(curFile.type) && curFile.size <= maxSizeInBytes) {
           curImgFiles.push(curFile);
         }
       });
 
-      this.boardImgFile.value = curImgFiles.length != 0 ? curImgFiles : null;
-      console.log(this.boardImgFile.value);
+      this.boardImgFile.value = curImgFiles.length != 0 ? curImgFiles : [];
     },
-
+    printFileName() {
+      let fileNameStr = "";
+      this.boardImgFile.value.forEach((curFile, idx) => {
+        fileNameStr += curFile.name;
+        if (idx !== this.boardImgFile.value.length - 1) {
+          fileNameStr += ", ";
+        }
+      });
+      return fileNameStr;
+    },
     registModalAttraction(position) {
       this.selectedModalAttraction = {
         contentId: position.contentId,
@@ -309,7 +376,7 @@ export default {
       this.closeModal();
     },
     moveList() {
-      this.$router.push({ name: "boardlist" });
+      this.$router.push({ name: "/noticeboard/list" });
     },
   },
   components: { AppDestinationInfo },
