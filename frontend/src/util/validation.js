@@ -9,10 +9,7 @@ function validateMemberId(value) {
 
 function validateMemberPassword(value) {
   // 비밀번호는 8자 이상, 영문 대소문자, 숫자, 특수문자를 모두 포함
-  return (
-    value.length >= 8 &&
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$/.test(value)
-  );
+  return value.length >= 8 && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$/.test(value);
 }
 
 function validateMemberPasswordCheck(pw, checkpw) {
@@ -29,10 +26,15 @@ function validateMemberName(value) {
   return value.length >= 2;
 }
 
+function validateImgFile(value) {
+  return /(image\/jpg|image\/jpeg|image\/png)$/i.test(value);
+}
+
 export {
   validateMemberId,
   validateMemberPassword,
   validateMemberPasswordCheck,
   validateMemberEmail,
   validateMemberName,
+  validateImgFile,
 };

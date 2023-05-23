@@ -6,6 +6,7 @@ import {
   validateMemberName,
   validateMemberPassword,
   validateMemberPasswordCheck,
+  validateImgFile,
 } from "./validation.js";
 
 export {
@@ -14,4 +15,5 @@ export {
   validateMemberName,
   validateMemberPassword,
   validateMemberPasswordCheck,
+  validateImgFile,
 };

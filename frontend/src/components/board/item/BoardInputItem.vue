@@ -2,12 +2,7 @@
   <b-row class="mb-1">
     <b-col style="text-align: left">
       <b-form @submit="onSubmit" @reset="onReset">
-        <b-form-group
-          label-cols="2"
-          content-cols="10"
-          label="제목 :"
-          label-for="title"
-        >
+        <b-form-group label-cols="2" content-cols="10" label="제목 :" label-for="title">
           <b-form-input
             id="title"
             v-model="boardTitle.value"
@@ -15,22 +10,6 @@
             required
             placeholder="제목 입력..."
           ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols="2"
-          content-cols="10"
-          label="이미지 등록 :"
-          label-for="uploadImage"
-        >
-          <b-form-file
-            id="uploadImage"
-            v-model="boardImageUrl.value"
-            variant="success"
-            multiple
-            accept=".jpg, .jpeg, .png, .gif"
-            browse-text="업로드"
-            @input="changeImgFile()"
-          ></b-form-file>
         </b-form-group>
 
         <b-form-group
@@ -75,14 +54,28 @@
                 placeholder="공유할 여행지 한 곳을 등록해주세요!"
               ></b-form-input>
             </b-form-group>
-            <b-button
-              @click="registAttraction()"
-              :disabled="isValidModalAttraction"
-              >등록</b-button
-            >
+            <b-button @click="registAttraction()" :disabled="isValidModalAttraction">등록</b-button>
             <b-button @click="closeModal()">닫기</b-button>
           </template>
         </b-modal>
+
+        <b-form-group
+          label-cols="2"
+          content-cols="10"
+          label="이미지 등록 :"
+          label-for="uploadImage"
+        >
+          <b-form-file
+            id="uploadImage"
+            variant="success"
+            multiple
+            accept="image/jpg, image/jpeg, image/png"
+            v-model="boardImgFile.value"
+            browse-text="업로드"
+            placeholder="이미지를 업로드해주세요"
+            @input="registImgFile"
+          ></b-form-file>
+        </b-form-group>
 
         <b-form-group id="content-group" label="내용:" label-for="content">
           <b-form-textarea
@@ -94,16 +87,10 @@
           ></b-form-textarea>
         </b-form-group>
 
-        <b-button
-          type="submit"
-          variant="primary"
-          class="m-1"
-          v-if="this.type === 'register'"
+        <b-button type="submit" variant="primary" class="m-1" v-if="this.type === 'register'"
           >글작성</b-button
         >
-        <b-button type="submit" variant="primary" class="m-1" v-else
-          >글수정</b-button
-        >
+        <b-button type="submit" variant="primary" class="m-1" v-else>글수정</b-button>
         <b-button type="reset" variant="danger" class="m-1">초기화</b-button>
       </b-form>
     </b-col>
@@ -142,6 +129,7 @@ import AppDestinationInfo from "@/views/AppDestinationInfo.vue";
 공유(또는 공지사항) 에서 글을 작성하고 등록을 보낼 때, 공지사항(또는 공유)로 request하도록 f12키를 통한 수정을 한다면?
 -
 */
+import { validateImgFile } from "@/util";
 export default {
   name: "BoardInputItem",
   data() {
@@ -174,12 +162,12 @@ export default {
         },
         valid: null,
       },
-      boardImage: {
+      boardImgFile: {
         value: [],
         valid: null,
       },
-      boardImageUrl: {
-        value: [],
+      boardImgUrl: {
+        value: null,
         valid: null,
       },
     };
@@ -204,7 +192,7 @@ export default {
           this.boardTitle.value = data.boardTitle;
           this.boardContent.value = data.boardContent;
           this.boardAttractionInfoId.value = data.boardAttractionInfoId;
-          this.boardImage.value = data.boardImage;
+          this.boardImgFile.value = data.boardImage;
         },
         (error) => {
           switch (error.response.status) {
@@ -242,8 +230,7 @@ export default {
         this.$refs.boardTitle.focus();
       }
       if (!err) alert(msg);
-      else
-        this.type === "register" ? this.registArticle() : this.modifyArticle();
+      else this.type === "register" ? this.registArticle() : this.modifyArticle();
     },
     onReset(event) {
       event.preventDefault();
@@ -293,9 +280,18 @@ export default {
         }
       );
     },
-    changeImgFile() {
-      return;
+    registImgFile(files) {
+      const curImgFiles = [];
+      files.forEach((curFile) => {
+        if (validateImgFile(curFile.type)) {
+          curImgFiles.push(curFile);
+        }
+      });
+
+      this.boardImgFile = curImgFiles.length != 0 ? curImgFiles : null;
+      console.log(this.boardImgFile);
     },
+
     registModalAttraction(position) {
       this.selectedModalAttraction = {
         contentId: position.contentId,
