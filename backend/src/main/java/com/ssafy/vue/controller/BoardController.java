@@ -48,7 +48,8 @@ public class BoardController {
 	@PostMapping
 	public ResponseEntity<String> writeArticle(@ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto, @RequestParam("file") List<MultipartFile> files) throws Exception {
 		logger.info("writeArticle - 호출");
-		MemberDto memberDto = new MemberDto(boardDto.getBoardType());
+		MemberDto memberDto = new MemberDto();
+		memberDto.setMemberId(boardDto.getBoardWriterId());
 		List<String> filePathList = fileHandlerService.parseFileInfo(memberDto, files);
 		if (boardService.writeArticle(boardDto)) {
 			if(boardService.uploadImages(boardDto, filePathList)) {

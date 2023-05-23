@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+
 <mapper namespace="com.ssafy.vue.model.mapper.BoardMapper">
 
 	<insert id="writeArticle" parameterType="boardDto">
-		insert into board (board_writer_Id, board_title, board_attraction_info_id, board_content, created_time, board_type)
-		values (#{boardWriterId}, #{boardTitle}, #{boardAttractionInfoId}, #{boardContent}, now(), #{boardType})
+		insert into board
+		(board_writer_Id, board_title, board_attraction_info_id,
+		board_content, created_time, board_type)
+		values (#{boardWriterId},
+		#{boardTitle}, #{boardAttractionInfoId}, #{boardContent}, now(),
+		#{boardType})
 	</insert>
-	
-	<select id="listArticle" parameterType="map" resultType="boardDto">
-		select board_id as boardId, board_writer_Id as boardWriterId, board_title as boardTitle, board_content as boardContent,
-				case when date_format(created_time, '%Y%m%d') = date_format(now(), '%Y%m%d')
-				then date_format(created_time, '%H:%i:%s')
-				else date_format(created_time, '%y.%m.%d')
-				end created_time
+
+	<select id="listArticle" parameterType="map"
+		resultType="boardDto">
+		select board_id as boardId, board_writer_Id as boardWriterId,
+		board_title as boardTitle, board_content as boardContent,
+		case when date_format(created_time, '%Y%m%d') = date_format(now(),
+		'%Y%m%d')
+		then date_format(created_time, '%H:%i:%s')
+		else date_format(created_time, '%y.%m.%d')
+		end created_time
 		from board
 		<if test="word != null and word != ''">
 			<if test="key == 'subject'">
@@ -27,7 +34,7 @@
 		order by board_id desc
 		limit #{start}, #{spp}
 	</select>
-	
+
 	<select id="getTotalCount" parameterType="map" resultType="int">
 		select count(board_id)
 		from board
@@ -40,36 +47,46 @@
 			</if>
 		</if>
 	</select>
-	
-	<select id="getArticle" parameterType="int" resultType="boardDto">
-		select board_id as boardId, board_writer_id as boardWriterId, board_title as boardTitle, board_content as boardContent, created_time as createdTime
+
+	<select id="getArticle" parameterType="int"
+		resultType="boardDto">
+		select board_id as boardId, board_writer_id as
+		boardWriterId, board_title as boardTitle, board_content as
+		boardContent, created_time as createdTime
 		from board
-		where board_id = #{boardId}
+		where board_id =
+		#{boardId}
 	</select>
-	
+
 	<update id="updateHit" parameterType="int">
 		update board
-		set hit = hit + 1
+		set hit = hit +
+		1
 		where articleno = #{articleno}
 	</update>
-	
+
 	<update id="modifyArticle" parameterType="boardDto">
 		update board
-		set board_title = #{boardTitle}, board_content = #{boardContent}
-		where board_id = #{boardId}
+		set
+		board_title = #{boardTitle}, board_content = #{boardContent}
+		where
+		board_id = #{boardId}
 	</update>
-	
+
 	<delete id="deleteMemo" parameterType="int">
 		delete from memo
-		where board_id = #{boardId}
+		where
+		board_id = #{boardId}
 	</delete>
-	
+
 	<delete id="deleteArticle" parameterType="int">
 		delete from board
-		where board_id = #{boardId}
+		where
+		board_id = #{boardId}
 	</delete>
-	<insert id="uploadImages" paramterType="">
-	
+	<insert id="uploadImages" parameterType="boardImgDto">
+		INSERT INTO board_img (board_id, board_img_src)
+		VALUES (#{boardId}, #{boardImgSrc})
 	</insert>
 
 </mapper>

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.vue.model.BoardDto;
+import com.ssafy.vue.model.BoardImgDto;
 import com.ssafy.vue.model.BoardParameterDto;
 
 @Mapper
@@ -19,5 +20,6 @@ public interface BoardMapper {
 	public int modifyArticle(BoardDto boardDto) throws SQLException;
 	public void deleteMemo(int articleno) throws SQLException;
 	public int deleteArticle(int articleno) throws SQLException;
+	public int uploadImages(BoardImgDto boardImgDto) throws SQLException;
 	
 }

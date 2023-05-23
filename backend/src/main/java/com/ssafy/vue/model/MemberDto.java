@@ -25,10 +25,6 @@ public class MemberDto {
 	@ApiModelProperty(value = "회원 권한 코드")
 	private String memberRoleCd;
 	
-	public MemberDto(String memberId) {
-		setMemberId(memberId);
-	}
-	
 	public String getMemberId() {
 		return memberId;
 	}
