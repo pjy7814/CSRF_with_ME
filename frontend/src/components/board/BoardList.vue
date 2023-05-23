@@ -136,7 +136,12 @@ export default {
   },
   methods: {
     moveWrite() {
-      this.$router.push({ name: `${this.currentBoard}write` });
+      this.$router.push({
+        name: `${this.currentBoard}write`,
+        params: {
+          currentBoard: this.currentBoard,
+        },
+      });
     },
     viewArticle(article) {
       this.$router.push({

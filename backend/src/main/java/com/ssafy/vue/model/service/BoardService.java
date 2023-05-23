@@ -14,4 +14,5 @@ public interface BoardService {
 	public BoardDto getArticle(int articleno) throws Exception;
 	public boolean modifyArticle(BoardDto boardDto) throws Exception;
 	public boolean deleteArticle(int articleno) throws Exception;
+	public boolean uploadImages(BoardDto boardDto, List<String> filePathList) throws Exception;
 }

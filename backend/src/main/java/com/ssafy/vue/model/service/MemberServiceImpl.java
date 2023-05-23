@@ -23,6 +23,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDto login(MemberDto memberDto) throws Exception {
 		if (memberDto.getMemberId() == null || memberDto.getMemberPassword() == null)
 			return null;
+		System.out.println(memberDto.toString());
 		String salt = sqlSession.getMapper(MemberMapper.class).getSalt(memberDto.getMemberId());
 		String hashPw = OpenCrypt.getSHA256(memberDto.getMemberPassword(), salt);
 		memberDto.setMemberPassword(hashPw);

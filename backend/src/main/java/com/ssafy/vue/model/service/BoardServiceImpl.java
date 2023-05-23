@@ -1,5 +1,6 @@
 package com.ssafy.vue.model.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.util.PageNavigation;
 import com.ssafy.vue.model.BoardDto;
+import com.ssafy.vue.model.BoardImgDto;
 import com.ssafy.vue.model.BoardParameterDto;
 import com.ssafy.vue.model.mapper.BoardMapper;
 
@@ -67,4 +69,27 @@ public class BoardServiceImpl implements BoardService {
 		sqlSession.getMapper(BoardMapper.class).deleteMemo(articleno);
 		return sqlSession.getMapper(BoardMapper.class).deleteArticle(articleno) == 1;
 	}
+
+	@Override
+	@Transactional
+	public boolean uploadImages(BoardDto boardDto, List<String> filePathList) throws Exception {
+		// TODO Auto-generated method stub
+		//board_img 테이블에 넣어주는 로직.
+		 
+		 int boardId = boardDto.getBoardId(); // boardDto에서 boardId를 가져옴
+
+		    for (String filePath : filePathList) {
+		        // filePathList에 있는 이미지의 url을 board_img_src 컬럼에 저장하는 로직
+		        // 각 이미지에 대해 boardId를 사용하여 board_id 컬럼에 외래키로 설정
+
+		        // board_img 테이블에 데이터 삽입
+		        BoardImgDto boardImgDto = new BoardImgDto();
+		        boardImgDto.setBoardId(boardId);
+		        boardImgDto.setBoardImgSrc(filePath);
+		        sqlSession.getMapper(BoardMapper.class).uploadImages(boardImgDto);
+		    }
+
+		    return true; // 이미지 업로드 성공시 true 반환
+	}
+	
 }
