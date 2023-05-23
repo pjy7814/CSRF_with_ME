@@ -11,26 +11,14 @@ function apiInstance() {
   return instance;
 }
 
-// house deal API axios instance
-function houseInstance() {
+function apiFormInstance() {
   const instance = axios.create({
-    baseURL: process.env.VUE_APP_HOUSE_DEAL_URL,
+    baseURL: process.env.VUE_APP_API_BASE_URL,
     headers: {
-      "Content-Type": "application/json;charset=utf-8",
+      "Content-Type": "multipart/form-data",
     },
   });
   return instance;
 }
 
-// electric charger station API axios instance
-function electricInstance() {
-  const instance = axios.create({
-    baseURL: process.env.VUE_APP_ELECTRIC_CHARGER_STATION_URL,
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-  });
-  return instance;
-}
-
-export { apiInstance, houseInstance, electricInstance };
+export { apiInstance, apiFormInstance };
