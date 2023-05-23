@@ -30,7 +30,7 @@ public class FileHandlerServiceImpl implements FileHandlerService{
             return filePathList;
         }
         // 프로젝트 폴더에 저장하기 위해 절대경로를 설정 (Window 의 Tomcat 은 Temp 파일을 이용한다)
-        String absolutePath = new File("").getAbsolutePath() + "\\";
+        String absolutePath = new File("").getAbsolutePath() + "/";
 
         // 경로를 지정하고 그곳에다가 저장할 심산이다
         String path = "images/";
@@ -67,12 +67,12 @@ public class FileHandlerServiceImpl implements FileHandlerService{
                 // 암호화된 네이밍 만들기
                 String salt = sqlSession.getMapper(MemberMapper.class).getSalt(memberDto.getMemberId());
                 String hashFileName = OpenCrypt.getSHA256(originalName, salt);
-                
+                String resultPath = absolutePath + path + "/" + hashFileName + originalFileExtension;
                 // 생성 후 리스트에 추가
-                filePathList.add(absolutePath + path + "/" + hashFileName);
+                filePathList.add(hashFileName + originalFileExtension);
 
                 // 저장된 파일로 변경하여 이를 보여주기 위함
-                file = new File(absolutePath + path + "/" + hashFileName);
+                file = new File(absolutePath + path + "/" + hashFileName + originalFileExtension);
                 multipartFile.transferTo(file);
             }
         }

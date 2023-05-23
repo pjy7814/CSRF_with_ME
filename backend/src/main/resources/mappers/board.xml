@@ -4,12 +4,17 @@
 
 <mapper namespace="com.ssafy.vue.model.mapper.BoardMapper">
 
-	<insert id="writeArticle" parameterType="boardDto">
+	<insert id="writeArticle" parameterType="boardDto" useGeneratedKeys="true" keyProperty="boardId">
+		<selectKey keyProperty="boardId" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 		insert into board
-		(board_writer_Id, board_title, board_attraction_info_id,
+		(board_writer_Id, board_title,
+		board_attraction_info_id,
 		board_content, created_time, board_type)
 		values (#{boardWriterId},
-		#{boardTitle}, #{boardAttractionInfoId}, #{boardContent}, now(),
+		#{boardTitle}, #{boardAttractionInfoId},
+		#{boardContent}, now(),
 		#{boardType})
 	</insert>
 
@@ -17,10 +22,13 @@
 		resultType="boardDto">
 		select board_id as boardId, board_writer_Id as boardWriterId,
 		board_title as boardTitle, board_content as boardContent,
-		case when date_format(created_time, '%Y%m%d') = date_format(now(),
+		case when
+		date_format(created_time, '%Y%m%d') = date_format(now(),
 		'%Y%m%d')
-		then date_format(created_time, '%H:%i:%s')
-		else date_format(created_time, '%y.%m.%d')
+		then
+		date_format(created_time, '%H:%i:%s')
+		else date_format(created_time,
+		'%y.%m.%d')
 		end created_time
 		from board
 		<if test="word != null and word != ''">
@@ -85,7 +93,8 @@
 		board_id = #{boardId}
 	</delete>
 	<insert id="uploadImages" parameterType="boardImgDto">
-		INSERT INTO board_img (board_id, board_img_src)
+		INSERT INTO board_img
+		(board_id, board_img_src)
 		VALUES (#{boardId}, #{boardImgSrc})
 	</insert>
 

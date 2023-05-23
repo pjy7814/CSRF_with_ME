@@ -53,7 +53,6 @@ public class BoardController {
 		List<String> filePathList = fileHandlerService.parseFileInfo(memberDto, files);
 		if (boardService.writeArticle(boardDto)) {
 			if(boardService.uploadImages(boardDto, filePathList)) {
-				
 				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 			}
 			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
