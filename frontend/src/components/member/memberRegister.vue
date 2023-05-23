@@ -34,9 +34,7 @@
             @keydown.prevent.space
             @keyup="handleInputChange('member_name')"
           />
-          <div class="confirmMessage" id="validConfirmName">
-            두글자 이상 입력해주세요
-          </div>
+          <div class="confirmMessage" id="validConfirmName">두글자 이상 입력해주세요</div>
         </div>
       </div>
       <div class="form-row">
@@ -73,8 +71,7 @@
             @keyup="handleInputChange('member_password')"
           />
           <div class="confirmMessage" id="validConfirmPw">
-            비밀번호는 8자 이상, 영문 대소문자, 숫자, 특수문자를 모두 포함해야
-            합니다
+            비밀번호는 8자 이상, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다
           </div>
         </div>
       </div>
@@ -92,9 +89,7 @@
             @keydown.prevent.space
             @keyup="handleInputChange('member_password_check')"
           />
-          <div class="confirmMessage" id="validConfirmPwCheck">
-            동일한 비밀번호가 아닙니다
-          </div>
+          <div class="confirmMessage" id="validConfirmPwCheck">동일한 비밀번호가 아닙니다</div>
         </div>
       </div>
 
@@ -102,10 +97,7 @@
         <div class="col-md-4">사는 곳</div>
         <b-row class="col-md-8 mt-3">
           <select-sido @select-sido="selectSido"></select-sido>
-          <select-gugun
-            :sidoCode="sidoCode.value"
-            @select-gugun="selectGugun"
-          ></select-gugun>
+          <select-gugun :sidoCode="sidoCode.value" @select-gugun="selectGugun"></select-gugun>
         </b-row>
       </div>
       <button type="submit" class="btn btn-primary btn-block">가입하기</button>
@@ -184,10 +176,8 @@ export default {
         ({ data }) => {
           console.log(data);
           if (data.message == "success") {
-            window.alert(
-              this.memberName.value + "님 환영합니다! 로그인 후 이용해주세요"
-            );
-            this.$router.push("/member/login");
+            window.alert(this.memberName.value + "님 환영합니다! 로그인 후 이용해주세요");
+            this.$router.push("/member/memberLogin");
           } else {
             window.alert("회원가입에 실패했습니다!");
           }
@@ -230,22 +220,14 @@ export default {
             this.memberPassword.value,
             this.memberPasswordCheck.value
           );
-          this.changeConfirmMsg(
-            isValid,
-            "validConfirmPwCheck",
-            this.memberPasswordCheck
-          );
+          this.changeConfirmMsg(isValid, "validConfirmPwCheck", this.memberPasswordCheck);
           break;
         case "member_password_check":
           isValid = validateMemberPasswordCheck(
             this.memberPassword.value,
             this.memberPasswordCheck.value
           );
-          this.changeConfirmMsg(
-            isValid,
-            "validConfirmPwCheck",
-            this.memberPasswordCheck
-          );
+          this.changeConfirmMsg(isValid, "validConfirmPwCheck", this.memberPasswordCheck);
           break;
         case "member_email":
           isValid = validateMemberEmail(this.memberEmail.value);
