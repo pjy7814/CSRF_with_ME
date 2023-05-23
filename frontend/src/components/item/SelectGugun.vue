@@ -22,9 +22,7 @@ const itemStore = "itemStore";
 export default {
   name: "SelectGugun",
   data() {
-    return {
-      // gugunCode: null,
-    };
+    return {};
   },
   props: {
     sidoCode: String,
@@ -35,13 +33,8 @@ export default {
   },
   computed: {
     ...mapState(itemStore, ["guguns"]),
-    gugunCode: {
-      get() {
-        return this.selectedGugun;
-      },
-      set(value) {
-        this.$emit("update:selectedGugun", value);
-      },
+    gugunCode() {
+      return this.selectedGugun || null;
     },
   },
   watch: {
@@ -54,8 +47,10 @@ export default {
   methods: {
     ...mapActions(itemStore, ["getGugun"]),
     ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
-    changeGugun() {
-      this.$emit("select-gugun", this.gugunCode);
+    changeGugun(value) {
+      this.$emit("update:selectedGugun", value);
+      this.$emit("select-gugun", value);
+      console.log(value);
     },
   },
 };
