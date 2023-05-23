@@ -9,24 +9,7 @@
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-right">
-        <b-button variant="outline-primary" @click="moveWrite()"
-          >글쓰기</b-button
-        >
-        <b-dropdown
-          id="dropdown-right"
-          right
-          :text="selectedFilerOption"
-          class="m-2"
-          size="md"
-        >
-          <b-dropdown-item
-            v-for="curFilter in filterOptions"
-            :key="curFilter"
-            :value="curFilter"
-            @click="clickFilterOption(curFilter)"
-            >{{ curFilter }}</b-dropdown-item
-          >
-        </b-dropdown>
+        <b-button variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
       </b-col>
     </b-row>
     <b-row>
@@ -34,7 +17,7 @@
         <b-table
           striped
           hover
-          :items="articles"
+          :items="paginatedArticles"
           :fields="fields"
           @row-clicked="viewArticle"
         >
@@ -45,7 +28,7 @@
                 params: { articleno: data.item.articleno },
               }"
             >
-              {{ data.item.subject }}
+              {{ data.item.boardTitle }}
             </router-link>
           </template>
         </b-table>
@@ -69,9 +52,7 @@
           placeholder="Search"
           ref="searchKeyword"
         ></b-form-input>
-        <b-button size="sm" class="my-2 my-sm-0" @click="searchPost()"
-          >Search</b-button
-        >
+        <b-button size="sm" class="my-2 my-sm-0" @click="searchPost()">Search</b-button>
       </div>
     </div>
   </b-container>
@@ -89,43 +70,66 @@ export default {
       currentBoardTitle: "",
       currentBoard: "",
       articles: [],
+      curArticles: [],
       fields: [
-        { key: "articleno", label: "글번호", tdClass: "tdClass" },
-        { key: "subject", label: "제목", tdClass: "tdSubject" },
-        { key: "userid", label: "작성자", tdClass: "tdClass" },
-        { key: "regtime", label: "작성일", tdClass: "tdClass" },
-        { key: "hit", label: "조회수", tdClass: "tdClass" },
+        { key: "boardId", label: "글번호", tdClass: "tdClass" },
+        { key: "boardTitle", label: "제목", tdClass: "tdSubject" },
+        { key: "boardWriterId", label: "작성자", tdClass: "tdClass" },
+        { key: "boardContent", label: "작성일", tdClass: "tdClass" },
       ],
-      filterOptions: ["최신순", "조회순", "인기순"],
-      selectedFilerOption: "필터링",
     };
   },
   computed: {
     rows() {
       return this.articles.length;
     },
+    paginatedArticles() {
+      const startIndex = (this.currentPage - 1) * this.perPage;
+      const endIndex = startIndex + this.perPage;
+      return this.articles.slice(startIndex, endIndex);
+    },
+  },
+  watch: {
+    currentPage(newPage) {
+      // 새로운 페이지를 받았을 때 실행할 작업을 여기에 작성합니다.
+      this.fetchData(newPage);
+    },
   },
   created() {
     let param = {
       pg: 1,
-      spp: 20,
+      spp: 100,
       key: null,
       word: null,
+      boardType: null,
     };
-    listArticle(
-      param,
-      ({ data }) => {
-        this.articles = data;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+
     this.currentBoard = this.$route.path.split("/")[1];
     if (this.currentBoard === "noticeboard") {
       this.currentBoardTitle = "공지사항 게시판";
+      param.boardType = "notice";
+      listArticle(
+        param,
+        ({ data }) => {
+          this.articles = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     } else if (this.currentBoard === "shareboard") {
       this.currentBoardTitle = "공유 게시판";
+      param.boardType = "share";
+
+      listArticle(
+        param,
+        ({ data }) => {
+          this.articles = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     } else {
       //의도치 않은 접근! 에러 페이지 또는 메인 페이지로 강제 이동 중 택 1 선택 필요
     }
@@ -140,17 +144,6 @@ export default {
         params: { articleno: article.articleno },
       });
     },
-    clickFilterOption(filterOption) {
-      //filterOptions에 포함된 필터 조건이며, 기존에 선택됬던 필터 조건과 다를 경우
-      if (
-        this.filterOptions.includes(filterOption) &&
-        filterOption !== this.selectedFilerOption
-      ) {
-        this.selectedFilerOption = filterOption;
-
-        //서버와 통신을 통해 필터링된 게시글을 받아온다.
-      }
-    },
     searchPost() {
       //키워드와 필터를 합한 검색 실시 => 상의 필요
       const currentKeyword = this.$refs.searchKeyword.$el.value;
@@ -161,6 +154,9 @@ export default {
       } else {
         //필터링 할 조건이 없을 때
       }
+    },
+    fetchData(page) {
+      console.log("page:", page);
     },
   },
 };

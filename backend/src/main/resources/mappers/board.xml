@@ -10,22 +10,27 @@
 	</insert>
 	
 	<select id="listArticle" parameterType="map" resultType="boardDto">
-		select board_id as boardId, board_writer_Id as boardWriterId, board_title as boardTitle, board_content as boardContent,
-				case when date_format(created_time, '%Y%m%d') = date_format(now(), '%Y%m%d')
-				then date_format(created_time, '%H:%i:%s')
-				else date_format(created_time, '%y.%m.%d')
-				end created_time
-		from board
-		<if test="word != null and word != ''">
-			<if test="key == 'subject'">
-				where board_title like concat('%', #{word}, '%')
-			</if>
-			<if test="key != 'subject'">
-				where ${key} = #{word}
-			</if>
-		</if>
-		order by board_id desc
-		limit #{start}, #{spp}
+	  select board_id as boardId, board_writer_Id as boardWriterId, board_title as boardTitle, board_content as boardContent,
+	    case when date_format(created_time, '%Y%m%d') = date_format(now(), '%Y%m%d')
+	      then date_format(created_time, '%H:%i:%s')
+	      else date_format(created_time, '%y.%m.%d')
+	    end created_time
+	  from board
+	  <if test="word != null and word != ''">
+	    <if test="key == 'subject'">
+	      where board_title like concat('%', #{word}, '%') and board_type = #{boardType}
+	    </if>
+	    <if test="key != 'subject'">
+	      where ${key} = #{word} and board_type = #{boardType}
+	    </if>
+	  </if>
+	  <if test="true">
+	    <![CDATA[
+	      where board_type = #{boardType}
+	    ]]>
+	  </if>
+	  order by board_id desc
+	  limit #{start}, #{spp}
 	</select>
 	
 	<select id="getTotalCount" parameterType="map" resultType="int">
@@ -46,12 +51,6 @@
 		from board
 		where board_id = #{boardId}
 	</select>
-	
-	<update id="updateHit" parameterType="int">
-		update board
-		set hit = hit + 1
-		where articleno = #{articleno}
-	</update>
 	
 	<update id="modifyArticle" parameterType="boardDto">
 		update board

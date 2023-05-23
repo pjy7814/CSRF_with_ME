@@ -3,6 +3,10 @@ import { apiInstance, apiFormInstance } from "./index.js";
 const api = apiInstance();
 const formApi = apiFormInstance();
 
+// function listArticle(param, success, fail) {
+//   api.get(`/board`, { params: param }).then(success).catch(fail);
+// }
+
 function listArticle(param, success, fail) {
   api.get(`/board`, { params: param }).then(success).catch(fail);
 }

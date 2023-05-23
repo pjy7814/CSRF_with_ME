@@ -55,12 +55,6 @@ public class BoardServiceImpl implements BoardService {
 	public BoardDto getArticle(int articleno) throws Exception {
 		return sqlSession.getMapper(BoardMapper.class).getArticle(articleno);
 	}
-	
-	@Override
-	public void updateHit(int articleno) throws Exception {
-		sqlSession.getMapper(BoardMapper.class).updateHit(articleno);
-	}
-
 	@Override
 	@Transactional
 	public boolean modifyArticle(BoardDto boardDto) throws Exception {
