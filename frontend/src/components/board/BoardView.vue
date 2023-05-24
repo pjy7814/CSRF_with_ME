@@ -35,6 +35,9 @@
         >
           <b-card-body class="text-left">
             <div>{{ this.article.boardContent }}</div>
+            <div v-for="image in imageArray" :key="image.boardId">
+              <img :src="`http://localhost:9999/vue/images/${image.boardImgSrc}`" alt="이미지" />
+            </div>
           </b-card-body>
         </b-card>
       </b-col>
@@ -54,6 +57,7 @@ export default {
   data() {
     return {
       article: {},
+      imageArray: {},
     };
   },
   computed: {
@@ -68,7 +72,8 @@ export default {
     getArticle(
       param,
       ({ data }) => {
-        this.article = data;
+        this.article = data.boardDtos;
+        this.imageArray = data.boardImgDtos;
         this.article.createdTime = this.formatDate(this.article.createdTime);
         console.log(data);
       },
