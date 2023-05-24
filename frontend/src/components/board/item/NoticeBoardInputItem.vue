@@ -82,7 +82,6 @@ export default {
       },
     };
   },
-  props: {},
   computed: {
     ...mapGetters(memberStore, ["checkMemberInfo"]),
     type() {
@@ -100,14 +99,17 @@ export default {
     },
   },
   created() {
+    console.log(this.type, this.modifyboardId);
     if (this.type === "modify") {
       getArticle(
         this.modifyboardId,
         ({ data }) => {
-          this.boardId.value = data.boardId;
-          this.boardWriterId.value = data.boardWriterId;
-          this.boardTitle.value = data.boardTitle;
-          this.boardContent.value = data.boardContent;
+          const { boardId, boardWriterId, boardTitle, boardContent } =
+            data.boardDtos;
+          this.boardId.value = boardId;
+          this.boardWriterId.value = boardWriterId;
+          this.boardTitle.value = boardTitle;
+          this.boardContent.value = boardContent;
         },
         (error) => {
           switch (error.response.status) {
@@ -200,6 +202,7 @@ export default {
     },
     modifyArticle() {
       const formData = new FormData();
+      formData.append("boardId", this.boardId.value);
       formData.append("boardWriterId", this.boardWriterId.value);
       formData.append("boardTitle", this.boardTitle.value);
       formData.append("boardContent", this.boardContent.value);

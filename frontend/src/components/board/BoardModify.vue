@@ -5,16 +5,8 @@
         <b-alert show><h3>글수정</h3></b-alert>
       </b-col>
     </b-row>
-    <ShareBoardInputItem
-      v-if="isShareBoard"
-      type="modify"
-      :modifyboardId="boardId"
-    ></ShareBoardInputItem>
-    <NoticeBoardInputItem
-      v-else-if="isNoticeBoard"
-      type="modify"
-      :modifyboardId="boardId"
-    ></NoticeBoardInputItem>
+    <ShareBoardInputItem v-if="isShareBoard"></ShareBoardInputItem>
+    <NoticeBoardInputItem v-else-if="isNoticeBoard"></NoticeBoardInputItem>
   </b-container>
 </template>
 

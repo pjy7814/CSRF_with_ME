@@ -94,17 +94,7 @@ export default {
     ...mapActions(memberStore, ["memberLogout"]),
     // ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     onClickLogout() {
-      // this.SET_IS_LOGIN(false);
-      // this.SET_USER_INFO(null);
-      // sessionStorage.removeItem("access-token");
-      // if (this.$route.path != "/") this.$router.push({ name: "main" });
-      //vuex actions에서 userLogout 실행(Backend에 저장 된 리프레시 토큰 없애기
-      //+ satate에 isLogin, memberInfo 정보 변경)
-      // this.$store.dispatch("userLogout", this.memberInfo.memberId);
       this.memberLogout();
-      console.log(this.checkMemberInfo);
-      sessionStorage.removeItem("access-token"); //저장된 토큰 없애기
-      if (this.$route.path != "/") this.$router.push({ name: "main" });
     },
     onClickDropDown(name) {
       if (name === this.$route.name) return;
