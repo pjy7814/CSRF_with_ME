@@ -1,7 +1,9 @@
 package com.ssafy.vue.model.service;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +57,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardDto getArticle(int articleno) throws Exception {
-		return sqlSession.getMapper(BoardMapper.class).getArticle(articleno);
+	public Map<String, Object> getArticle(int articleno) throws Exception {
+		Map<String, Object> resultMap = new HashMap<>();
+
+	    BoardDto boardDto = sqlSession.getMapper(BoardMapper.class).getArticle(articleno);
+	    List<BoardImgDto> boardImgDtos = sqlSession.getMapper(BoardMapper.class).getArticleImg(articleno);
+
+	    resultMap.put("boardDtos", boardDto);
+	    resultMap.put("boardImgDtos", boardImgDtos);
+
+	    return resultMap;
 	}
 	@Override
 	@Transactional

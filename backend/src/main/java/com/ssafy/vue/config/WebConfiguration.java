@@ -1,5 +1,7 @@
 package com.ssafy.vue.config;
 
+import java.io.File;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -35,6 +37,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/images/**").addResourceLocations("file:"+new File("").getAbsolutePath() + "/images/");
     }
 	
 }

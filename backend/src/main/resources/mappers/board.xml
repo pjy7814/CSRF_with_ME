@@ -3,7 +3,6 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.vue.model.mapper.BoardMapper">
-
 	<insert id="writeArticle" parameterType="boardDto"
 		useGeneratedKeys="true" keyProperty="boardId">
 		<selectKey keyProperty="boardId" resultType="int"
@@ -25,6 +24,13 @@
 		#{boardType})
 	</insert>
 
+	<select id="getArticleImg" parameterType="int" resultType="boardImgDto">
+		select board_id as boardId, board_img_src as boardImgSrc, board_img_order as boardImgOrder
+		from board_img
+		where board_id = #{articleno}
+		order by board_img_order desc
+	</select>
+	
 	<select id="listArticle" parameterType="map"
 		resultType="boardDto">
 		select board_id as boardId, board_writer_Id as boardWriterId,
@@ -106,6 +112,8 @@
 		(board_id, board_img_src)
 		VALUES (#{boardId}, #{boardImgSrc})
 	</insert>
+	
+	
 
 </mapper>
 
