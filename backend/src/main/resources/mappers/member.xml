@@ -53,4 +53,8 @@
     salt = #{salt}
     WHERE member_id = #{memberId}
   </update>
+  
+  <select id="getMemberRoleCd" parameterType="String" resultType="String">
+  	SELECT member_role_cd from member WHERE member_id = #{memberId}
+  </select>
 </mapper>

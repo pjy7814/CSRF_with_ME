@@ -304,7 +304,6 @@ export default {
       //   boardContent: this.boardContent.value,
       //   boardAttractionInfoId: this.boardAttractionInfo.value.contentId,
       // };
-      console.log(this.boardAttractionInfo.value.contentId);
       formData.append("boardWriterId", this.boardWriterId.value);
       formData.append("boardTitle", this.boardTitle.value);
       formData.append("boardContent", this.boardContent.value);
@@ -391,7 +390,7 @@ export default {
       this.closeModal();
     },
     moveList() {
-      this.$router.push({ name: "/noticeboard/list" });
+      this.$router.replace({ name: "shareboardlist" });
     },
   },
   components: { AppDestinationInfo },
