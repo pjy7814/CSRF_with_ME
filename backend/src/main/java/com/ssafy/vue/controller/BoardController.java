@@ -79,6 +79,7 @@ public class BoardController {
 	@GetMapping("/{articleno}")
 	public ResponseEntity<BoardDto> getArticle(@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno) throws Exception {
 		logger.info("getArticle - 호출 : " + articleno);
+		System.out.println(boardService.getArticle(articleno));
 		return new ResponseEntity<BoardDto>(boardService.getArticle(articleno), HttpStatus.OK);
 	}
 	

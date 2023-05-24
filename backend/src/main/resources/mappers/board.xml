@@ -62,7 +62,7 @@
 		boardContent, created_time as createdTime
 		from board
 		where board_id =
-		#{boardId}
+		#{articleno}
 	</select>
 
 	<update id="updateHit" parameterType="int">

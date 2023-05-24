@@ -21,16 +21,16 @@
           :fields="fields"
           @row-clicked="viewArticle"
         >
-          <template #cell(subject)="data">
+          <!-- <template #cell(subject)="data">
             <router-link
               :to="{
                 name: 'boardview',
-                params: { articleno: data.item.articleno },
+                params: { boardId: data.item.boardId },
               }"
             >
               {{ data.item.boardTitle }}
             </router-link>
-          </template>
+          </template> -->
         </b-table>
       </b-col>
     </b-row>
@@ -144,10 +144,20 @@ export default {
       });
     },
     viewArticle(article) {
-      this.$router.push({
-        name: "boardview",
-        params: { articleno: article.articleno },
-      });
+      console.log(article.boardId);
+      if (this.currentBoard === "noticeboard") {
+        this.$router.push({
+          name: "noticeboardview",
+          params: { boardId: article.boardId },
+        });
+      } else if (this.currentBoard === "shareboard") {
+        this.$router.push({
+          name: "shareboardview",
+          params: { boardId: article.boardId },
+        });
+      } else {
+        //의도치 않은 접근! 에러 페이지 또는 메인 페이지로 강제 이동 중 택 1 선택 필요
+      }
     },
     searchPost() {
       //키워드와 필터를 합한 검색 실시 => 상의 필요

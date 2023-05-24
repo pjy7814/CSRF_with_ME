@@ -9,16 +9,17 @@
       <b-col class="text-left">
         <b-button variant="outline-primary" @click="moveList">목록</b-button>
       </b-col>
-      <b-col class="text-right" v-if="userInfo.userid === article.userid">
-        <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2">글수정</b-button>
+      <b-col class="text-right" v-if="memberInfo.memberId === article.boardWriterId">
+        <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2"
+          >글수정</b-button
+        >
         <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
       </b-col>
     </b-row>
     <b-row class="mb-1">
       <b-col>
         <b-card
-          :header-html="`<h3>${article.articleno}.
-          ${article.subject} [${article.hit}]</h3><div><h6>${article.userid}</div><div>${article.regtime}</h6></div>`"
+          :header-html="`<h3>${article.boardId}. ${article.boardTitle}</h3><div><h6>${article.boardWriterId}</h6><div>{{ article.createdTime | formatDate }}</div></div>`"
           class="mb-2"
           border-variant="dark"
           no-body
@@ -47,29 +48,37 @@ export default {
     };
   },
   computed: {
-    ...mapState(memberStore, ["userInfo"]),
-    message() {
-      if (this.article.content) return this.article.content.split("\n").join("<br>");
-      return "";
-    },
+    ...mapState(memberStore, ["isLogin", "isLoginError", "memberInfo"]),
+    // message() {
+    //   if (this.article.boardContent) return this.article.content.split("\n").join("<br>");
+    //   return "";
+    // },
   },
   created() {
-    let param = this.$route.params.articleno;
+    let param = this.$route.params.boardId;
     getArticle(
       param,
       ({ data }) => {
         this.article = data;
+        console.log(data);
       },
       (error) => {
         console.log(error);
       }
     );
   },
+
+  filters: {
+    formatDate(value) {
+      const date = new Date(value);
+      return date.toLocaleString();
+    },
+  },
   methods: {
     moveModifyArticle() {
       this.$router.replace({
         name: "boardmodify",
-        params: { articleno: this.article.articleno },
+        params: { boardId: this.article.boardId },
       });
       //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
@@ -77,19 +86,19 @@ export default {
       if (confirm("정말로 삭제?")) {
         this.$router.replace({
           name: "boarddelete",
-          params: { articleno: this.article.articleno },
+          params: { boardId: this.article.boardId },
         });
       }
     },
     moveList() {
       this.$router.push({ name: "boardlist" });
     },
+    generateCardHeader(article) {
+      const headerTitle = `<h3>${article.boardId}. ${article.boardTitle}</h3>`;
+      const headerInfo = `<div><h6>${article.boardWriterId}</h6><div>{{ article.createdTime | formatDate }}</div></div>`;
+      return headerTitle + headerInfo;
+    },
   },
-  // filters: {
-  //   dateFormat(regtime) {
-  //     return moment(new Date(regtime)).format("YY.MM.DD hh:mm:ss");
-  //   },
-  // },
 };
 </script>
 
