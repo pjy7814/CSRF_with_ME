@@ -22,4 +22,5 @@ public interface MemberMapper {
 	public void updateMember(MemberDto memberDto) throws SQLException;
 	public void updateMemberPw(MemberDto memberDto) throws SQLException;
 	public void updateSalt(String memberId, String salt) throws SQLException;
+	public String getMemberRoleCd(String memberId) throws SQLException;
 }

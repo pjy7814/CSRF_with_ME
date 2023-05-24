@@ -128,38 +128,10 @@
 <script>
 import { writeArticle, modifyArticle, getArticle } from "@/api/board";
 import AppDestinationInfo from "@/views/AppDestinationInfo.vue";
-
-/*
- fix me!
-  - 토큰 만료 시, interceptor에서 토큰 초기화 및 로그아웃 response를 반환해줘야 한다.
-  - 글 작성 시, request할 시에 서버에서 memberId와 accessToken.memberId를 동일한지 체킹하는 로직 꼭 필요하다.
-
-  글 작성 페이지
-  - 글 작성 입력 사항은 다음과 같다.
-    - 제목 (o)
-    - 공유할 관광지 : 이름, 주소가 저장됨. (o)
-      - '등록' 버튼 클릭시, 서브 페이지로 이동한다.
-      - 서브 페이지 내부에는 시/도, 구/군, 카테고리, 키워드 검색이 존재한다.
-      - 사용자의 경우 마커 클릭 시, 마커위에 창이 뜨며 해당 창 내에서 '등록'을 누를 시에 하단 입력창에 해당 여행지의 이름과 주소가 표시된다.
-    - 이미지
-      - 최대 5개 등록 가능하다.
-      - 이미지 등록 시에, .jpg, .jpeg, .png임을 체크하는 validation이 존재한다.
-        - 만약, validation에 불통할 시, 등록 자체를 해주지 않으며 하단에 경고 문구를 띄운다.
-    - 본문
-      - 최대 1000자로 제한해준다.
-      - 띄어쓰기 및 줄 바꿈을 textarea로 구성하기 위해 wrap="hard"를 넣어주며, .replace를 통해 <br>태그를 삽입해준다.
-
-  - 글 등록 시에는, 제목, 본문에 xss 공격 방지를 위한 .replace 함수를 적용시켜준다. 만약, 해당 시도가 존재할 시에 xss공격 방지를 위해 특수 문자로 변경된다.
-*/
-
-/*
-
-공유(또는 공지사항) 에서 글을 작성하고 등록을 보낼 때, 공지사항(또는 공유)로 request하도록 f12키를 통한 수정을 한다면?
--
-*/
 import { validateImgFile } from "@/util";
 import { mapGetters } from "vuex";
 const memberStore = "memberStore";
+
 export default {
   name: "ShareBoardInputItem",
   data() {
@@ -298,13 +270,6 @@ export default {
         formData.append("file", curFile);
       });
 
-      // let data = {
-      //   boardWriterId: this.boardWriterId.value,
-      //   boardTitle: this.boardTitle.value,
-      //   boardContent: this.boardContent.value,
-      //   boardAttractionInfoId: this.boardAttractionInfo.value.contentId,
-      // };
-      console.log(this.boardAttractionInfo.value.contentId);
       formData.append("boardWriterId", this.boardWriterId.value);
       formData.append("boardTitle", this.boardTitle.value);
       formData.append("boardContent", this.boardContent.value);
@@ -313,7 +278,6 @@ export default {
         this.boardAttractionInfo.value.contentId
       );
       formData.append("boardType", "share");
-      //formData.append("postBoard", data);
 
       writeArticle(
         formData,
@@ -345,7 +309,6 @@ export default {
             msg = "수정이 완료되었습니다.";
           }
           alert(msg);
-          // 현재 route를 /list로 변경.
           this.moveList();
         },
         (error) => {
@@ -382,7 +345,6 @@ export default {
       };
     },
     registAttraction() {
-      //최종 등록한 여행지를 넣어주고, selectedModalAttraction을 초기화해준다.
       this.boardAttractionInfo.value = { ...this.selectedModalAttraction };
       this.selectedModalAttraction = {
         contentId: "",
@@ -391,7 +353,7 @@ export default {
       this.closeModal();
     },
     moveList() {
-      this.$router.push({ name: "/noticeboard/list" });
+      this.$router.replace({ name: "shareboardlist" });
     },
   },
   components: { AppDestinationInfo },

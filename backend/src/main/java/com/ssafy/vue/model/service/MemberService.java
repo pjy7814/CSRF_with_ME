@@ -8,4 +8,6 @@ public interface MemberService {
 	public MemberDto memberInfo(String memberId) throws Exception;
 	public boolean regist(MemberDto memberDto) throws Exception;
 	public boolean update(MemberDto memberDto) throws Exception;
+	public boolean checkAdmin(String boardWriterId) throws Exception;
+	public boolean checkEqualMember(String boardWriterId) throws Exception;
 }

@@ -4,42 +4,53 @@
 
 <mapper namespace="com.ssafy.vue.model.mapper.BoardMapper">
 
-	<insert id="writeArticle" parameterType="boardDto" useGeneratedKeys="true" keyProperty="boardId">
-		<selectKey keyProperty="boardId" resultType="int" order="AFTER">
+	<insert id="writeArticle" parameterType="boardDto"
+		useGeneratedKeys="true" keyProperty="boardId">
+		<selectKey keyProperty="boardId" resultType="int"
+			order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		insert into board
 		(board_writer_Id, board_title,
-		board_attraction_info_id,
+		<if test="boardAttractionInfoId != 0">
+			board_attraction_info_id,
+		</if>
 		board_content, created_time, board_type)
 		values (#{boardWriterId},
-		#{boardTitle}, #{boardAttractionInfoId},
+		#{boardTitle},
+		<if test="boardAttractionInfoId != 0">
+			#{boardAttractionInfoId},
+		</if>
 		#{boardContent}, now(),
 		#{boardType})
 	</insert>
-	
-	<select id="listArticle" parameterType="map" resultType="boardDto">
-	  select board_id as boardId, board_writer_Id as boardWriterId, board_title as boardTitle, board_content as boardContent,
-	    case when date_format(created_time, '%Y%m%d') = date_format(now(), '%Y%m%d')
-	      then date_format(created_time, '%H:%i:%s')
-	      else date_format(created_time, '%y.%m.%d')
-	    end created_time
-	  from board
-	  <if test="word != null and word != ''">
-	    <if test="key == 'subject'">
-	      where board_title like concat('%', #{word}, '%') and board_type = #{boardType}
-	    </if>
-	    <if test="key != 'subject'">
-	      where ${key} = #{word} and board_type = #{boardType}
-	    </if>
-	  </if>
-	  <if test="true">
+
+	<select id="listArticle" parameterType="map"
+		resultType="boardDto">
+		select board_id as boardId, board_writer_Id as boardWriterId,
+		board_title as boardTitle, board_content as boardContent,
+		case when date_format(created_time, '%Y%m%d') = date_format(now(),
+		'%Y%m%d')
+		then date_format(created_time, '%H:%i:%s')
+		else date_format(created_time, '%y.%m.%d')
+		end created_time
+		from board
+		<if test="word != null and word != ''">
+			<if test="key == 'subject'">
+				where board_title like concat('%', #{word}, '%') and board_type =
+				#{boardType}
+			</if>
+			<if test="key != 'subject'">
+				where ${key} = #{word} and board_type = #{boardType}
+			</if>
+		</if>
+		<if test="true">
 	    <![CDATA[
 	      where board_type = #{boardType}
 	    ]]>
-	  </if>
-	  order by board_id desc
-	  limit #{start}, #{spp}
+		</if>
+		order by board_id desc
+		limit #{start}, #{spp}
 	</select>
 
 	<select id="getTotalCount" parameterType="map" resultType="int">

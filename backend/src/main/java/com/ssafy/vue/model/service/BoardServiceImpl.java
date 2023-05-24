@@ -25,6 +25,7 @@ public class BoardServiceImpl implements BoardService {
 		if(boardDto.getBoardTitle() == null || boardDto.getBoardContent() == null) {
 			throw new Exception();
 		}
+		System.out.println(boardDto.toString()); 
 		return sqlSession.getMapper(BoardMapper.class).writeArticle(boardDto) == 1;
 	}
 
