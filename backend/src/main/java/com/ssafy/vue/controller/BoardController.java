@@ -127,6 +127,7 @@ public class BoardController {
 				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
 			}
 			if (boardService.modifyArticle(boardDto)) {
+				
 				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 			}
 			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);

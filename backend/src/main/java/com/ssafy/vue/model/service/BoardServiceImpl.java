@@ -1,15 +1,22 @@
 package com.ssafy.vue.model.service;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.util.HTMLCharacterEscapes;
 import com.ssafy.util.PageNavigation;
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardImgDto;
@@ -65,7 +72,6 @@ public class BoardServiceImpl implements BoardService {
 
 	    resultMap.put("boardDtos", boardDto);
 	    resultMap.put("boardImgDtos", boardImgDtos);
-
 	    return resultMap;
 	}
 	@Override
