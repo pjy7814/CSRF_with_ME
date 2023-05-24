@@ -112,13 +112,35 @@ public class BoardController {
 
 	@ApiOperation(value = "게시판 글수정", notes = "수정할 게시글 정보를 입력한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping("/modify")
-	public ResponseEntity<String> modifyArticle(@ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto) throws Exception {
+	public ResponseEntity<String> modifyArticle(@ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto, @RequestParam(value="file", required=false) List<MultipartFile> files) throws Exception {
 		logger.info("modifyArticle - 호출 {}", boardDto);
-
-		if (boardService.modifyArticle(boardDto)) {
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		
+		MemberDto memberDto = new MemberDto();
+		memberDto.setMemberId(boardDto.getBoardWriterId());
+		
+		switch(boardDto.getBoardType()) {
+		case "notice":
+			//관리자 권한을 가지고 있는 유저인지 체크해야 한다. 
+			
+			if(!memberService.checkAdmin(boardDto.getBoardWriterId())) {
+				//관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
+				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
+			}
+			if (boardService.modifyArticle(boardDto)) {
+				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+			}
+			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+		case "share":
+			//token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
+			if(!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
+				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
+			}
+			if (boardService.modifyArticle(boardDto)) {
+				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+			}
+		default:
+			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "게시판 글삭제", notes = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)

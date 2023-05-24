@@ -203,12 +203,12 @@ export default {
       getArticle(
         param,
         ({ data }) => {
-          this.boardId.value = data.boardId;
-          this.boardWriterId.value = data.boardWriterId;
-          this.boardTitle.value = data.boardTitle;
-          this.boardContent.value = data.boardContent;
-          this.boardAttractionInfoId.value = data.boardAttractionInfoId;
-          this.boardImgFile.value = data.boardImage;
+          const { boardId, boardWriterId, boardTitle, boardContent } =
+            data.boardDtos;
+          this.boardId.value = boardId;
+          this.boardWriterId.value = boardWriterId;
+          this.boardTitle.value = boardTitle;
+          this.boardContent.value = boardContent;
         },
         (error) => {
           switch (error.response.status) {
@@ -305,14 +305,22 @@ export default {
       );
     },
     modifyArticle() {
-      let param = {
-        boardId: this.boardId.value,
-        boardWriterId: this.boardWriterId.value,
-        boardTitle: this.boardTitle.value,
-        boardContent: this.boardContent.value,
-      };
+      const formData = new FormData();
+
+      this.boardImgFile.value.forEach((curFile) => {
+        formData.append("file", curFile);
+      });
+      formData.append("boardId", this.boardId.value);
+      formData.append("boardWriterId", this.boardWriterId.value);
+      formData.append("boardTitle", this.boardTitle.value);
+      formData.append("boardContent", this.boardContent.value);
+      formData.append(
+        "boardAttractionInfoId",
+        this.boardAttractionInfo.value.contentId
+      );
+      formData.append("boardType", "share");
       modifyArticle(
-        param,
+        formData,
         ({ data }) => {
           let msg = "수정 처리시 문제가 발생했습니다.";
           if (data === "success") {

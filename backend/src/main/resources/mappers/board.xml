@@ -92,6 +92,9 @@
 		update board
 		set
 		board_title = #{boardTitle}, board_content = #{boardContent}
+		<if test="boardAttractionInfoId != 0">
+			, board_attraction_info_id=#{boardAttractionInfoId}
+		</if>
 		where
 		board_id = #{boardId}
 	</update>

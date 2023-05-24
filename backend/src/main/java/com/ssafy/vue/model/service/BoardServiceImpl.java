@@ -71,6 +71,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	@Transactional
 	public boolean modifyArticle(BoardDto boardDto) throws Exception {
+		System.out.println(boardDto.toString());
 		return sqlSession.getMapper(BoardMapper.class).modifyArticle(boardDto) == 1;
 	}
 

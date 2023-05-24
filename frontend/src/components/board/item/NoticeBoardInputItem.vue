@@ -99,7 +99,6 @@ export default {
     },
   },
   created() {
-    console.log(this.type, this.modifyboardId);
     if (this.type === "modify") {
       getArticle(
         this.modifyboardId,
