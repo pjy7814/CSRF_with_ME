@@ -61,7 +61,7 @@ public class BoardController {
 		
 		switch(boardDto.getBoardType()) {
 		case "notice":
-			//관리자 권한을 가지고 있는 유저인지 체크해야 한다.
+			//관리자 권한을 가지고 있는 유저인지 체크해야 한다. 
 			
 			if(!memberService.checkAdmin(boardDto.getBoardWriterId())) {
 				//관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
