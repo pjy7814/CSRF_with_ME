@@ -28,6 +28,7 @@ import com.ssafy.vue.model.service.BoardService;
 import com.ssafy.vue.model.service.FileHandlerService;
 import com.ssafy.vue.model.service.FileHandlerServiceImpl;
 import com.ssafy.vue.model.service.MemberService;
+import com.ssafy.vue.model.service.RecaptchaService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,13 +44,15 @@ public class BoardController {
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
-	private String secretKey = "6Le0_jcmAAAAAAVJ76xEyuX3SeNGbdP1PgvOa1Gs";
+
 	@Autowired
 	private BoardService boardService;
 	@Autowired
 	private MemberService memberService;
 	@Autowired
 	private FileHandlerService fileHandlerService;
+	@Autowired
+	private RecaptchaService recaptchaService;
 
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping
@@ -60,10 +63,8 @@ public class BoardController {
 		MemberDto memberDto = new MemberDto();
 		memberDto.setMemberId(boardDto.getBoardWriterId());
 
-		RecaptchaConfig.setSecretKey(secretKey);
-		Boolean verify = RecaptchaConfig.verify(recaptchaToken);
-
-		if (!verify) {
+		//캡챠 확인
+		if (!recaptchaService.verifyRecaptcha(recaptchaToken)) {
 			return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
 		}
 
