@@ -19,13 +19,13 @@
     <b-row class="mb-1">
       <b-col>
         <b-card
-          :header-html="`<h3>${article.boardId}. ${article.boardTitle}</h3><div><h6>${article.boardWriterId}</h6><div>{{ article.createdTime | formatDate }}</div></div>`"
+          :header-html="`<h3>${article.boardId}. ${article.boardTitle}</h3><div><h6>${article.boardWriterId}</h6><div>${article.createdTime}</div></div>`"
           class="mb-2"
           border-variant="dark"
           no-body
         >
           <b-card-body class="text-left">
-            <div v-html="message"></div>
+            <div>{{ this.article.boardContent }}</div>
           </b-card-body>
         </b-card>
       </b-col>
@@ -60,6 +60,7 @@ export default {
       param,
       ({ data }) => {
         this.article = data;
+        this.article.createdTime = this.formatDate(this.article.createdTime);
         console.log(data);
       },
       (error) => {
@@ -68,12 +69,7 @@ export default {
     );
   },
 
-  filters: {
-    formatDate(value) {
-      const date = new Date(value);
-      return date.toLocaleString();
-    },
-  },
+  filters: {},
   methods: {
     moveModifyArticle() {
       this.$router.replace({
@@ -93,10 +89,9 @@ export default {
     moveList() {
       this.$router.push({ name: "boardlist" });
     },
-    generateCardHeader(article) {
-      const headerTitle = `<h3>${article.boardId}. ${article.boardTitle}</h3>`;
-      const headerInfo = `<div><h6>${article.boardWriterId}</h6><div>{{ article.createdTime | formatDate }}</div></div>`;
-      return headerTitle + headerInfo;
+    formatDate(value) {
+      const date = new Date(value);
+      return date.toLocaleString();
     },
   },
 };
