@@ -82,17 +82,27 @@ export default {
       },
     };
   },
-  props: {
-    type: { type: String },
-  },
+  props: {},
   computed: {
     ...mapGetters(memberStore, ["checkMemberInfo"]),
+    type() {
+      switch (this.$route.name) {
+        case "noticeboardwrite":
+          return "register";
+        case "noticeboardmodify":
+          return "modify";
+        default:
+          return "error";
+      }
+    },
+    modifyboardId() {
+      return this.$route.params.boardId;
+    },
   },
   created() {
     if (this.type === "modify") {
-      let param = this.$route.params.boardId;
       getArticle(
-        param,
+        this.modifyboardId,
         ({ data }) => {
           this.boardId.value = data.boardId;
           this.boardWriterId.value = data.boardWriterId;

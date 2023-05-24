@@ -8,10 +8,12 @@
     <ShareBoardInputItem
       v-if="isShareBoard"
       type="modify"
+      :modifyboardId="boardId"
     ></ShareBoardInputItem>
     <NoticeBoardInputItem
       v-else-if="isNoticeBoard"
       type="modify"
+      :modifyboardId="boardId"
     ></NoticeBoardInputItem>
   </b-container>
 </template>
@@ -21,15 +23,15 @@ import ShareBoardInputItem from "./item/ShareBoardInputItem";
 import NoticeBoardInputItem from "./item/NoticeBoardInputItem.vue";
 export default {
   name: "BoardModify",
-  props: {
-    currentBoard: String,
-  },
   computed: {
     isNoticeBoard() {
-      return this.currentBoard === "noticeboard";
+      return this.$route.name === "noticeboardmodify";
     },
     isShareBoard() {
-      return this.currentBoard === "shareboard";
+      return this.$route.name === "shareboardmodify";
+    },
+    boardId() {
+      return this.$route.params.boardId;
     },
   },
   components: {

@@ -9,7 +9,9 @@
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-right">
-        <b-button variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
+        <b-button variant="outline-primary" @click="moveWrite()"
+          >글쓰기</b-button
+        >
       </b-col>
     </b-row>
     <b-row>
@@ -52,7 +54,9 @@
           placeholder="Search"
           ref="searchKeyword"
         ></b-form-input>
-        <b-button size="sm" class="my-2 my-sm-0" @click="searchPost()">Search</b-button>
+        <b-button size="sm" class="my-2 my-sm-0" @click="searchPost()"
+          >Search</b-button
+        >
       </div>
     </div>
   </b-container>
@@ -137,15 +141,19 @@ export default {
   },
   methods: {
     moveWrite() {
-      this.$router.push({
-        name: `${this.currentBoard}write`,
-        params: {
-          currentBoard: this.currentBoard,
-        },
-      });
+      if (this.currentBoard === "noticeboard") {
+        this.$router.push({
+          name: "noticeboardwrite",
+        });
+      } else if (this.currentBoard === "shareboard") {
+        this.$router.push({
+          name: "shareboardwrite",
+        });
+      } else {
+        //의도치 않은 접근! 에러 페이지 또는 메인 페이지로 강제 이동 중 택 1 선택 필요
+      }
     },
     viewArticle(article) {
-      console.log(article.boardId);
       if (this.currentBoard === "noticeboard") {
         this.$router.push({
           name: "noticeboardview",

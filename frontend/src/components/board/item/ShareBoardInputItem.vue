@@ -177,15 +177,25 @@ export default {
       },
     };
   },
-  props: {
-    type: { type: String },
-  },
   computed: {
     isValidModalAttraction() {
       const { contentId = 0, title = "" } = this.selectedModalAttraction;
       return contentId === 0 || title.length === 0;
     },
     ...mapGetters(memberStore, ["checkMemberInfo"]),
+    type() {
+      switch (this.$route.name) {
+        case "shareboardwrite":
+          return "register";
+        case "shareboardmodify":
+          return "modify";
+        default:
+          return "error";
+      }
+    },
+    modifyboardId() {
+      return this.$route.params.boardId;
+    },
   },
   created() {
     if (this.type === "modify") {

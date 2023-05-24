@@ -90,7 +90,7 @@ const routes = [
           ),
       },
       {
-        path: "view/:articleno",
+        path: "view/:boardId",
         name: "noticeboardview",
         beforeEnter: onlyAuthMember,
         component: () =>
@@ -99,7 +99,7 @@ const routes = [
           ),
       },
       {
-        path: "modify",
+        path: "modify/:boardId",
         name: "noticeboardmodify",
         beforeEnter: onlyAuthMember,
         props: true,
@@ -109,7 +109,7 @@ const routes = [
           ),
       },
       {
-        path: "delete/:articleno",
+        path: "delete/:boardId",
         name: "noticeboarddelete",
         beforeEnter: onlyAuthMember,
         component: () =>
@@ -145,26 +145,26 @@ const routes = [
           ),
       },
       {
-        path: "view/:articleno",
+        path: "view/:boardId",
         name: "shareboardview",
         beforeEnter: onlyAuthMember,
-        props: true,
         component: () =>
           import(
             /* webpackChunkName: "board" */ "@/components/board/BoardView"
           ),
       },
       {
-        path: "modify",
+        path: "modify/:boardId",
         name: "shareboardmodify",
         beforeEnter: onlyAuthMember,
+        props: true,
         component: () =>
           import(
             /* webpackChunkName: "board" */ "@/components/board/BoardModify"
           ),
       },
       {
-        path: "delete/:articleno",
+        path: "delete/:boardId",
         name: "shareboarddelete",
         beforeEnter: onlyAuthMember,
         component: () =>

@@ -5,14 +5,8 @@
         <b-alert show><h3>글작성</h3></b-alert>
       </b-col>
     </b-row>
-    <ShareBoardInputItem
-      v-if="isShareBoard"
-      type="register"
-    ></ShareBoardInputItem>
-    <NoticeBoardInputItem
-      v-else-if="isNoticeBoard"
-      type="register"
-    ></NoticeBoardInputItem>
+    <ShareBoardInputItem v-if="isShareBoard"></ShareBoardInputItem>
+    <NoticeBoardInputItem v-else-if="isNoticeBoard"></NoticeBoardInputItem>
   </b-container>
 </template>
 
@@ -22,19 +16,13 @@ import NoticeBoardInputItem from "./item/NoticeBoardInputItem.vue";
 
 export default {
   name: "BoardWrite",
-  props: {
-    currentBoard: String,
-  },
   computed: {
     isNoticeBoard() {
-      return this.currentBoard === "noticeboard";
+      return this.$route.name === "noticeboardwrite";
     },
     isShareBoard() {
-      return this.currentBoard === "shareboard";
+      return this.$route.name === "shareboardwrite";
     },
-  },
-  created() {
-    console.log(this.currentBoard);
   },
   components: {
     ShareBoardInputItem,
