@@ -112,6 +112,7 @@ const routes = [
         path: "delete/:boardId",
         name: "noticeboarddelete",
         beforeEnter: onlyAuthMember,
+        props: true,
         component: () =>
           import(
             /* webpackChunkName: "board" */ "@/components/board/BoardDelete"
@@ -167,6 +168,7 @@ const routes = [
         path: "delete/:boardId",
         name: "shareboarddelete",
         beforeEnter: onlyAuthMember,
+        props: true,
         component: () =>
           import(
             /* webpackChunkName: "board" */ "@/components/board/BoardDelete"

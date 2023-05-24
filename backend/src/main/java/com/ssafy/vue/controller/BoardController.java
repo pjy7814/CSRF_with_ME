@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.vue.config.RecaptchaConfig;
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
 import com.ssafy.vue.model.MemberDto;
@@ -42,30 +43,36 @@ public class BoardController {
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
-
+	private String secretKey = "6Le0_jcmAAAAAAVJ76xEyuX3SeNGbdP1PgvOa1Gs";
 	@Autowired
 	private BoardService boardService;
 	@Autowired
 	private MemberService memberService;
 	@Autowired
 	private FileHandlerService fileHandlerService;
-/*
- * 통합...
- */
+
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping
 	public ResponseEntity<String> writeArticle(@ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto,
-			@RequestParam(value="file", required=false) List<MultipartFile> files) throws Exception {
+			@RequestParam(value = "file", required = false) List<MultipartFile> files,
+			@RequestParam(value = "recaptchaToken", required = true) String recaptchaToken) throws Exception {
 		logger.info("writeArticle - 호출");
 		MemberDto memberDto = new MemberDto();
 		memberDto.setMemberId(boardDto.getBoardWriterId());
-		
-		switch(boardDto.getBoardType()) {
+
+		RecaptchaConfig.setSecretKey(secretKey);
+		Boolean verify = RecaptchaConfig.verify(recaptchaToken);
+
+		if (!verify) {
+			return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
+		}
+
+		switch (boardDto.getBoardType()) {
 		case "notice":
-			//관리자 권한을 가지고 있는 유저인지 체크해야 한다. 
-			
-			if(!memberService.checkAdmin(boardDto.getBoardWriterId())) {
-				//관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
+			// 관리자 권한을 가지고 있는 유저인지 체크해야 한다.
+
+			if (!memberService.checkAdmin(boardDto.getBoardWriterId())) {
+				// 관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
 				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
 			}
 			if (boardService.writeArticle(boardDto)) {
@@ -73,21 +80,25 @@ public class BoardController {
 			}
 			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 		case "share":
-			//token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
-			if(!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
+			// token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
+			if (!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
 				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
 			}
-			List<String> filePathList = fileHandlerService.parseFileInfo(memberDto, files);
 			if (boardService.writeArticle(boardDto)) {
-				if (boardService.uploadImages(boardDto, filePathList)) {
-					return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+				if (files.size() > 1) {
+					List<String> filePathList = fileHandlerService.parseFileInfo(memberDto, files);
+					if (boardService.uploadImages(boardDto, filePathList)) {
+						return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+					}
+					return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 				}
-				return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 			}
+			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 		default:
 			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 		}
-		 
+
 	}
 
 	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = List.class)
@@ -105,25 +116,26 @@ public class BoardController {
 			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
 			throws Exception {
 		logger.info("getArticle - 호출 : " + articleno);
-        Map<String, Object> resultMap = boardService.getArticle(articleno);
+		Map<String, Object> resultMap = boardService.getArticle(articleno);
 
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "게시판 글수정", notes = "수정할 게시글 정보를 입력한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping("/modify")
-	public ResponseEntity<String> modifyArticle(@ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto, @RequestParam(value="file", required=false) List<MultipartFile> files) throws Exception {
+	public ResponseEntity<String> modifyArticle(@ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto,
+			@RequestParam(value = "file", required = false) List<MultipartFile> files) throws Exception {
 		logger.info("modifyArticle - 호출 {}", boardDto);
-		
+
 		MemberDto memberDto = new MemberDto();
 		memberDto.setMemberId(boardDto.getBoardWriterId());
-		
-		switch(boardDto.getBoardType()) {
+
+		switch (boardDto.getBoardType()) {
 		case "notice":
-			//관리자 권한을 가지고 있는 유저인지 체크해야 한다. 
-			
-			if(!memberService.checkAdmin(boardDto.getBoardWriterId())) {
-				//관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
+			// 관리자 권한을 가지고 있는 유저인지 체크해야 한다.
+
+			if (!memberService.checkAdmin(boardDto.getBoardWriterId())) {
+				// 관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
 				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
 			}
 			if (boardService.modifyArticle(boardDto)) {
@@ -131,8 +143,8 @@ public class BoardController {
 			}
 			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 		case "share":
-			//token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
-			if(!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
+			// token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
+			if (!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
 				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
 			}
 			if (boardService.modifyArticle(boardDto)) {
@@ -144,10 +156,9 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "게시판 글삭제", notes = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
-	@DeleteMapping("/delete/")
+	@PostMapping("/delete")
 	public ResponseEntity<String> deleteArticle(
-			@RequestBody @ApiParam(value = "살제할 글의 글번호.", required = true) int articleno)
-			throws Exception {
+			@RequestBody @ApiParam(value = "살제할 글의 글번호.", required = true) int articleno) throws Exception {
 		logger.info("deleteArticle - 호출");
 		if (boardService.deleteArticle(articleno)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);

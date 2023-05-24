@@ -99,12 +99,6 @@
 		board_id = #{boardId}
 	</update>
 
-	<delete id="deleteMemo" parameterType="int">
-		delete from memo
-		where
-		board_id = #{boardId}
-	</delete>
-
 	<delete id="deleteArticle" parameterType="int">
 		delete from board
 		where

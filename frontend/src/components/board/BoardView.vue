@@ -112,10 +112,17 @@ export default {
     },
     deleteArticle() {
       if (confirm("정말로 삭제?")) {
-        this.$router.replace({
-          name: "boarddelete",
-          params: { boardId: this.article.boardId },
-        });
+        if (this.$route.name === "noticeboardview") {
+          this.$router.replace({
+            name: "noticeboarddelete",
+            params: { boardId: this.article.boardId, boardListType: "notice" },
+          });
+        } else if (this.$route.name === "shareboardview") {
+          this.$router.replace({
+            name: "shareboarddelete",
+            params: { boardId: this.article.boardId, boardListType: "share" },
+          });
+        }
       }
     },
     moveList() {

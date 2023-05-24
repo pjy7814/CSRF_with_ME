@@ -109,6 +109,12 @@
           ></b-form-textarea>
         </b-form-group>
 
+        <vue-recaptcha
+          ref="recaptcha"
+          :sitekey="envRecaptchaSKey"
+          @verify="checkRecaptcha"
+        >
+        </vue-recaptcha>
         <b-button
           type="submit"
           variant="primary"
@@ -131,6 +137,7 @@ import AppDestinationInfo from "@/views/AppDestinationInfo.vue";
 import { validateImgFile } from "@/util";
 import { mapGetters } from "vuex";
 const memberStore = "memberStore";
+import { VueRecaptcha } from "vue-recaptcha";
 
 export default {
   name: "ShareBoardInputItem",
@@ -175,6 +182,7 @@ export default {
         value: null,
         valid: null,
       },
+      recaptchaToken: "",
     };
   },
   computed: {
@@ -195,6 +203,9 @@ export default {
     },
     modifyboardId() {
       return this.$route.params.boardId;
+    },
+    envRecaptchaSKey() {
+      return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
     },
   },
   created() {
@@ -233,8 +244,13 @@ export default {
     closeModal() {
       this.isModalOpen = false;
     },
+
     onSubmit(event) {
       event.preventDefault();
+      if (!this.recaptchaToken) {
+        alert("검증 프로그램을 체킹해주세요!");
+        return;
+      }
       let err = true;
       if (err && !this.boardTitle.value) {
         this.boardTitle.valid = false;
@@ -288,7 +304,7 @@ export default {
         this.boardAttractionInfo.value.contentId
       );
       formData.append("boardType", "share");
-
+      formData.append("recaptchaToken", this.recaptchaToken);
       writeArticle(
         formData,
         ({ data }) => {
@@ -319,6 +335,7 @@ export default {
         this.boardAttractionInfo.value.contentId
       );
       formData.append("boardType", "share");
+      formData.append("recaptchaToken", this.recaptchaToken);
       modifyArticle(
         formData,
         ({ data }) => {
@@ -331,6 +348,7 @@ export default {
         },
         (error) => {
           console.log(error);
+          alert("수정 처리시 문제가 발생했습니다.");
         }
       );
     },
@@ -373,8 +391,11 @@ export default {
     moveList() {
       this.$router.replace({ name: "shareboardlist" });
     },
+    checkRecaptcha(response) {
+      this.recaptchaToken = response;
+    },
   },
-  components: { AppDestinationInfo },
+  components: { AppDestinationInfo, VueRecaptcha },
 };
 </script>
 

@@ -36,7 +36,12 @@
             :state="boardContent.valid"
           ></b-form-textarea>
         </b-form-group>
-
+        <vue-recaptcha
+          ref="recaptcha"
+          :sitekey="envRecaptchaSKey"
+          @verify="checkRecaptcha"
+        >
+        </vue-recaptcha>
         <b-button
           type="submit"
           variant="primary"
@@ -57,9 +62,10 @@
 import { writeArticle, modifyArticle, getArticle } from "@/api/board";
 import { mapGetters } from "vuex";
 const memberStore = "memberStore";
+import { VueRecaptcha } from "vue-recaptcha";
 export default {
   name: "NoticeBoardInputItem",
-  components: {},
+  components: { VueRecaptcha },
   data() {
     return {
       boardId: {
@@ -80,6 +86,7 @@ export default {
         valid: null,
         invalidText: "본문은 1자 이상, 1000자 이하입니다.",
       },
+      recaptchaToken: "",
     };
   },
   computed: {
@@ -96,6 +103,9 @@ export default {
     },
     modifyboardId() {
       return this.$route.params.boardId;
+    },
+    envRecaptchaSKey() {
+      return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
     },
   },
   created() {
@@ -129,6 +139,10 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
+      if (!this.recaptchaToken) {
+        alert("검증 프로그램을 체킹해주세요!");
+        return;
+      }
       let err = true;
       if (err && !this.boardTitle.value) {
         this.boardTitle.valid = false;
@@ -162,7 +176,7 @@ export default {
       formData.append("boardContent", this.boardContent.value);
       formData.append("boardType", "notice");
       formData.append("file", "");
-
+      formData.append("recaptchaToken", this.recaptchaToken);
       writeArticle(
         formData,
         ({ data }) => {
@@ -207,6 +221,7 @@ export default {
       formData.append("boardContent", this.boardContent.value);
       formData.append("boardType", "notice");
       formData.append("file", "");
+      formData.append("recaptchaToken", this.recaptchaToken);
       modifyArticle(
         formData,
         ({ data }) => {
@@ -224,6 +239,9 @@ export default {
     },
     moveList() {
       this.$router.replace({ name: "noticeboardlist" });
+    },
+    checkRecaptcha(response) {
+      this.recaptchaToken = response;
     },
   },
 };

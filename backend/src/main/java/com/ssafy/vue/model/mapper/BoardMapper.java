@@ -17,7 +17,6 @@ public interface BoardMapper {
 	public int getTotalCount(BoardParameterDto boardParameterDto) throws SQLException;
 	public BoardDto getArticle(int articleno) throws SQLException;
 	public int modifyArticle(BoardDto boardDto) throws SQLException;
-	public void deleteMemo(int articleno) throws SQLException;
 	public int deleteArticle(int articleno) throws SQLException;
 	public int uploadImages(BoardImgDto boardImgDto) throws SQLException;
 	public List<BoardImgDto> getArticleImg(int articleno) throws SQLException;

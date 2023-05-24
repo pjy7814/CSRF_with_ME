@@ -16,8 +16,11 @@ import { deleteArticle } from "@/api/board";
 
 export default {
   name: "BoardDelete",
+  props: {
+    boardListType: String,
+  },
   created() {
-    let param = this.$route.params.articleno;
+    let param = this.$route.params.boardId;
     deleteArticle(
       param,
       ({ data }) => {
@@ -27,7 +30,7 @@ export default {
         }
         alert(msg);
         // 현재 route를 /list로 변경.
-        this.$router.push({ name: "boardlist" });
+        this.$router.replace({ name: `${this.boardListType}boardlist` });
       },
       (error) => {
         console.log(error);
