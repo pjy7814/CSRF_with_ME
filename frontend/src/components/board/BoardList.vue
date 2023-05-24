@@ -75,7 +75,7 @@ export default {
         { key: "boardId", label: "글번호", tdClass: "tdClass" },
         { key: "boardTitle", label: "제목", tdClass: "tdSubject" },
         { key: "boardWriterId", label: "작성자", tdClass: "tdClass" },
-        { key: "boardContent", label: "작성일", tdClass: "tdClass" },
+        { key: "createdTime", label: "작성일", tdClass: "tdClass" },
       ],
     };
   },
@@ -125,6 +125,7 @@ export default {
         param,
         ({ data }) => {
           this.articles = data;
+          console.log(data);
         },
         (error) => {
           console.log(error);

@@ -18,9 +18,9 @@ public class BoardDto {
 	@ApiModelProperty(value = "관광지 주소")
 	private int boardAttractionInfoId;
 	@ApiModelProperty(value = "작성일")
-	private Timestamp createdTime;
+	private String createdTime;
 	@ApiModelProperty(value = "수정일")
-	private Timestamp modifiedTime;
+	private String modifiedTime;
 	@ApiModelProperty(value = "보드 타입")
 	private String boardType;
 	
@@ -54,16 +54,16 @@ public class BoardDto {
 	public void setBoardAttractionInfoId(int boardAttractionInfoId) {
 		this.boardAttractionInfoId = boardAttractionInfoId;
 	}
-	public Timestamp getCreatedTime() {
+	public String getCreatedTime() {
 		return createdTime;
 	}
-	public void setCreatedTime(Timestamp createdTime) {
+	public void setCreatedTime(String createdTime) {
 		this.createdTime = createdTime;
 	}
-	public Timestamp getModifiedTime() {
+	public String getModifiedTime() {
 		return modifiedTime;
 	}
-	public void setModifiedTime(Timestamp modifiedTime) {
+	public void setModifiedTime(String modifiedTime) {
 		this.modifiedTime = modifiedTime;
 	}
 	

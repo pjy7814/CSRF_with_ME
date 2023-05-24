@@ -33,7 +33,7 @@
 		'%Y%m%d')
 		then date_format(created_time, '%H:%i:%s')
 		else date_format(created_time, '%y.%m.%d')
-		end created_time
+		end as createdTime 
 		from board
 		<if test="word != null and word != ''">
 			<if test="key == 'subject'">

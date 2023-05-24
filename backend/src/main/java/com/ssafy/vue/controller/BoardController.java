@@ -95,7 +95,7 @@ public class BoardController {
 			@ApiParam(value = "게시글을 얻기위한 부가정보.", required = true) BoardParameterDto boardParameterDto)
 			throws Exception {
 		logger.info("listShareArticle - 호출");
-		System.out.println(boardParameterDto);
+		System.out.println(boardService.listArticle(boardParameterDto));
 		return new ResponseEntity<List<BoardDto>>(boardService.listArticle(boardParameterDto), HttpStatus.OK);
 	}
 
