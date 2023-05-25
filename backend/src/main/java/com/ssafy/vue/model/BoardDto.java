@@ -24,6 +24,53 @@ public class BoardDto {
 	@ApiModelProperty(value = "보드 타입")
 	private String boardType;
 	
+	public BoardDto() {
+		super();
+	}
+	
+	// list
+	public BoardDto(int boardId, String boardWriterId, String boardTitle, String boardContent, String createdTime, String boardType) {
+		super();
+		setBoardId(boardId);
+		setBoardWriterId(boardWriterId);
+		setBoardTitle(boardTitle);
+		setBoardContent(boardContent);
+		setCreatedTime(createdTime);
+		setBoardType(boardType);
+	}
+	
+	// 공지사항
+	public BoardDto(String boardWriterId, String boardTitle, String createdTime, String boardType) {
+		super();
+		setBoardWriterId(boardWriterId);
+		setBoardTitle(boardTitle);
+		setCreatedTime(createdTime);
+		setBoardType(boardType);
+	}
+	
+	// 공유게시판
+	public BoardDto(String boardWriterId, String boardTitle, String boardContent, int boardAttractionInfoId, String createdTime, String boardType) {
+		super();
+		setBoardWriterId(boardWriterId);
+		setBoardTitle(boardTitle);
+		setBoardContent(boardContent);
+		setBoardAttractionInfoId(boardAttractionInfoId);
+		setCreatedTime(createdTime);
+		setBoardType(boardType);
+	}
+	
+	public BoardDto(int boardId, String boardWriterId, String boardTitle, String boardContent, int boardAttractionInfoId, String createdTime, String modifiedTime, String boardType) {
+		super();
+		setBoardId(boardId);
+		setBoardWriterId(boardWriterId);
+		setBoardTitle(boardTitle);
+		setBoardContent(boardContent);
+		setBoardAttractionInfoId(boardAttractionInfoId);
+		setCreatedTime(createdTime);
+		setModifiedTime(modifiedTime);
+		setBoardType(boardType);
+	}
+	
 	public int getBoardId() {
 		return boardId;
 	}

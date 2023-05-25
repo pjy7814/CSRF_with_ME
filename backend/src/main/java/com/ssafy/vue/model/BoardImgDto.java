@@ -5,7 +5,12 @@ public class BoardImgDto {
     private String boardImgSrc;
     private int boardImgOrder;
     
-    public BoardImgDto(int boardId, String boardImgSrc) {
+    
+    public BoardImgDto() {
+		super();
+	}
+
+	public BoardImgDto(int boardId, String boardImgSrc) {
 		super();
 		setBoardId(boardId);
 		setBoardImgSrc(boardImgSrc);
