@@ -8,5 +8,5 @@ import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.MemberDto;
 
 public interface FileHandlerService {
-	public List<String> parseFileInfo(MemberDto memberDto, List<MultipartFile> multipartFiles) throws Exception;
+	public List<String> parseFileInfo(String string, List<MultipartFile> multipartFiles) throws Exception;
 }

@@ -21,7 +21,7 @@ public class FileHandlerServiceImpl implements FileHandlerService{
 	private SqlSession sqlSession;
 	
 	@Override
-    public List<String> parseFileInfo(MemberDto memberDto, List<MultipartFile> multipartFiles) throws Exception{
+    public List<String> parseFileInfo(String writerId, List<MultipartFile> multipartFiles) throws Exception{
         // 파일들의 서버 내 경로를 저장하는 fileList
         List<String> filePathList = new ArrayList<>();
 
@@ -65,7 +65,7 @@ public class FileHandlerServiceImpl implements FileHandlerService{
                     }
                 }
                 // 암호화된 네이밍 만들기
-                String salt = sqlSession.getMapper(MemberMapper.class).getSalt(memberDto.getMemberId());
+                String salt = sqlSession.getMapper(MemberMapper.class).getSalt(writerId);
                 String hashFileName = OpenCrypt.getSHA256(originalName, salt);
                 String resultPath = absolutePath + path + "/" + hashFileName + originalFileExtension;
                 // 생성 후 리스트에 추가

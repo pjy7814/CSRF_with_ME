@@ -60,8 +60,6 @@ public class BoardController {
 			@RequestParam(value = "file", required = false) List<MultipartFile> files,
 			@RequestParam(value = "recaptchaToken", required = true) String recaptchaToken) throws Exception {
 		logger.info("writeArticle - 호출");
-		MemberDto memberDto = new MemberDto();
-		memberDto.setMemberId(boardDto.getBoardWriterId());
 
 		//캡챠 확인
 		if (!recaptchaService.verifyRecaptcha(recaptchaToken)) {
@@ -87,7 +85,7 @@ public class BoardController {
 			}
 			if (boardService.writeArticle(boardDto)) {
 				if (files.size() >= 1) {
-					List<String> filePathList = fileHandlerService.parseFileInfo(memberDto, files);
+					List<String> filePathList = fileHandlerService.parseFileInfo(boardDto.getBoardWriterId(), files);
 					if (boardService.uploadImages(boardDto, filePathList)) {
 						return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 					}
@@ -127,9 +125,6 @@ public class BoardController {
 	public ResponseEntity<String> modifyArticle(@ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto,
 			@RequestParam(value = "file", required = false) List<MultipartFile> files) throws Exception {
 		logger.info("modifyArticle - 호출 {}", boardDto);
-
-		MemberDto memberDto = new MemberDto();
-		memberDto.setMemberId(boardDto.getBoardWriterId());
 
 		switch (boardDto.getBoardType()) {
 		case "notice":

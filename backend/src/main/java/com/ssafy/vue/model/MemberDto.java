@@ -17,62 +17,132 @@ public class MemberDto {
 	@ApiModelProperty(value = "회원 이메일")
 	private String memberEmail;
 	@ApiModelProperty(value = "시도 코드")
-	private String sidoCode; 
+	private int sidoCode; 
 	@ApiModelProperty(value = "군구 코드")
-	private String gunguCode; 
+	private int gunguCode; 
 	@ApiModelProperty(value = "회원 가입일")
 	private Timestamp createdAt;
 	@ApiModelProperty(value = "회원 권한 코드")
 	private String memberRoleCd;
 	
+	public MemberDto() {
+	    // 기본 생성자 내용
+	}
+	// 로그인 시
+	public MemberDto(String memberId, String memberPassword) {
+		super();
+		setMemberId(memberId);
+		setMemberPassword(memberPassword);
+	}
+	
+	// 회원가입 시
+	public MemberDto(String memberId, String memberName, String memberPassword, String memberEmail, int sidoCode,
+			int gunguCode) {
+		super();
+		setMemberId(memberId);
+		setMemberName(memberName);
+		setMemberPassword(memberPassword);
+		setMemberEmail(memberEmail);
+		setSidoCode(sidoCode);
+		setGunguCode(gunguCode);
+	}
+	
+	
+
+	// 로그인시 멤버의 정보 불러오기
+	public MemberDto(String memberId, String memberName,String memberEmail) {
+		super();
+		setMemberId(memberId);
+		setMemberName(memberName);
+		setMemberEmail(memberEmail);
+	}
+	
+	// mypage	
+	public MemberDto(String memberId, String memberName, String memberEmail, int sidoCode, int gunguCode) {
+		super();
+		setMemberId(memberId);
+		setMemberName(memberName);
+		setMemberEmail(memberEmail);
+		setSidoCode(sidoCode);
+		setGunguCode(gunguCode);
+	}
+	
+	public MemberDto(String memberId, String memberName, String memberPassword, String memberEmail, int sidoCode,
+			int gunguCode, Timestamp createdAt, String memberRoleCd) {
+		super();
+		setMemberId(memberId);
+		setMemberName(memberName);
+		setMemberPassword(memberPassword);
+		setMemberEmail(memberEmail);
+		setSidoCode(sidoCode);
+		setGunguCode(gunguCode);
+		setCreatedAt(createdAt);
+		setMemberRoleCd(memberRoleCd);
+	}
 	public String getMemberId() {
 		return memberId;
 	}
 	public void setMemberId(String memberId) {
-		this.memberId = memberId;
+		if (memberId != null) {
+			this.memberId = memberId;
+		}
 	}
 	public String getMemberName() {
 		return memberName;
 	}
 	public void setMemberName(String memberName) {
-		this.memberName = memberName;
+		if (memberName != null) {
+			this.memberName = memberName;
+		}
 	}
 	public String getMemberPassword() {
 		return memberPassword;
 	}
 	public void setMemberPassword(String memberPassword) {
-		this.memberPassword = memberPassword;
+		if (memberPassword != null) {
+			this.memberPassword = memberPassword;
+		}
 	}
 	public String getMemberEmail() {
 		return memberEmail;
 	}
 	public void setMemberEmail(String memberEmail) {
-		this.memberEmail = memberEmail;
+		if (memberEmail != null) {
+			this.memberEmail = memberEmail;
+		}
 	}
-	public String getSidoCode() {
+	public int getSidoCode() {
 		return sidoCode;
 	}
-	public void setSidoCode(String sidoCode) {
-		this.sidoCode = sidoCode;
+	public void setSidoCode(int sidoCode) {
+		if (sidoCode > 0) {
+			this.sidoCode = sidoCode;
+		}
 	}
-	public String getGunguCode() {
+	public int getGunguCode() {
 		return gunguCode;
 	}
-	public void setGunguCode(String gunguCode) {
-		this.gunguCode = gunguCode;
+	public void setGunguCode(int gunguCode) {
+		if (gunguCode > 0) {
+			this.gunguCode = gunguCode;
+		}
 	}
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
 	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
+		if(createdAt != null) {
+			this.createdAt = createdAt;
+		}
 	}
 	
 	public String getMemberRoleCd() {
 		return memberRoleCd;
 	}
 	public void setMemberRoleCd(String memberRoleCd) {
-		this.memberRoleCd = memberRoleCd;
+		if (memberRoleCd.equals("STPKMCD001") || memberRoleCd.equals("HOTGUYSSAFYTP01")) {	
+			this.memberRoleCd = memberRoleCd;
+		}
 	}
 	@Override
 	public String toString() {
