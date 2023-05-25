@@ -14,13 +14,30 @@ public class SidoGugunCodeDto {
 	private String gugunCode;
 	@ApiModelProperty(value = "구군이름")
 	private String gugunName;
+	
+	
+	
+
+	public SidoGugunCodeDto() {
+		super();
+	}
+
+	public SidoGugunCodeDto(String sidoCode, String sidoName, String gugunCode, String gugunName) {
+		super();
+		setSidoCode(sidoCode);
+		setSidoName(sidoName);
+		setGugunCode(gugunCode);
+		setGugunName(gugunName);
+	}
 
 	public String getSidoCode() {
 		return sidoCode;
 	}
 
 	public void setSidoCode(String sidoCode) {
-		this.sidoCode = sidoCode;
+		if (sidoCode != null) {
+			this.sidoCode = sidoCode;
+		}
 	}
 
 	public String getSidoName() {
@@ -28,7 +45,9 @@ public class SidoGugunCodeDto {
 	}
 
 	public void setSidoName(String sidoName) {
-		this.sidoName = sidoName;
+		if (sidoName != null) {
+			this.sidoName = sidoName;
+		}
 	}
 
 	public String getGugunCode() {
@@ -36,7 +55,9 @@ public class SidoGugunCodeDto {
 	}
 
 	public void setGugunCode(String gugunCode) {
-		this.gugunCode = gugunCode;
+		if (gugunCode != null) {
+			this.gugunCode = gugunCode;
+		}
 	}
 
 	public String getGugunName() {
@@ -44,7 +65,9 @@ public class SidoGugunCodeDto {
 	}
 
 	public void setGugunName(String gugunName) {
-		this.gugunName = gugunName;
+		if(gugunName != null) {
+			this.gugunName = gugunName;
+		}
 	}
 
 	@Override
