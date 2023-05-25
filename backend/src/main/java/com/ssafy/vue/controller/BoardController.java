@@ -3,8 +3,6 @@ package com.ssafy.vue.controller;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +32,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-//http://localhost:9999/vue/swagger-ui.html
-//@CrossOrigin(origins = { "*" }, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.POST} , maxAge = 6000)
 @RestController
 @RequestMapping("/board")
 @Api("게시판 컨트롤러  API V1")
 public class BoardController {
 
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 
@@ -59,7 +54,6 @@ public class BoardController {
 	public ResponseEntity<String> writeArticle(@ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto,
 			@RequestParam(value = "file", required = false) List<MultipartFile> files,
 			@RequestParam(value = "recaptchaToken", required = true) String recaptchaToken) throws Exception {
-		logger.info("writeArticle - 호출");
 
 		//캡챠 확인
 		if (!recaptchaService.verifyRecaptcha(recaptchaToken)) {
@@ -105,7 +99,6 @@ public class BoardController {
 	public ResponseEntity<List<BoardDto>> listShareArticle(
 			@ApiParam(value = "게시글을 얻기위한 부가정보.", required = true) BoardParameterDto boardParameterDto)
 			throws Exception {
-		logger.info("listShareArticle - 호출");
 		return new ResponseEntity<List<BoardDto>>(boardService.listArticle(boardParameterDto), HttpStatus.OK);
 	}
 
@@ -114,7 +107,6 @@ public class BoardController {
 	public ResponseEntity<Map<String, Object>> getArticle(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
 			throws Exception {
-		logger.info("getArticle - 호출 : " + articleno);
 		Map<String, Object> resultMap = boardService.getArticle(articleno);
 
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
@@ -124,7 +116,6 @@ public class BoardController {
 	@PostMapping("/modify")
 	public ResponseEntity<String> modifyArticle(@ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto,
 			@RequestParam(value = "file", required = false) List<MultipartFile> files) throws Exception {
-		logger.info("modifyArticle - 호출 {}", boardDto);
 
 		switch (boardDto.getBoardType()) {
 		case "notice":
@@ -156,7 +147,6 @@ public class BoardController {
 	@PostMapping("/delete")
 	public ResponseEntity<String> deleteArticle(
 			@RequestBody @ApiParam(value = "살제할 글의 글번호.", required = true) int articleno) throws Exception {
-		logger.info("deleteArticle - 호출");
 		if (boardService.deleteArticle(articleno)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
