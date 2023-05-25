@@ -214,12 +214,20 @@ export default {
         this.modifyboardId,
         "share",
         ({ data }) => {
-          const { boardId, boardWriterId, boardTitle, boardContent } =
-            data.article.boardDtos;
+          const {
+            boardId,
+            boardWriterId,
+            boardTitle,
+            boardContent,
+            boardAttractionInfoId,
+            boardAttractionInfoTitle,
+          } = data.article.boardDtos;
           this.boardId.value = boardId;
           this.boardWriterId.value = boardWriterId;
           this.boardTitle.value = boardTitle;
           this.boardContent.value = boardContent;
+          this.boardAttractionInfo.value.contentId = boardAttractionInfoId;
+          this.boardAttractionInfo.value.title = boardAttractionInfoTitle;
         },
         (error) => {
           processResError(error);
