@@ -86,7 +86,7 @@ public class BoardController {
 				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
 			}
 			if (boardService.writeArticle(boardDto)) {
-				if (files.size() > 1) {
+				if (files.size() >= 1) {
 					List<String> filePathList = fileHandlerService.parseFileInfo(memberDto, files);
 					if (boardService.uploadImages(boardDto, filePathList)) {
 						return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);

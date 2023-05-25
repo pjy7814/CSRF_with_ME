@@ -100,9 +100,9 @@ public class BoardServiceImpl implements BoardService {
 		        // 각 이미지에 대해 boardId를 사용하여 board_id 컬럼에 외래키로 설정
 
 		        // board_img 테이블에 데이터 삽입
-		        BoardImgDto boardImgDto = new BoardImgDto();
-		        boardImgDto.setBoardId(boardId);
-		        boardImgDto.setBoardImgSrc(filePath);
+		        BoardImgDto boardImgDto = new BoardImgDto(boardId, filePath);
+//		        boardImgDto.setBoardId(boardId);
+//		        boardImgDto.setBoardImgSrc(filePath);
 		        sqlSession.getMapper(BoardMapper.class).uploadImages(boardImgDto);
 		    }
 
