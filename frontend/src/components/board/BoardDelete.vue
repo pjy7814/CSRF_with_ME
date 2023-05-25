@@ -24,16 +24,20 @@ export default {
     deleteArticle(
       param,
       ({ data }) => {
-        let msg = "삭제 처리시 문제가 발생했습니다.";
-        if (data === "success") {
-          msg = "삭제가 완료되었습니다.";
-        }
-        alert(msg);
-        // 현재 route를 /list로 변경.
+        alert(data.message);
         this.$router.replace({ name: `${this.boardListType}boardlist` });
       },
       (error) => {
+        const { message } = error.response.data;
         console.log(error);
+        switch (error.response.status) {
+          case 500:
+            this.$router.replace({ name: "error", params: { message } });
+            break;
+          default:
+            alert(message);
+            break;
+        }
       }
     );
   },

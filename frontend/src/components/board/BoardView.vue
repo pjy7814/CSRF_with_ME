@@ -9,11 +9,20 @@
       <b-col class="text-left">
         <b-button variant="outline-primary" @click="moveList">목록</b-button>
       </b-col>
-      <b-col class="text-right" v-if="memberInfo.memberId === article.boardWriterId">
-        <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2"
+      <b-col
+        class="text-right"
+        v-if="memberInfo.memberId === article.boardWriterId"
+      >
+        <b-button
+          variant="outline-info"
+          size="sm"
+          @click="moveModifyArticle"
+          class="mr-2"
           >글수정</b-button
         >
-        <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
+        <b-button variant="outline-danger" size="sm" @click="deleteArticle"
+          >글삭제</b-button
+        >
       </b-col>
     </b-row>
     <b-row class="mb-1">
@@ -58,10 +67,6 @@ export default {
   },
   computed: {
     ...mapState(memberStore, ["isLogin", "isLoginError", "memberInfo"]),
-    // message() {
-    //   if (this.article.boardContent) return this.article.content.split("\n").join("<br>");
-    //   return "";
-    // },
     envImgEndPoint() {
       return process.env.VUE_APP_IMG_ENDPOINT;
     },
@@ -71,13 +76,21 @@ export default {
     getArticle(
       param,
       ({ data }) => {
-        this.article = data.boardDtos;
-        this.imageArray = data.boardImgDtos;
+        const { boardDtos, boardImgDtos } = data.article;
+        this.article = boardDtos;
+        this.imageArray = boardImgDtos;
         this.article.createdTime = this.formatDate(this.article.createdTime);
-        console.log(data);
       },
       (error) => {
-        console.log(error);
+        const { message } = error.response.data;
+        switch (error.response.status) {
+          case 500:
+            this.$router.replace({ name: "error", params: { message } });
+            break;
+          default:
+            alert(message);
+            break;
+        }
       }
     );
   },
@@ -85,34 +98,60 @@ export default {
   filters: {},
   methods: {
     moveModifyArticle() {
-      if (this.$route.name === "noticeboardview") {
-        this.$router.replace({
-          name: `noticeboardmodify`,
-          params: {
-            boardId: this.article.boardId,
-          },
-        });
-      } else if (this.$route.name === "shareboardview") {
-        this.$router.replace({
-          name: `shareboardmodify`,
-          params: {
-            boardId: this.article.boardId,
-          },
-        });
+      switch (this.$route.name) {
+        case "noticeboardview":
+          this.$router.replace({
+            name: `noticeboardmodify`,
+            params: {
+              boardId: this.article.boardId,
+            },
+          });
+          break;
+        case "shareboardview":
+          this.$router.replace({
+            name: `shareboardmodify`,
+            params: {
+              boardId: this.article.boardId,
+            },
+          });
+          break;
+        default:
+          this.$router.replace({
+            name: `error`,
+            params: {
+              message: "비 정상적인 접근입니다! 사이트를 제대로 이용해주세요!",
+            },
+          });
+          break;
       }
     },
     deleteArticle() {
       if (confirm("정말로 삭제?")) {
-        if (this.$route.name === "noticeboardview") {
-          this.$router.replace({
-            name: "noticeboarddelete",
-            params: { boardId: this.article.boardId, boardListType: "notice" },
-          });
-        } else if (this.$route.name === "shareboardview") {
-          this.$router.replace({
-            name: "shareboarddelete",
-            params: { boardId: this.article.boardId, boardListType: "share" },
-          });
+        switch (this.$route.name) {
+          case "noticeboardview":
+            this.$router.replace({
+              name: "noticeboarddelete",
+              params: {
+                boardId: this.article.boardId,
+                boardListType: "notice",
+              },
+            });
+            break;
+          case "shareboardview":
+            this.$router.replace({
+              name: "shareboarddelete",
+              params: { boardId: this.article.boardId, boardListType: "share" },
+            });
+            break;
+          default:
+            this.$router.replace({
+              name: `error`,
+              params: {
+                message:
+                  "비 정상적인 접근입니다! 사이트를 제대로 이용해주세요!",
+              },
+            });
+            break;
         }
       }
     },

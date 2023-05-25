@@ -114,21 +114,21 @@ export default {
         this.modifyboardId,
         ({ data }) => {
           const { boardId, boardWriterId, boardTitle, boardContent } =
-            data.boardDtos;
+            data.article.boardDtos;
           this.boardId.value = boardId;
           this.boardWriterId.value = boardWriterId;
           this.boardTitle.value = boardTitle;
           this.boardContent.value = boardContent;
         },
         (error) => {
+          const { message } = error.response.data;
           switch (error.response.status) {
-            case "500":
-              this.$router.push({
-                name: "error",
-                params: {
-                  msg: "서버 상태 이상",
-                },
-              });
+            case 500:
+              this.$router.replace({ name: "error", params: { message } });
+              break;
+            default:
+              alert(message);
+              break;
           }
         }
       );
@@ -180,37 +180,19 @@ export default {
       writeArticle(
         formData,
         ({ data }) => {
-          console.log("에러");
-          let msg = "등록 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "등록이 완료되었습니다.";
-          }
-          alert(msg);
+          alert(data.message);
           this.moveList();
         },
         (error) => {
+          const { message } = error.response.data;
           switch (error.response.status) {
-            case 401:
-              alert("잘못된 접근입니다!");
-              break;
             case 500:
-              this.$router.push({
-                name: "error",
-                params: {
-                  msg: "서버 상태 이상",
-                },
-              });
+              this.$router.replace({ name: "error", params: { message } });
               break;
             default:
-              this.$router.push({
-                name: "error",
-                params: {
-                  msg: "잘못된 서비스 사용",
-                },
-              });
+              alert(message);
               break;
           }
-          console.log(error);
         }
       );
     },
@@ -226,15 +208,19 @@ export default {
       modifyArticle(
         formData,
         ({ data }) => {
-          let msg = "수정 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "수정이 완료되었습니다.";
-          }
-          alert(msg);
+          alert(data.message);
           this.moveList();
         },
         (error) => {
-          console.log(error);
+          const { message } = error.response.data;
+          switch (error.response.status) {
+            case 500:
+              this.$router.replace({ name: "error", params: { message } });
+              break;
+            default:
+              alert(message);
+              break;
+          }
         }
       );
     },

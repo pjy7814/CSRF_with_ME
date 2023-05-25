@@ -210,26 +210,25 @@ export default {
   },
   created() {
     if (this.type === "modify") {
-      let param = this.$route.params.boardId;
       getArticle(
-        param,
+        this.modifyboardId,
         ({ data }) => {
           const { boardId, boardWriterId, boardTitle, boardContent } =
-            data.boardDtos;
+            data.article.boardDtos;
           this.boardId.value = boardId;
           this.boardWriterId.value = boardWriterId;
           this.boardTitle.value = boardTitle;
           this.boardContent.value = boardContent;
         },
         (error) => {
+          const { message } = error.response.data;
           switch (error.response.status) {
-            case "500":
-              this.$router.push({
-                name: "error",
-                params: {
-                  msg: "서버 상태 이상",
-                },
-              });
+            case 500:
+              this.$router.replace({ name: "error", params: { message } });
+              break;
+            default:
+              alert(message);
+              break;
           }
         }
       );
@@ -291,7 +290,6 @@ export default {
     },
     registArticle() {
       const formData = new FormData();
-
       this.boardImgFile.value.forEach((curFile) => {
         formData.append("file", curFile);
       });
@@ -308,21 +306,24 @@ export default {
       writeArticle(
         formData,
         ({ data }) => {
-          let msg = "등록 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "등록이 완료되었습니다.";
-          }
-          alert(msg);
+          alert(data.message);
           this.moveList();
         },
         (error) => {
-          console.log(error);
+          const { message } = error.response.data;
+          switch (error.response.status) {
+            case 500:
+              this.$router.replace({ name: "error", params: { message } });
+              break;
+            default:
+              alert(message);
+              break;
+          }
         }
       );
     },
     modifyArticle() {
       const formData = new FormData();
-
       this.boardImgFile.value.forEach((curFile) => {
         formData.append("file", curFile);
       });
@@ -339,16 +340,19 @@ export default {
       modifyArticle(
         formData,
         ({ data }) => {
-          let msg = "수정 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "수정이 완료되었습니다.";
-          }
-          alert(msg);
+          alert(data.message);
           this.moveList();
         },
         (error) => {
-          console.log(error);
-          alert("수정 처리시 문제가 발생했습니다.");
+          const { message } = error.response.data;
+          switch (error.response.status) {
+            case 500:
+              this.$router.replace({ name: "error", params: { message } });
+              break;
+            default:
+              alert(message);
+              break;
+          }
         }
       );
     },

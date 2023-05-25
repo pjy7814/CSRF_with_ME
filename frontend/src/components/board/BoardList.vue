@@ -23,16 +23,6 @@
           :fields="fields"
           @row-clicked="viewArticle"
         >
-          <!-- <template #cell(subject)="data">
-            <router-link
-              :to="{
-                name: 'boardview',
-                params: { boardId: data.item.boardId },
-              }"
-            >
-              {{ data.item.boardTitle }}
-            </router-link>
-          </template> -->
         </b-table>
       </b-col>
     </b-row>
@@ -109,75 +99,98 @@ export default {
     };
 
     this.currentBoard = this.$route.path.split("/")[1];
-    if (this.currentBoard === "noticeboard") {
-      this.currentBoardTitle = "공지사항 게시판";
-      param.boardType = "notice";
-      listArticle(
-        param,
-        ({ data }) => {
-          this.articles = data;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else if (this.currentBoard === "shareboard") {
-      this.currentBoardTitle = "공유 게시판";
-      param.boardType = "share";
-
-      listArticle(
-        param,
-        ({ data }) => {
-          this.articles = data;
-          console.log(data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      //의도치 않은 접근! 에러 페이지 또는 메인 페이지로 강제 이동 중 택 1 선택 필요
+    switch (this.currentBoard) {
+      case "noticeboard":
+        this.currentBoardTitle = "공지사항 게시판";
+        param.boardType = "notice";
+        break;
+      case "shareboard":
+        this.currentBoardTitle = "공유 게시판";
+        param.boardType = "share";
+        break;
+      default:
+        this.$router.replace({
+          name: "error",
+          params: {
+            message: "비 정상적인 접근입니다! 사이트를 제대로 이용해주세요!",
+          },
+        });
+        break;
     }
+    listArticle(
+      param,
+      ({ data }) => {
+        this.articles = data.boardDtos;
+      },
+      (error) => {
+        const { message } = error.response.data;
+        switch (error.response.status) {
+          case 500:
+            this.$router.replace({ name: "error", params: { message } });
+            break;
+          default:
+            alert(message);
+            return;
+        }
+      }
+    );
   },
   methods: {
     moveWrite() {
-      if (this.currentBoard === "noticeboard") {
-        this.$router.push({
-          name: "noticeboardwrite",
-        });
-      } else if (this.currentBoard === "shareboard") {
-        this.$router.push({
-          name: "shareboardwrite",
-        });
-      } else {
-        //의도치 않은 접근! 에러 페이지 또는 메인 페이지로 강제 이동 중 택 1 선택 필요
+      switch (this.currentBoard) {
+        case "noticeboard":
+          this.$router.push({
+            name: "noticeboardwrite",
+          });
+          break;
+        case "shareboard":
+          this.$router.push({
+            name: "shareboardwrite",
+          });
+          break;
+        default:
+          this.$router.push({
+            name: "error",
+            params: {
+              message: "비 정상적인 접근입니다! 사이트를 제대로 이용해주세요!",
+            },
+          });
+          break;
       }
     },
     viewArticle(article) {
-      if (this.currentBoard === "noticeboard") {
-        this.$router.push({
-          name: "noticeboardview",
-          params: { boardId: article.boardId },
-        });
-      } else if (this.currentBoard === "shareboard") {
-        this.$router.push({
-          name: "shareboardview",
-          params: { boardId: article.boardId },
-        });
-      } else {
-        //의도치 않은 접근! 에러 페이지 또는 메인 페이지로 강제 이동 중 택 1 선택 필요
+      switch (this.currentBoard) {
+        case "noticeboard":
+          this.$router.push({
+            name: "noticeboardview",
+            params: { boardId: article.boardId },
+          });
+          break;
+        case "shareboard":
+          this.$router.push({
+            name: "shareboardview",
+            params: { boardId: article.boardId },
+          });
+          break;
+        default:
+          this.$router.push({
+            name: "error",
+            params: {
+              message: "비 정상적인 접근입니다! 사이트를 제대로 이용해주세요!",
+            },
+          });
+          break;
       }
     },
     searchPost() {
       //키워드와 필터를 합한 검색 실시 => 상의 필요
       const currentKeyword = this.$refs.searchKeyword.$el.value;
-      console.log(currentKeyword);
-
       if (this.selectedFilerOption) {
         //필터링 할 조건이 있을 때
       } else {
         //필터링 할 조건이 없을 때
       }
+      console.log(currentKeyword);
     },
     fetchData(page) {
       console.log("page:", page);

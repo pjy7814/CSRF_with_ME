@@ -137,7 +137,7 @@ public class BoardController {
 
 	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = List.class)
 	@GetMapping
-	public ResponseEntity<Map<String, Object>> listShareArticle(
+	public ResponseEntity<Map<String, Object>> listArticle(
 			@ApiParam(value = "게시글을 얻기위한 부가정보.", required = true) BoardParameterDto boardParameterDto)
 			throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
@@ -204,26 +204,26 @@ public class BoardController {
 				// 관리자 권한을 가지고 있는 유저인지 체크해야 한다.
 				if (!memberService.checkAdmin(boardDto.getBoardWriterId())) {
 					// 관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
-					message = "권한에 어긋나는 등록입니다! 사이트를 정상적으로 사용해주세요!";
+					message = "권한에 어긋나는 수정 작업입니다! 사이트를 정상적으로 사용해주세요!";
 					status = HttpStatus.UNAUTHORIZED;
 				}else if (boardService.modifyArticle(boardDto)) {
-					message = "글 등록 성공!";
+					message = "글 수정 성공!";
 					status = HttpStatus.OK;
 				}else {
-					message = "서버 에러로 인해 글 등록이 실패했습니다.";
+					message = "서버 에러로 인해 글 수정이 실패했습니다.";
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 				break;
 			case "share":
 				// token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
 				if (!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
-					message = "권한에 어긋나는 등록입니다! 사이트를 정상적으로 사용해주세요!";
+					message = "권한에 어긋나는 수정입니다! 사이트를 정상적으로 사용해주세요!";
 					status = HttpStatus.UNAUTHORIZED;
 				}else if (boardService.modifyArticle(boardDto)) {
-					message = "글 등록 성공!";
+					message = "글 수정 성공!";
 					status = HttpStatus.OK;
 				}else {
-					message = "서버 에러로 인해 글 등록이 실패했습니다.";
+					message = "서버 에러로 인해 글 수정이 실패했습니다.";
 					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 				break;
@@ -250,7 +250,7 @@ public class BoardController {
 
 	@ApiOperation(value = "게시판 글삭제", notes = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping("/delete")
-	public ResponseEntity<String> deleteArticle(
+	public ResponseEntity<Map<String, Object>> deleteArticle(
 			@RequestBody @ApiParam(value = "살제할 글의 글번호.", required = true) int articleno) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = null;
@@ -276,6 +276,6 @@ public class BoardController {
 			}
 		}
 		resultMap.put("message", message);
-		return new ResponseEntity<String>(message, status);
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 }
