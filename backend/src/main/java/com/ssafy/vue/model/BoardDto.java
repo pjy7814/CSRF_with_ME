@@ -28,42 +28,55 @@ public class BoardDto {
 		return boardId;
 	}
 	public void setBoardId(int boardId) {
-		this.boardId = boardId;
+		if (boardId > 0) {
+			this.boardId = boardId;
+		}
 	}
 	public String getBoardWriterId() {
 		return boardWriterId;
 	}
 	public void setBoardWriterId(String boardWriterId) {
-		this.boardWriterId = boardWriterId;
+		if (boardWriterId != null) {
+			this.boardWriterId = boardWriterId;
+		}
 	}
 	public String getBoardTitle() {
 		return boardTitle;
 	}
 	public void setBoardTitle(String boardTitle) {
-		this.boardTitle = boardTitle;
+		if(boardTitle != null) {
+			this.boardTitle = boardTitle;
+		}
 	}
 	public String getBoardContent() {
 		return boardContent;
 	}
 	public void setBoardContent(String boardContent) {
-		this.boardContent = boardContent;
+		if (boardContent != null) {
+			this.boardContent = boardContent;
+		}
 	}
 	public int getBoardAttractionInfoId() {
 		return boardAttractionInfoId;
 	}
 	public void setBoardAttractionInfoId(int boardAttractionInfoId) {
-		this.boardAttractionInfoId = boardAttractionInfoId;
+		if (boardAttractionInfoId > 0) {
+			this.boardAttractionInfoId = boardAttractionInfoId;
+		}
 	}
 	public String getCreatedTime() {
 		return createdTime;
 	}
 	public void setCreatedTime(String createdTime) {
-		this.createdTime = createdTime;
+		if (createdTime != null) {
+			this.createdTime = createdTime;
+		}
 	}
 	public String getModifiedTime() {
 		return modifiedTime;
 	}
 	public void setModifiedTime(String modifiedTime) {
+		//null이어도 됨
 		this.modifiedTime = modifiedTime;
 	}
 	
@@ -71,7 +84,9 @@ public class BoardDto {
 		return boardType;
 	}
 	public void setBoardType(String boardType) {
-		this.boardType = boardType;
+		if (boardType != null) {
+			this.boardType = boardType;
+		}
 	}
 	
 	@Override

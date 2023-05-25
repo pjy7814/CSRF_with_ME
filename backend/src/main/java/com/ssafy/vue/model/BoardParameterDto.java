@@ -29,8 +29,10 @@ public class BoardParameterDto {
 	}
 
 	public void setPg(int pg) {
-		pg = pg == 0 ? 1 : pg;
-		this.pg = pg;
+		if (pg >= 0) {
+			pg = pg == 0 ? 1 : pg;
+			this.pg = pg;
+		}
 	}
 
 	public int getSpp() {
@@ -38,7 +40,9 @@ public class BoardParameterDto {
 	}
 
 	public void setSpp(int spp) {
-		this.spp = spp;
+		if (spp >= 0) {
+			this.spp = spp;
+		}
 	}
 
 	public int getStart() {
@@ -46,7 +50,9 @@ public class BoardParameterDto {
 	}
 
 	public void setStart(int start) {
-		this.start = start;
+		if (start >= 0) {
+			this.start = start;
+		}
 	}
 
 	public String getKey() {
@@ -54,6 +60,7 @@ public class BoardParameterDto {
 	}
 
 	public void setKey(String key) {
+		// 검색어 null이어 됨
 		this.key = key;
 	}
 
@@ -62,6 +69,7 @@ public class BoardParameterDto {
 	}
 
 	public void setWord(String word) {
+		// word null이어도 됨
 		this.word = word;
 	}
 
@@ -70,7 +78,9 @@ public class BoardParameterDto {
 	}
 
 	public void setBoardType(String boardType) {
-		this.boardType = boardType;
+		if (boardType != null) {
+			this.boardType = boardType;
+		}
 	}
 
 	@Override

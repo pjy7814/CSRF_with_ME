@@ -9,19 +9,26 @@ public class BoardImgDto {
 		return boardId;
 	}
 	public void setBoardId(int boardId) {
-		this.boardId = boardId;
+		if (boardId > 0) {
+			this.boardId = boardId;
+		}
 	}
 	public String getBoardImgSrc() {
 		return boardImgSrc;
 	}
 	public void setBoardImgSrc(String boardImgSrc) {
-		this.boardImgSrc = boardImgSrc;
+		if (boardImgSrc != null) {
+			this.boardImgSrc = boardImgSrc;
+	
+		}
 	}
 	public int getBoardImgOrder() {
 		return boardImgOrder;
 	}
 	public void setBoardImgOrder(int boardImgOrder) {
-		this.boardImgOrder = boardImgOrder;
+		if (boardImgOrder > 0) {
+			this.boardImgOrder = boardImgOrder;
+		}
 	}
 	@Override
 	public String toString() {
