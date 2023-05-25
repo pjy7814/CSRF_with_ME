@@ -54,7 +54,7 @@
 
 <script>
 import { listArticle } from "@/api/board";
-
+import { processResError } from "@/util";
 export default {
   name: "BoardList",
   data() {
@@ -123,15 +123,7 @@ export default {
         this.articles = data.boardDtos;
       },
       (error) => {
-        const { message } = error.response.data;
-        switch (error.response.status) {
-          case 500:
-            this.$router.replace({ name: "error", params: { message } });
-            break;
-          default:
-            alert(message);
-            return;
-        }
+        processResError(error);
       }
     );
   },

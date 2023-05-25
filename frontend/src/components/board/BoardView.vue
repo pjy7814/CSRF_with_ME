@@ -54,7 +54,7 @@
 // import moment from "moment";
 import { getArticle } from "@/api/board";
 import { mapState } from "vuex";
-
+import { processResError } from "@/util";
 const memberStore = "memberStore";
 
 export default {
@@ -82,15 +82,7 @@ export default {
         this.article.createdTime = this.formatDate(this.article.createdTime);
       },
       (error) => {
-        const { message } = error.response.data;
-        switch (error.response.status) {
-          case 500:
-            this.$router.replace({ name: "error", params: { message } });
-            break;
-          default:
-            alert(message);
-            break;
-        }
+        processResError(error);
       }
     );
   },

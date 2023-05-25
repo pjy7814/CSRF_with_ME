@@ -134,7 +134,7 @@
 <script>
 import { writeArticle, modifyArticle, getArticle } from "@/api/board";
 import AppDestinationInfo from "@/views/AppDestinationInfo.vue";
-import { validateImgFile } from "@/util";
+import { validateImgFile, processResError } from "@/util";
 import { mapGetters } from "vuex";
 const memberStore = "memberStore";
 import { VueRecaptcha } from "vue-recaptcha";
@@ -221,15 +221,7 @@ export default {
           this.boardContent.value = boardContent;
         },
         (error) => {
-          const { message } = error.response.data;
-          switch (error.response.status) {
-            case 500:
-              this.$router.replace({ name: "error", params: { message } });
-              break;
-            default:
-              alert(message);
-              break;
-          }
+          processResError(error);
         }
       );
     } else if (this.type === "register") {
@@ -310,15 +302,7 @@ export default {
           this.moveList();
         },
         (error) => {
-          const { message } = error.response.data;
-          switch (error.response.status) {
-            case 500:
-              this.$router.replace({ name: "error", params: { message } });
-              break;
-            default:
-              alert(message);
-              break;
-          }
+          processResError(error);
         }
       );
     },
@@ -344,15 +328,7 @@ export default {
           this.moveList();
         },
         (error) => {
-          const { message } = error.response.data;
-          switch (error.response.status) {
-            case 500:
-              this.$router.replace({ name: "error", params: { message } });
-              break;
-            default:
-              alert(message);
-              break;
-          }
+          processResError(error);
         }
       );
     },

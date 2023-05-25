@@ -13,7 +13,7 @@
 
 <script>
 import { deleteArticle } from "@/api/board";
-
+import { processResError } from "@/util";
 export default {
   name: "BoardDelete",
   props: {
@@ -28,16 +28,7 @@ export default {
         this.$router.replace({ name: `${this.boardListType}boardlist` });
       },
       (error) => {
-        const { message } = error.response.data;
-        console.log(error);
-        switch (error.response.status) {
-          case 500:
-            this.$router.replace({ name: "error", params: { message } });
-            break;
-          default:
-            alert(message);
-            break;
-        }
+        processResError(error);
       }
     );
   },
