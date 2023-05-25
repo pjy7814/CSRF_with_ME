@@ -130,6 +130,9 @@ public class BoardController {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				break;
 			}
+		} catch (Exception e) {
+			message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		resultMap.put("message", message);
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -158,6 +161,9 @@ public class BoardController {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				break;
 			}
+		}catch (Exception e) {
+			message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		resultMap.put("message", message);
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -187,6 +193,9 @@ public class BoardController {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				break;
 			}
+		}catch (Exception e) {
+			message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		resultMap.put("message", message);
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -244,6 +253,9 @@ public class BoardController {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				break;
 			}
+		}catch (Exception e) {
+			message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		resultMap.put("message", message);
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -275,6 +287,9 @@ public class BoardController {
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				break;
 			}
+		}catch (Exception e) {
+			message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		resultMap.put("message", message);
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);

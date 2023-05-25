@@ -54,7 +54,7 @@ public class MemberController {
 				status = HttpStatus.ACCEPTED;
 			}
 		} catch (Exception e) {
-			resultMap.put("message", e.getMessage());
+			resultMap.put("message", "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!");
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -74,7 +74,7 @@ public class MemberController {
 				resultMap.put("message", SUCCESS);
 				status = HttpStatus.ACCEPTED;
 			} catch (Exception e) {
-				resultMap.put("message", e.getMessage());
+				resultMap.put("message", "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!");
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} else {
@@ -93,7 +93,7 @@ public class MemberController {
 			resultMap.put("message", SUCCESS);
 			status = HttpStatus.ACCEPTED;
 		} catch (Exception e) {
-			resultMap.put("message", e.getMessage());
+			resultMap.put("message", "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!");
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -116,7 +116,7 @@ public class MemberController {
 			}
 			status = HttpStatus.ACCEPTED;
 		} catch (Exception e) {
-			resultMap.put("message", e.getMessage());
+			resultMap.put("message", "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!");
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -140,7 +140,7 @@ public class MemberController {
 				}
 				status = HttpStatus.ACCEPTED;
 			} catch (Exception e) {
-				resultMap.put("message", e.getMessage());
+				resultMap.put("message", "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!");
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} else {

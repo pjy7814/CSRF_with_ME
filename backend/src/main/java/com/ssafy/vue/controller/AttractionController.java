@@ -41,6 +41,8 @@ public class AttractionController {
 			default:
 				return new ResponseEntity<String>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+		}catch (Exception e) {
+			return new ResponseEntity<String>("비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -57,6 +59,8 @@ public class AttractionController {
 			default:
 				return new ResponseEntity<String>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+		}catch (Exception e) {
+			return new ResponseEntity<String>("비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -73,6 +77,8 @@ public class AttractionController {
 			default:
 				return new ResponseEntity<String>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+		}catch (Exception e) {
+			return new ResponseEntity<String>("비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
