@@ -1,5 +1,6 @@
 package com.ssafy.vue.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.util.MyException;
 import com.ssafy.vue.config.RecaptchaConfig;
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
@@ -51,55 +53,114 @@ public class BoardController {
 
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping
-	public ResponseEntity<String> writeArticle(@ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto,
+	public ResponseEntity<Map<String, Object>> writeArticle(
+			@ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto,
 			@RequestParam(value = "file", required = false) List<MultipartFile> files,
 			@RequestParam(value = "recaptchaToken", required = true) String recaptchaToken) throws Exception {
 
-		//캡챠 확인
-		if (!recaptchaService.verifyRecaptcha(recaptchaToken)) {
-			return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
-		}
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		String message = "";
+		try {
+			// 캡챠 확인
+			if (!recaptchaService.verifyRecaptcha(recaptchaToken)) {
+				throw new MyException("RecaptchaException");
+			}
 
-		switch (boardDto.getBoardType()) {
-		case "notice":
-			// 관리자 권한을 가지고 있는 유저인지 체크해야 한다.
-
-			if (!memberService.checkAdmin(boardDto.getBoardWriterId())) {
-				// 관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
-				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
-			}
-			if (boardService.writeArticle(boardDto)) {
-				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-			}
-			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
-		case "share":
-			// token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
-			if (!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
-				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
-			}
-			if (boardService.writeArticle(boardDto)) {
-				if (files.size() >= 1) {
-					List<String> filePathList = fileHandlerService.parseFileInfo(boardDto.getBoardWriterId(), files);
-					if (boardService.uploadImages(boardDto, filePathList)) {
-						return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-					}
-					return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+			switch (boardDto.getBoardType()) {
+			case "notice":
+				// 관리자 권한을 가지고 있는 유저인지 체크해야 한다.
+				if (!memberService.checkAdmin(boardDto.getBoardWriterId())) {
+					// 관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
+					message = "권한에 어긋나는 등록입니다! 사이트를 정상적으로 사용해주세요!";
+					status = HttpStatus.UNAUTHORIZED;
+				} else if (boardService.writeArticle(boardDto)) {
+					message = "글 등록 성공!";
+					status = HttpStatus.OK;
+				} else {
+					// 관리자 권한이 있었으나 글 등록에 실패함.
+					message = "서버 에러로 인해 글 등록이 실패했습니다.";
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
-				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+				break;
+			case "share":
+				// token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
+				if (!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
+					message = "권한에 어긋나는 등록입니다! 사이트를 정상적으로 사용해주세요!";
+					status = HttpStatus.UNAUTHORIZED;
+					break;
+				}
+				if (boardService.writeArticle(boardDto)) {
+					if (files.size() >= 1) {
+						List<String> filePathList = fileHandlerService.parseFileInfo(boardDto.getBoardWriterId(),
+								files);
+						if (boardService.uploadImages(boardDto, filePathList)) {
+							message = "글 등록 성공!";
+							status = HttpStatus.OK;
+						} else {
+							message = "글이 등록됬으나, 서버 에러로 인해 이미지 등록에 실패하였습니다!";
+							status = HttpStatus.INTERNAL_SERVER_ERROR;
+						}
+					} else {
+						message = "글 등록 성공!";
+						status = HttpStatus.OK;
+					}
+				} else {
+					message = "서버 에러로 인해 글 등록이 실패했습니다.";
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				}
+				break;
+			default:
+				message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
 			}
-			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
-		default:
-			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+		} catch (MyException e) {
+			switch (e.getMessage()) {
+			case "RecaptchaException":
+				message = "캡챠 인증에 실패했습니다! 다시 시도해주세요.";
+				status = HttpStatus.BAD_REQUEST;
+				break;
+			case "SQLException":
+				message = "서버 에러로 인해 글 등록이 실패했습니다.";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			default:
+				message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			}
 		}
-
+		resultMap.put("message", message);
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
 	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = List.class)
 	@GetMapping
-	public ResponseEntity<List<BoardDto>> listShareArticle(
+	public ResponseEntity<Map<String, Object>> listShareArticle(
 			@ApiParam(value = "게시글을 얻기위한 부가정보.", required = true) BoardParameterDto boardParameterDto)
 			throws Exception {
-		return new ResponseEntity<List<BoardDto>>(boardService.listArticle(boardParameterDto), HttpStatus.OK);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		String message = "";
+		try {
+			resultMap.put("boardDtos", boardService.listArticle(boardParameterDto));
+			message = SUCCESS;
+			status =HttpStatus.OK;
+		}catch(MyException e) {
+			switch(e.getMessage()) {
+			case "SQLException":
+				message = "글을 받아오는데 실패했습니다!";
+				status =HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			default:
+				message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			}
+		}
+		resultMap.put("message", message);
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
 	@ApiOperation(value = "게시판 글보기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardDto.class)
@@ -107,49 +168,114 @@ public class BoardController {
 	public ResponseEntity<Map<String, Object>> getArticle(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
 			throws Exception {
-		Map<String, Object> resultMap = boardService.getArticle(articleno);
-
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		String message = "";
+		try {
+			resultMap.put("article",boardService.getArticle(articleno));
+			status = HttpStatus.OK;
+			message=SUCCESS;
+		}catch(MyException e) {
+			switch(e.getMessage()) {
+			case "SQLException":
+				message = "글을 받아오는데 실패했습니다!";
+				status =HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			default:
+				message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			}
+		}
+		resultMap.put("message", message);
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
 	@ApiOperation(value = "게시판 글수정", notes = "수정할 게시글 정보를 입력한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping("/modify")
-	public ResponseEntity<String> modifyArticle(@ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto,
+	public ResponseEntity<Map<String, Object>> modifyArticle(@ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto,
 			@RequestParam(value = "file", required = false) List<MultipartFile> files) throws Exception {
-
-		switch (boardDto.getBoardType()) {
-		case "notice":
-			// 관리자 권한을 가지고 있는 유저인지 체크해야 한다.
-
-			if (!memberService.checkAdmin(boardDto.getBoardWriterId())) {
-				// 관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
-				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		String message = "";
+		try {
+			switch (boardDto.getBoardType()) {
+			case "notice":
+				// 관리자 권한을 가지고 있는 유저인지 체크해야 한다.
+				if (!memberService.checkAdmin(boardDto.getBoardWriterId())) {
+					// 관리자 권한이 없을 경우 UNAUTHORIZED : status 401을 반환한다.
+					message = "권한에 어긋나는 등록입니다! 사이트를 정상적으로 사용해주세요!";
+					status = HttpStatus.UNAUTHORIZED;
+				}else if (boardService.modifyArticle(boardDto)) {
+					message = "글 등록 성공!";
+					status = HttpStatus.OK;
+				}else {
+					message = "서버 에러로 인해 글 등록이 실패했습니다.";
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				}
+				break;
+			case "share":
+				// token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
+				if (!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
+					message = "권한에 어긋나는 등록입니다! 사이트를 정상적으로 사용해주세요!";
+					status = HttpStatus.UNAUTHORIZED;
+				}else if (boardService.modifyArticle(boardDto)) {
+					message = "글 등록 성공!";
+					status = HttpStatus.OK;
+				}else {
+					message = "서버 에러로 인해 글 등록이 실패했습니다.";
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				}
+				break;
+			default:
+				message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
 			}
-			if (boardService.modifyArticle(boardDto)) {
-				
-				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		}catch(MyException e) {
+			switch(e.getMessage()) {
+			case "SQLException":
+				message = "서버 에러로 인해 글 수정이 실패했습니다.";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			default:
+				message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
 			}
-			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
-		case "share":
-			// token 내 memberId와 boardWriterId가 동일한지 체킹해준다.
-			if (!memberService.checkEqualMember(boardDto.getBoardWriterId())) {
-				return new ResponseEntity<String>(FAIL, HttpStatus.UNAUTHORIZED);
-			}
-			if (boardService.modifyArticle(boardDto)) {
-				return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-			}
-		default:
-			return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 		}
+		resultMap.put("message", message);
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
 	@ApiOperation(value = "게시판 글삭제", notes = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
 	@PostMapping("/delete")
 	public ResponseEntity<String> deleteArticle(
 			@RequestBody @ApiParam(value = "살제할 글의 글번호.", required = true) int articleno) throws Exception {
-		if (boardService.deleteArticle(articleno)) {
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = null;
+		String message = "";
+		try {
+			if (boardService.deleteArticle(articleno)) {
+				message="글 삭제에 성공했습니다! 리스트 페이지로 돌아갑니다!";
+				status=HttpStatus.OK;
+			}else {
+				message="글 삭제에 실패했습니다! 다시, 시도해주세요.";
+				status=HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		}catch(MyException e) {
+			switch(e.getMessage()) {
+			case "SQLException":
+				message="서버 에러로 인해 글 삭제에 실패했습니다.";
+				status=HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			default:
+				message = "비 정상적입 접근입니다! 사이트를 정상적으로 사용해주세요!";
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				break;
+			}
 		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+		resultMap.put("message", message);
+		return new ResponseEntity<String>(message, status);
 	}
 }

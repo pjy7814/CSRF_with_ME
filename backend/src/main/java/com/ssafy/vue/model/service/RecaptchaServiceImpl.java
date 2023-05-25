@@ -19,7 +19,7 @@ public class RecaptchaServiceImpl implements RecaptchaService{
 			RecaptchaConfig.setSecretKey(secretKey);
 			return RecaptchaConfig.verify(recaptchaToken);	
 		}catch(RecaptchaException e) {
-			throw new MyException("캡챠 인증 오류");
+			throw new MyException("RecaptchaException");
 		}
 	}
 }

@@ -103,7 +103,7 @@ public class MemberServiceImpl implements MemberService {
 			String curMemberRoleCd = sqlSession.getMapper(MemberMapper.class).getMemberRoleCd(boardWriterId);
 			return curMemberRoleCd.equals("HOTGUYSSAFYTP01");
 		} catch (SQLException e) {
-			return false;
+			throw new MyException("SQLException");
 		}
 	}
 	
