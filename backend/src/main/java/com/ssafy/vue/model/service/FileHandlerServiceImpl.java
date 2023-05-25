@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.apache.ibatis.session.SqlSession;
 
 import com.ssafy.util.OpenCrypt;
-import com.ssafy.vue.model.MemberDto;
 import com.ssafy.vue.model.mapper.MemberMapper;
 
 @Service
@@ -21,8 +20,8 @@ public class FileHandlerServiceImpl implements FileHandlerService{
 	private SqlSession sqlSession;
 	
 	@Override
-    public List<String> parseFileInfo(MemberDto memberDto, List<MultipartFile> multipartFiles) throws Exception{
-		// 파일들의 서버 내 경로를 저장하는 fileList
+    public List<String> parseFileInfo(String writerId, List<MultipartFile> multipartFiles) throws Exception{
+        // 파일들의 서버 내 경로를 저장하는 fileList
         List<String> filePathList = new ArrayList<>();
 
         // 파일이 빈 것이 들어오면 빈 것을 반환
@@ -65,7 +64,7 @@ public class FileHandlerServiceImpl implements FileHandlerService{
                     }
                 }
                 // 암호화된 네이밍 만들기
-                String salt = sqlSession.getMapper(MemberMapper.class).getSalt(memberDto.getMemberId());
+                String salt = sqlSession.getMapper(MemberMapper.class).getSalt(writerId);
                 String hashFileName = OpenCrypt.getSHA256(originalName, salt);
                 // 생성 후 리스트에 추가
                 filePathList.add(hashFileName + originalFileExtension);
