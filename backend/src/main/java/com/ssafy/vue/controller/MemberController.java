@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +27,6 @@ import io.swagger.annotations.ApiParam;
 @Api("사용자 컨트롤러  API V1")
 public class MemberController {
 
-	public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 
@@ -50,7 +46,6 @@ public class MemberController {
 			MemberDto loginUser = memberService.login(memberDto);
 			if (loginUser != null) {
 				String accessToken = jwtService.createAccessToken("memberId", loginUser.getMemberId());// key, data
-				logger.debug("로그인 accessToken 정보 : {}", accessToken);
 				resultMap.put("access-token", accessToken);
 				resultMap.put("message", SUCCESS);
 				status = HttpStatus.ACCEPTED;
@@ -59,7 +54,6 @@ public class MemberController {
 				status = HttpStatus.ACCEPTED;
 			}
 		} catch (Exception e) {
-			logger.error("로그인 실패 : {}", e);
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
@@ -72,7 +66,6 @@ public class MemberController {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
 		if (jwtService.checkToken(request.getHeader("access-token"))) {
-			logger.info("사용 가능한 토큰!!!", request.getHeader("access-token"));
 			try {
 //				로그인 사용자 정보.
 				String memberId = jwtService.getMemberId();
@@ -81,12 +74,10 @@ public class MemberController {
 				resultMap.put("message", SUCCESS);
 				status = HttpStatus.ACCEPTED;
 			} catch (Exception e) {
-				logger.error("정보조회 실패 : {}", e);
 				resultMap.put("message", e.getMessage());
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} else {
-			logger.error("사용 불가능 토큰!!!");
 			resultMap.put("message", FAIL);
 			status = HttpStatus.UNAUTHORIZED;
 		}
@@ -102,7 +93,6 @@ public class MemberController {
 			resultMap.put("message", SUCCESS);
 			status = HttpStatus.ACCEPTED;
 		} catch (Exception e) {
-			logger.error("로그아웃 실패 : {}", e);
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
@@ -127,7 +117,6 @@ public class MemberController {
 			}
 			status = HttpStatus.ACCEPTED;
 		} catch (Exception e) {
-			logger.error("회원가입 실패 : {}", e);
 			resultMap.put("message", e.getMessage());
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
@@ -143,7 +132,6 @@ public class MemberController {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = null;
 		if (jwtService.checkToken(request.getHeader("access-token"))) {
-			logger.info("사용 가능한 토큰!!!", request.getHeader("access-token"));
 			try {
 				boolean updateMember = memberService.update(memberDto);
 				if (updateMember) {
@@ -154,12 +142,10 @@ public class MemberController {
 				}
 				status = HttpStatus.ACCEPTED;
 			} catch (Exception e) {
-				logger.error("수정 실패 : {}", e);
 				resultMap.put("message", e.getMessage());
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 			}
 		} else {
-			logger.error("사용 불가능 토큰!!!");
 			resultMap.put("message", FAIL);
 			status = HttpStatus.UNAUTHORIZED;
 		}
