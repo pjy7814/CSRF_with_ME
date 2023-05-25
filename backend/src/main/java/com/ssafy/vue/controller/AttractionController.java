@@ -23,13 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.vue.model.HouseInfoDto;
 import com.ssafy.vue.model.MemberDto;
 import com.ssafy.vue.model.SearchOptionDto;
 import com.ssafy.vue.model.SidoGugunCodeDto;
 import com.ssafy.vue.model.TouristSpotInfoDto;
 import com.ssafy.vue.model.service.AttractionService;
-import com.ssafy.vue.model.service.HouseMapService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
