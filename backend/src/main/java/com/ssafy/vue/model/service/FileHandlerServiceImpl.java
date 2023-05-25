@@ -9,11 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.ibatis.session.SqlSession;
+
 import com.ssafy.util.OpenCrypt;
-import com.ssafy.vue.model.BoardDto;
-import com.ssafy.vue.model.MemberDto;
 import com.ssafy.vue.model.mapper.MemberMapper;
-import com.ssafy.vue.model.service.FileHandlerService;
+
 @Service
 public class FileHandlerServiceImpl implements FileHandlerService{
 	
@@ -67,7 +66,6 @@ public class FileHandlerServiceImpl implements FileHandlerService{
                 // 암호화된 네이밍 만들기
                 String salt = sqlSession.getMapper(MemberMapper.class).getSalt(writerId);
                 String hashFileName = OpenCrypt.getSHA256(originalName, salt);
-                String resultPath = absolutePath + path + "/" + hashFileName + originalFileExtension;
                 // 생성 후 리스트에 추가
                 filePathList.add(hashFileName + originalFileExtension);
 

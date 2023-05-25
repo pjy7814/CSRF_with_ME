@@ -3,10 +3,7 @@ package com.ssafy.vue.config;
 import java.io.File;
 import java.util.List;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -16,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import com.ssafy.util.HTMLCharacterEscapes;
 
 @Configuration
@@ -25,7 +21,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-//		System.out.println("CORS Setting");
 //		default 설정.
 //		Allow all origins.
 //		Allow "simple" methods GET, HEAD and POST.
@@ -52,7 +47,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 	
 	@Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        System.out.println(">>>>>>>>>>>>>>>>>>> [WebMvcConfig1]");
         converters.add(htmlEscapingConverter());
     }
 

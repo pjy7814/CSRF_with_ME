@@ -105,7 +105,6 @@ public class MemberController {
 	@PostMapping("/regist")
 	public ResponseEntity<Map<String, Object>> regist(
 			@RequestBody @ApiParam(value = "회원가입 시 필요한 회원정보(아이디, 이름, 이메일, 비밀번호, 시도코드, 군구코드).", required = true) MemberDto memberDto) {
-		System.out.println(memberDto);
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = null;
 		try {
@@ -129,7 +128,6 @@ public class MemberController {
 	public ResponseEntity<Map<String, Object>> update(
 			@RequestBody @ApiParam(value = "수정하기 시 필요한 회원정보(아이디, 이름, 이메일, 비밀번호, 시도코드, 군구코드).", required = true) MemberDto memberDto,
 			HttpServletRequest request) {
-		System.out.println(memberDto);
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = null;
 		if (jwtService.checkToken(request.getHeader("access-token"))) {

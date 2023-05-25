@@ -8,7 +8,7 @@ import com.ssafy.vue.model.SidoGugunCodeDto;
 import com.ssafy.vue.model.TouristSpotInfoDto;
 
 public interface AttractionService {
-	List<SidoGugunCodeDto> getSido() throws Exception;
-	List<SidoGugunCodeDto> getGugunInSido(String sido) throws Exception;
-	List<TouristSpotInfoDto> getDestination(SearchOptionDto searchOptionDto) throws Exception;
+	List<SidoGugunCodeDto> getSido() throws MyException;
+	List<SidoGugunCodeDto> getGugunInSido(String sido) throws MyException;
+	List<TouristSpotInfoDto> getDestination(SearchOptionDto searchOptionDto) throws MyException;
 }
