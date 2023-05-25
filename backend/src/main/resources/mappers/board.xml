@@ -24,26 +24,33 @@
 		#{boardType})
 	</insert>
 
-	<select id="getArticleImg" parameterType="int" resultType="boardImgDto">
-		select board_id as boardId, board_img_src as boardImgSrc, board_img_order as boardImgOrder
+	<select id="getArticleImg" parameterType="int"
+		resultType="boardImgDto">
+		select board_id as boardId, board_img_src as boardImgSrc,
+		board_img_order as boardImgOrder
 		from board_img
-		where board_id = #{articleno}
+		where board_id =
+		#{articleno}
 		order by board_img_order desc
 	</select>
-	
+
 	<select id="listArticle" parameterType="map"
 		resultType="boardDto">
 		select board_id as boardId, board_writer_Id as boardWriterId,
 		board_title as boardTitle, board_content as boardContent,
-		case when date_format(created_time, '%Y%m%d') = date_format(now(),
+		case when
+		date_format(created_time, '%Y%m%d') = date_format(now(),
 		'%Y%m%d')
-		then date_format(created_time, '%H:%i:%s')
-		else date_format(created_time, '%y.%m.%d')
-		end as createdTime 
+		then
+		date_format(created_time, '%H:%i:%s')
+		else date_format(created_time,
+		'%y.%m.%d')
+		end as createdTime
 		from board
 		<if test="word != null and word != ''">
 			<if test="key == 'subject'">
-				where board_title like concat('%', #{word}, '%') and board_type =
+				where board_title like concat('%', #{word}, '%') and
+				board_type =
 				#{boardType}
 			</if>
 			<if test="key != 'subject'">
@@ -72,20 +79,30 @@
 		</if>
 	</select>
 
-	<select id="getArticle" parameterType="int"
+	<select id="getArticle" parameterType="map"
 		resultType="boardDto">
-		select board_id as boardId, board_writer_id as
-		boardWriterId, board_title as boardTitle, board_content as
-		boardContent, created_time as createdTime
-		from board
-		where board_id =
-		#{articleno}
+		<if test="boardType == 'share'">
+			select a.board_id as boardId, a.board_writer_id as boardWriterId, a.board_title as boardTitle,
+			a.board_content as boardContent, a.created_time as createdTime, b.content_id as boardAttractionInfoId,
+			b.title as boardAttractionInfoTitle, b.addr1 as boardAttractionInfoAddr1
+			from board as a inner join attraction_info as b
+			on a.board_attraction_info_id = b.content_id
+			where a.board_id = #{articleno}
+		</if>
+		<if test="boardType == 'notice'">
+			select board_id as boardId, board_writer_id as
+			boardWriterId, board_title as boardTitle, board_content as
+			boardContent, created_time as createdTime
+			from board
+			where board_id = #{articleno}
+		</if>
 	</select>
 
 	<update id="modifyArticle" parameterType="boardDto">
 		update board
 		set
-		board_title = #{boardTitle}, board_content = #{boardContent}
+		board_title = #{boardTitle}, board_content =
+		#{boardContent}
 		<if test="boardAttractionInfoId != 0">
 			, board_attraction_info_id=#{boardAttractionInfoId}
 		</if>
@@ -103,8 +120,8 @@
 		(board_id, board_img_src)
 		VALUES (#{boardId}, #{boardImgSrc})
 	</insert>
-	
-	
+
+
 
 </mapper>
 

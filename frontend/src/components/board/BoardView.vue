@@ -42,6 +42,11 @@
                 alt="이미지"
               />
             </div>
+            <h5 v-if="currentBoard === 'share'">
+              공유 여행지 : {{ article.boardAttractionInfoTitle }}({{
+                article.boardAttractionInfoAddr1
+              }})
+            </h5>
             <div v-html="this.article.boardContent"></div>
           </b-card-body>
         </b-card>
@@ -70,12 +75,23 @@ export default {
     envImgEndPoint() {
       return process.env.VUE_APP_IMG_ENDPOINT;
     },
+    currentBoard() {
+      if (this.$route.name === "noticeboardview") {
+        return "notice";
+      } else if (this.$route.name === "shareboardview") {
+        return "share";
+      } else {
+        return "";
+      }
+    },
   },
   created() {
     let param = this.$route.params.boardId;
     getArticle(
       param,
+      this.currentBoard,
       ({ data }) => {
+        console.log(data);
         const { boardDtos, boardImgDtos } = data.article;
         this.article = boardDtos;
         this.imageArray = boardImgDtos;
@@ -118,7 +134,7 @@ export default {
       }
     },
     deleteArticle() {
-      if (confirm("정말로 삭제?")) {
+      if (confirm("정말로, 게시글을 삭제하시겠습니까?")) {
         switch (this.$route.name) {
           case "noticeboardview":
             this.$router.replace({

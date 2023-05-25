@@ -19,8 +19,8 @@ function modifyArticle(article, success, fail) {
   formApi.post(`/board/modify`, article).then(success).catch(fail);
 }
 
-function getArticle(articleno, success, fail) {
-  formApi.get(`/board/${articleno}`).then(success).catch(fail);
+function getArticle(articleno, boardType, success, fail) {
+  formApi.get(`/board/${boardType}/${articleno}`).then(success).catch(fail);
 }
 
 function deleteArticle(articleno, success, fail) {

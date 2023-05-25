@@ -72,10 +72,11 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Map<String, Object> getArticle(int articleno) throws MyException {
+	public Map<String, Object> getArticle(int articleno, String boardType) throws MyException {
+		System.out.println(articleno + " " + boardType);
 		try {
 			Map<String, Object> resultMap = new HashMap<>();
-			BoardDto boardDto = sqlSession.getMapper(BoardMapper.class).getArticle(articleno);
+			BoardDto boardDto = sqlSession.getMapper(BoardMapper.class).getArticle(articleno, boardType);
 			List<BoardImgDto> boardImgDtos = sqlSession.getMapper(BoardMapper.class).getArticleImg(articleno);
 			resultMap.put("boardDtos", boardDto);
 			resultMap.put("boardImgDtos", boardImgDtos);

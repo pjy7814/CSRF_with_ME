@@ -164,15 +164,16 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "게시판 글보기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardDto.class)
-	@GetMapping("/{articleno}")
+	@GetMapping("/{boardType}/{articleno}")
 	public ResponseEntity<Map<String, Object>> getArticle(
-			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
+			@PathVariable("boardType") String boardType,
+			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno )
 			throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = null;
 		String message = "";
 		try {
-			resultMap.put("article",boardService.getArticle(articleno));
+			resultMap.put("article",boardService.getArticle(articleno, boardType));
 			status = HttpStatus.OK;
 			message=SUCCESS;
 		}catch(MyException e) {

@@ -113,6 +113,7 @@ export default {
     if (this.type === "modify") {
       getArticle(
         this.modifyboardId,
+        "notice",
         ({ data }) => {
           const { boardId, boardWriterId, boardTitle, boardContent } =
             data.article.boardDtos;

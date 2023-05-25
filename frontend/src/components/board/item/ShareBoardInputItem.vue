@@ -212,6 +212,7 @@ export default {
     if (this.type === "modify") {
       getArticle(
         this.modifyboardId,
+        "share",
         ({ data }) => {
           const { boardId, boardWriterId, boardTitle, boardContent } =
             data.article.boardDtos;

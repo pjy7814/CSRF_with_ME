@@ -13,7 +13,7 @@ public interface BoardService {
 	public List<BoardDto> listArticle(BoardParameterDto boardParameterDto) throws MyException;
 	public PageNavigation makePageNavigation(BoardParameterDto boardParameterDto) throws MyException;
 	
-	public Map<String, Object> getArticle(int articleno) throws MyException;
+	public Map<String, Object> getArticle(int articleno, String boardType) throws MyException;
 	public boolean modifyArticle(BoardDto boardDto) throws MyException;
 	public boolean deleteArticle(int articleno) throws MyException;
 	public boolean uploadImages(BoardDto boardDto, List<String> filePathList) throws MyException;

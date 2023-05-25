@@ -23,6 +23,10 @@ public class BoardDto {
 	private String modifiedTime;
 	@ApiModelProperty(value = "보드 타입")
 	private String boardType;
+	@ApiModelProperty(value = "관광지 이름")
+	private String boardAttractionInfoTitle;
+	@ApiModelProperty(value = "관광지 주소")
+	private String boardAttractionInfoAddr1;
 	
 	public BoardDto() {
 		super();
@@ -136,6 +140,23 @@ public class BoardDto {
 		}
 	}
 	
+	public String getBoardAttractionInfoTitle() {
+		return boardAttractionInfoTitle;
+	}
+
+	public void setBoardAttractionInfoTitle(String boardAttractionInfoTitle) {
+		this.boardAttractionInfoTitle = boardAttractionInfoTitle;
+	}
+
+	
+	public String getBoardAttractionInfoAddr1() {
+		return boardAttractionInfoAddr1;
+	}
+
+	public void setBoardAttractionInfoAddr1(String boardAttractionInfoAddr1) {
+		this.boardAttractionInfoAddr1 = boardAttractionInfoAddr1;
+	}
+
 	@Override
 	public String toString() {
 		return "BoardDto [boardId=" + boardId + ", boardWriterId=" + boardWriterId + ", boardTitle=" + boardTitle
