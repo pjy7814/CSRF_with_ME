@@ -137,6 +137,7 @@ export default {
                 this.closeOverlay();
               },
               registModalAttraction: () => {
+                this.closeOverlay();
                 this.$emit("registModalAttraction", position);
               },
             },
