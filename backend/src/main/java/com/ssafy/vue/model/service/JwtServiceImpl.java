@@ -14,7 +14,6 @@ import com.ssafy.vue.exception.UnAuthorizedException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -104,10 +103,6 @@ public class JwtServiceImpl implements JwtService {
 		try {
 			claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
 		} catch (Exception e) {
-//			if (logger.isInfoEnabled()) {
-//				e.printStackTrace();
-//			} else {
-//			}
 			throw new UnAuthorizedException();
 //			개발환경
 //			Map<String,Object> testMap = new HashMap<>();

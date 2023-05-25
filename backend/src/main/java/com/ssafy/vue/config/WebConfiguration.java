@@ -25,7 +25,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-//		System.out.println("CORS Setting");
 //		default 설정.
 //		Allow all origins.
 //		Allow "simple" methods GET, HEAD and POST.
@@ -52,7 +51,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 	
 	@Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        System.out.println(">>>>>>>>>>>>>>>>>>> [WebMvcConfig1]");
         converters.add(htmlEscapingConverter());
     }
 
