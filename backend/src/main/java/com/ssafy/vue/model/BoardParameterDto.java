@@ -23,6 +23,18 @@ public class BoardParameterDto {
 		pg = 1;
 		spp = 20;
 	}
+	
+	
+
+	public BoardParameterDto(int pg, int spp, int start, String boardType) {
+		super();
+		setPg(pg);
+		setSpp(spp);
+		setStart(start);
+		setBoardType(boardType);
+	}
+
+
 
 	public int getPg() {
 		return pg;

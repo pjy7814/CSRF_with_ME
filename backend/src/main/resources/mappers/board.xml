@@ -82,12 +82,6 @@
 		#{articleno}
 	</select>
 
-	<update id="updateHit" parameterType="int">
-		update board
-		set hit = hit +
-		1
-		where articleno = #{articleno}
-	</update>
 	<update id="modifyArticle" parameterType="boardDto">
 		update board
 		set
