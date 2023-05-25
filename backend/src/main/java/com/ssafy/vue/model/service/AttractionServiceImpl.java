@@ -22,7 +22,7 @@ public class AttractionServiceImpl implements AttractionService {
 		try {
 			return sqlSession.getMapper(AttractionMapMapper.class).getSido();
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 
@@ -31,7 +31,7 @@ public class AttractionServiceImpl implements AttractionService {
 		try {
 			return sqlSession.getMapper(AttractionMapMapper.class).getGugunInSido(sido);
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 
@@ -40,7 +40,7 @@ public class AttractionServiceImpl implements AttractionService {
 		try {
 			return sqlSession.getMapper(AttractionMapMapper.class).getDestination(searchOptionDto);
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 }

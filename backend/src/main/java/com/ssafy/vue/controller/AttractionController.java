@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.util.MyException;
 import com.ssafy.vue.model.MemberDto;
 import com.ssafy.vue.model.SearchOptionDto;
 import com.ssafy.vue.model.SidoGugunCodeDto;
@@ -30,22 +31,50 @@ public class AttractionController {
 
 	@ApiOperation(value = "시도 정보", notes = "전국의 시도를 반환한다.", response = List.class)
 	@GetMapping("/sido")
-	public ResponseEntity<List<SidoGugunCodeDto>> sido() throws Exception {
-		return new ResponseEntity<List<SidoGugunCodeDto>>(attractionService.getSido(), HttpStatus.OK);
+	public ResponseEntity<?> sido() {
+		try {
+			return new ResponseEntity<List<SidoGugunCodeDto>>(attractionService.getSido(), HttpStatus.OK);
+		}catch(MyException e){
+			switch(e.getMessage()) {
+			case "SQLException":
+				return new ResponseEntity<String>("Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+			default:
+				return new ResponseEntity<String>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
 	}
 
 	@ApiOperation(value = "구군 정보", notes = "전국의 구군을 반환한다.", response = List.class)
 	@GetMapping("/gugun")
-	public ResponseEntity<List<SidoGugunCodeDto>> gugun(
-			@RequestParam("sido") @ApiParam(value = "시도코드.", required = true) String sido) throws Exception {
-		return new ResponseEntity<List<SidoGugunCodeDto>>(attractionService.getGugunInSido(sido), HttpStatus.OK);
+	public ResponseEntity<?> gugun(
+			@RequestParam("sido") @ApiParam(value = "시도코드.", required = true) String sido) {
+		try {
+			return new ResponseEntity<List<SidoGugunCodeDto>>(attractionService.getGugunInSido(sido), HttpStatus.OK);
+		}catch(MyException e) {
+			switch(e.getMessage()) {
+			case "SQLException":
+				return new ResponseEntity<String>("Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+			default:
+				return new ResponseEntity<String>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
 	}
 	
 	@ApiOperation(value = "여행지 정보", notes = "여행지 정보를 반환한다.", response = List.class)
 	@GetMapping("/destination")
-	public ResponseEntity<List<TouristSpotInfoDto>> destination(
+	public ResponseEntity<?> destination(
 			@ApiParam(value = "시도코드.", required = true) SearchOptionDto searchOptionDto) throws Exception {
-		return new ResponseEntity<List<TouristSpotInfoDto>>(attractionService.getDestination(searchOptionDto), HttpStatus.OK);
+		try {
+			return new ResponseEntity<List<TouristSpotInfoDto>>(attractionService.getDestination(searchOptionDto), HttpStatus.OK);
+		}catch(MyException e) {
+			switch(e.getMessage()) {
+			case "SQLException":
+				return new ResponseEntity<String>("Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+			default:
+				return new ResponseEntity<String>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		
 	}
 
 }
