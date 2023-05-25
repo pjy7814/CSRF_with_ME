@@ -9,6 +9,7 @@ import {
   validateImgFile,
 } from "./validation.js";
 
+import { processResError } from "./api.js";
 export {
   validateMemberEmail,
   validateMemberId,
@@ -16,4 +17,5 @@ export {
   validateMemberPassword,
   validateMemberPasswordCheck,
   validateImgFile,
+  processResError,
 };
