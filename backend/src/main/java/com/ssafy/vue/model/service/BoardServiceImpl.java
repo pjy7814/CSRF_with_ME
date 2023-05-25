@@ -31,7 +31,7 @@ public class BoardServiceImpl implements BoardService {
 //			}
 			return sqlSession.getMapper(BoardMapper.class).writeArticle(boardDto) == 1;
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 
@@ -43,7 +43,7 @@ public class BoardServiceImpl implements BoardService {
 			boardParameterDto.setStart(start);
 			return sqlSession.getMapper(BoardMapper.class).listArticle(boardParameterDto);
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 
 	}
@@ -67,7 +67,7 @@ public class BoardServiceImpl implements BoardService {
 			pageNavigation.makeNavigator();
 			return pageNavigation;
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 
@@ -81,7 +81,7 @@ public class BoardServiceImpl implements BoardService {
 			resultMap.put("boardImgDtos", boardImgDtos);
 			return resultMap;
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 
@@ -91,7 +91,7 @@ public class BoardServiceImpl implements BoardService {
 		try {
 			return sqlSession.getMapper(BoardMapper.class).modifyArticle(boardDto) == 1;
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 
@@ -101,7 +101,7 @@ public class BoardServiceImpl implements BoardService {
 		try {
 			return sqlSession.getMapper(BoardMapper.class).deleteArticle(articleno) == 1;
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 
@@ -127,7 +127,7 @@ public class BoardServiceImpl implements BoardService {
 
 			return true; // 이미지 업로드 성공시 true 반환
 		} catch (SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 

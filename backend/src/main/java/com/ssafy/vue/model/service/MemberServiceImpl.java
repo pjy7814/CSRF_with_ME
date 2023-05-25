@@ -34,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
 
 			return sqlSession.getMapper(MemberMapper.class).login(memberDto);
 		}catch(SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}catch(CryptException e) {
 			throw new MyException("크립토 오류가 발생했습니다!");
 		}
@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
 		try {
 			return sqlSession.getMapper(MemberMapper.class).memberInfo(memberId);
 		}catch(SQLException e) {
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		}
 	}
 
@@ -64,7 +64,7 @@ public class MemberServiceImpl implements MemberService {
 			return true;
 		} catch (SQLException e) {
 			sqlSession.rollback();
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		} catch (CryptException e) {
 			throw new MyException("크립토 오류가 발생했습니다!");
 		}
@@ -88,7 +88,7 @@ public class MemberServiceImpl implements MemberService {
 			return true;
 		} catch (SQLException e) {
 			sqlSession.rollback();
-			throw new MyException("서버 오류가 발생했습니다!");
+			throw new MyException("SQLException");
 		} catch (CryptException e) {
 			throw new MyException("크립토 오류가 발생했습니다!");
 		}
